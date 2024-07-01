@@ -1,16 +1,19 @@
+import time
 from machine import Pin
 from time import sleep
-import dht, ujson,urequests
+import dht, ujson, urequests
 
 # Khai Báo Đèn
 led = Pin(2, Pin.OUT, value=1)
-led1 = Pin(5, Pin.OUT, value=0)
+led1 = Pin(13, Pin.OUT, value=0)
 led2 = Pin(15, Pin.OUT, value=0)
-#Gọi API thời tiết
+
+# Gọi API thời tiết
 API_KEY = '07bb5510d2576951d78b0f0b637f4716'
 LAT = 16.467
 LON = 107.590
 URL = f'http://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY}&units=metric'
+
 def get_weather():
     try:
         response = urequests.get(URL)
@@ -25,11 +28,15 @@ def get_weather():
     except Exception as e:
         return e
 
+# Pir sensor pir HC-SR501
+pir = Pin(14, Pin.IN)
+
 
 def web_page():
     with open('templates/index.html', 'r', encoding='utf-8') as file:
         html = file.read()
     return html
+
 
 def handle_request(request):
     if 'GET /led' in request:
@@ -61,20 +68,24 @@ def handle_request(request):
         elif "led2=off" in request:
             led2.off()
 
-
         response = {
-            'state': str(value),
-
+            'state': str(value)
         }
 
         return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
+
     elif 'GET /api/weather' in request:
         response = get_weather()
+        return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
+
+    elif 'GET /api/motion' in request:
+        response = {'status' : True if pir.value() else False}
         return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
 
     elif 'GET /' in request:
         response = web_page()
         return 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + response
+
 
     else:
         return 'HTTP/1.1 404 NOT FOUND\r\n\r\n'
@@ -95,7 +106,6 @@ while True:
         conn.settimeout(None)
         request = str(request)
         print('Content = %s' % request)
-
 
         response = handle_request(request)
         conn.sendall(response)
