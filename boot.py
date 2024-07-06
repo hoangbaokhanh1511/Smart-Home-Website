@@ -24,3 +24,5 @@ while sta.isconnected() == False:
     pass
 print('Ket noi mang Wifi thanh cong!')
 print(sta.ifconfig())
+
+#0108675083

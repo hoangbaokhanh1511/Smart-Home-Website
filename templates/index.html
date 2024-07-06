@@ -73,7 +73,7 @@
         .weather-forecast {
             display: flex;
             flex-direction: column;
-            width: 450px;
+            width: 300px;
             border: 2px solid grey;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
             padding: 25px;
@@ -130,6 +130,7 @@
                 </div>
             </div>
             <p id="pir" onclick="pir()">Pir sensor HC-SR501: waiting</p>
+
         </div>
 
     </div>
@@ -146,7 +147,7 @@
             </div>
         </div>
 
-        <canvas id="myChart" style="width: 120px; height: 120px;"></canvas>
+<!--        <canvas id="myChart" style="width: 120px; height: 120px;"></canvas>-->
     </div>
     <script>
         function pir(){
@@ -161,7 +162,6 @@
                 })
         }
 
-        setInterval(pir,3000)
 
         function state(state) {
             fetch('/led' + state)
@@ -173,6 +173,7 @@
                     console.error('Lỗi khi gửi yêu cầu: ', err);
                 });
         }
+
         const Dates = []
         const Temperature = []
         const Humidity = []
@@ -190,8 +191,8 @@
             fetch('/api/weather')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại (Huế): " + data.temperature + "℃"
-                    document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại (Huế): " + data.humidity + "%"
+                    document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
+                    document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
 
                     Temperature.push(data.temperature)
                     Humidity.push(data.humidity)
@@ -204,50 +205,49 @@
         }
 
 
-        function updateChart() {
+<!--        function updateChart() {-->
 
-            const x = getData(Dates)
-            const y = getData(Temperature)
-            const z = getData(Humidity)
+<!--            const x = getData(Dates)-->
+<!--            const y = getData(Temperature)-->
+<!--            const z = getData(Humidity)-->
 
-            new Chart("myChart", {
-                type: 'line',
-                data: {
-                    labels: x,
-                    datasets: [{
-                        label: "Nhiệt độ (℃)",
-                        fill: false,
-                        backgroundColor: "red",
-                        borderColor: "red",
-                        data: y
-                    },
+<!--            new Chart("myChart", {-->
+<!--                type: 'line',-->
+<!--                data: {-->
+<!--                    labels: x,-->
+<!--                    datasets: [{-->
+<!--                        label: "Nhiệt độ (℃)",-->
+<!--                        fill: false,-->
+<!--                        backgroundColor: "red",-->
+<!--                        borderColor: "red",-->
+<!--                        data: y-->
+<!--                    },-->
 
-                    {
-                        label: "Độ ẩm (%)",
-                        fill: false,
-                        backgroundColor: "black",
-                        borderColor: "black",
-                        data: z
-                    }]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: "Biểu đồ nhiệt độ và độ ẩm"
-                    },
-                    scales: {
+<!--                    {-->
+<!--                        label: "Độ ẩm (%)",-->
+<!--                        fill: false,-->
+<!--                        backgroundColor: "black",-->
+<!--                        borderColor: "black",-->
+<!--                        data: z-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    title: {-->
+<!--                        display: true,-->
+<!--                        text: "Biểu đồ nhiệt độ và độ ẩm"-->
+<!--                    },-->
+<!--                    scales: {-->
 
-                        yAxes: [{ ticks: { min: 0, max: 100 } }]
-                    }
-                }
-            })
-        }
+<!--                        yAxes: [{ ticks: { min: 0, max: 100 } }]-->
+<!--                    }-->
+<!--                }-->
+<!--            })-->
+<!--        }-->
 
-        function runAll() {
-            realtime()
-            updateChart()
-        }
-        setInterval(runAll, 3000)
+
+
+        setInterval(pir,1000)
+        setInterval(realtime, 3000)
 
 
     </script>
