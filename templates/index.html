@@ -147,7 +147,6 @@
             </div>
         </div>
 
-<!--        <canvas id="myChart" style="width: 120px; height: 120px;"></canvas>-->
     </div>
     <script>
         function pir(){
@@ -174,9 +173,7 @@
                 });
         }
 
-        const Dates = []
-        const Temperature = []
-        const Humidity = []
+
 
         function getData(x) {
             let y = []
@@ -186,17 +183,20 @@
             return y
         }
 
+        const Data = {
+            data1: "",
+            data2: ""
+        }
 
         function realtime() {
             fetch('/api/weather')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
-                    document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
+                    Data.data1 = data.temperature
 
-                    Temperature.push(data.temperature)
-                    Humidity.push(data.humidity)
-                    Dates.push(new Date().toLocaleTimeString())
+                    document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
+                    Data.data2 = data.humidity
 
                 })
                 .catch(err => {
@@ -205,50 +205,23 @@
         }
 
 
-<!--        function updateChart() {-->
 
-<!--            const x = getData(Dates)-->
-<!--            const y = getData(Temperature)-->
-<!--            const z = getData(Humidity)-->
+        const url = "https://script.google.com/macros/s/AKfycbwZsQxPWyt4VyFV0OblQyXOzXVByee0L6DviWr0ysK9DVrs_sHZ10j40v1ZcwGzrG_j4Q/exec"
 
-<!--            new Chart("myChart", {-->
-<!--                type: 'line',-->
-<!--                data: {-->
-<!--                    labels: x,-->
-<!--                    datasets: [{-->
-<!--                        label: "Nhiệt độ (℃)",-->
-<!--                        fill: false,-->
-<!--                        backgroundColor: "red",-->
-<!--                        borderColor: "red",-->
-<!--                        data: y-->
-<!--                    },-->
-
-<!--                    {-->
-<!--                        label: "Độ ẩm (%)",-->
-<!--                        fill: false,-->
-<!--                        backgroundColor: "black",-->
-<!--                        borderColor: "black",-->
-<!--                        data: z-->
-<!--                    }]-->
-<!--                },-->
-<!--                options: {-->
-<!--                    title: {-->
-<!--                        display: true,-->
-<!--                        text: "Biểu đồ nhiệt độ và độ ẩm"-->
-<!--                    },-->
-<!--                    scales: {-->
-
-<!--                        yAxes: [{ ticks: { min: 0, max: 100 } }]-->
-<!--                    }-->
-<!--                }-->
-<!--            })-->
-<!--        }-->
-
-
+        function upload_data() {
+            fetch(url , {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Data)
+            })
+        }
 
         setInterval(pir,1000)
         setInterval(realtime, 3000)
-
+        setInterval(upload_data, 3100)
 
     </script>
 </body>

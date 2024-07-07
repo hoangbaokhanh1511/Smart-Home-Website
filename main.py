@@ -94,7 +94,6 @@ def handle_request(request):
 
         return 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + response
 
-
     else:
         return 'HTTP/1.1 404 NOT FOUND\r\n\r\n', None
 
