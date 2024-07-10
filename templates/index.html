@@ -4,143 +4,106 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-      <link rel="stylesheet" href="css/site.css">   
-    <style>
-      
-    </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <link rel="stylesheet" href="css/site.css">  
+  <link rel="icon"  href="image/module-icon.jpg">  
+  <title>
+      Demo ESP8266
+  </title>
   </head>
 <body onclick="realtime()">
-  <div class="container">
-    <div class="tittle">
-      Demo ESP8266
-    </div>
-    <div class="button-section">
-      <div class="led_main">
-        <div class="stats">Led_Main:</div>
-        <div class="led-button">
-          <button onclick="state('=on')">ON</button>
-          <button onclick="state('=off')">OFF</button>
+  <div class="main-left">
+    <div class="container adiv">
+      <div class="tittle">
+        Demo ESP8266
+      </div>
+      <div class="button-section">
+        <div class="led_main">
+          <div class="stats">Led_Main:</div>
+          <div class="led-button">
+            <button onclick="state('=on')">ON</button>
+            <button onclick="state('=off')">OFF</button>
+          </div>
+        </div>
+        <div class="ledD0">
+          <div class="stats">Led_D0:</div>
+          <div class="ledD0-button">
+            <button onclick="state('1=on')">ON</button>
+            <button onclick="state('1=off')">OFF</button>
+          </div>
+        </div>
+        <div class="ledD1">
+          <div class="stats">Led_D1:</div>
+          <div class="ledD1-button">
+            <button onclick="state('2=on')">ON</button>
+            <button onclick="state('2=off')">OFF</button>
+          </div>
         </div>
       </div>
-      <div class="ledD0">
-        <div class="stats">Led_D0:</div>
-        <div class="ledD0-button">
-          <button onclick="state('1=on')">ON</button>
-          <button onclick="state('1=off')">OFF</button>
+    </div>
+    <div class="weather-forecast adiv">
+
+      <div class="Tittle">
+        Cảm Biến Dự Báo Thời Tiết
+      </div>
+
+      <div id="data" class="Stats">
+        <div class="description">
+          <div id="temperature" class="nhiet_do">Loading Temperature.....</div>
+          <div id="humidity" class="do_am">Loading Humidity......</div>
         </div>
       </div>
-      <div class="ledD1">
-        <div class="stats">Led_D1:</div>
-        <div class="ledD1-button">
-          <button onclick="state('2=on')">ON</button>
-          <button onclick="state('2=off')">OFF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="weather-forecast">
 
-    <div class="Tittle">
-      Cảm Biến Dự Báo Thời Tiết
-    </div>
 
-    <div id="data" class="Stats">
-      <div class="description">
-        <div id="temperature" class="nhiet_do">Loading Temperature.....</div>
-        <div id="humidity" class="do_am">Loading Humidity......</div>
-      </div>
     </div>
+    <script>
+      function state(state) {
+        fetch('/led' + state)
+            .then(response => response.json())
+            .then(data => {
+              document.getElementById('status').innerHTML = "Led is: " + data.state
+            })
+            .catch(err => {
+              console.error('Lỗi khi gửi yêu cầu: ', err);
+            });
+      }
+      const Dates = []
+      const Temperature = []
+      const Humidity = []
 
-    <canvas id="myChart" style="width: 120px; height: 120px;"></canvas>
-  </div>
-  <script>
-    function state(state) {
-      fetch('/led' + state)
+      function getData(x){
+        let y = []
+        for (let i = Math.max(x.length - 5,0) ; i < x.length; i++){
+          y.push(x[i])
+        }
+        return y
+      }
+
+
+      function realtime(){
+        fetch('/api/weather')
           .then(response => response.json())
           .then(data => {
-            document.getElementById('status').innerHTML = "Led is: " + data.state
+            document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại (Huế): " + data.temperature + "℃"
+            document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại (Huế): " + data.humidity + "%"
+
+            Temperature.push(data.temperature)
+            Humidity.push(data.humidity)
+            Dates.push(new Date().toLocaleTimeString())
+
           })
           .catch(err => {
-             console.error('Lỗi khi gửi yêu cầu: ', err);
+              console.error('Lỗi khi gửi yêu cầu: ', err);
           });
-    }
-    const Dates = []
-    const Temperature = []
-    const Humidity = []
-
-    function getData(x){
-      let y = []
-      for (let i = Math.max(x.length - 5,0) ; i < x.length; i++){
-        y.push(x[i])
       }
-      return y
-    }
+      setInterval(runAll, 3000)
 
-
-    function realtime(){
-      fetch('/api/weather')
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại (Huế): " + data.temperature + "℃"
-          document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại (Huế): " + data.humidity + "%"
-
-          Temperature.push(data.temperature)
-          Humidity.push(data.humidity)
-          Dates.push(new Date().toLocaleTimeString())
-
-        })
-        .catch(err => {
-             console.error('Lỗi khi gửi yêu cầu: ', err);
-        });
-    }
-
-
-    function updateChart(){
-
-            const x = getData(Dates)
-            const y = getData(Temperature)
-            const z = getData(Humidity)
-
-            new Chart("myChart", {
-                type:'line',
-                data: {
-                    labels: x,
-                    datasets: [{
-                        label:"Nhiệt độ (℃)",
-                        fill:false,
-                        backgroundColor: "red",
-                        borderColor: "red",
-                        data: y
-                    },
-
-                    {
-                        label:"Độ ẩm (%)",
-                        fill:false,
-                        backgroundColor: "black",
-                        borderColor: "black",
-                        data: z
-                    }]
-                },
-                options:{
-                    title:{
-                        display:true,
-                        text: "Biểu đồ nhiệt độ và độ ẩm"
-                    },
-                    scales:{
-
-                        yAxes:[{ticks: {min:0,max:100}}]
-                    }
-                }
-            })
-        }
-
-     function runAll(){
-        realtime()
-        updateChart()
-     }
-     setInterval(runAll, 3000)
-
-  </script>
+    </script>
+  </div>
+  <div class="main-right">
+    <div class=" adiv">
+      <div class="tittle">Phát hiện chuyển động</div>
+    </div>
+  </div>
 </body>
 </html>
