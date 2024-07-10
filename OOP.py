@@ -4,9 +4,9 @@ import dht
 
 class LED:
     GPIO = -1
-
     def __init__(self, pin_number):
         self.led = Pin(pin_number, Pin.OUT)
+        self.led.value(0)
         self.GPIO = pin_number
 
     def turn_on(self):

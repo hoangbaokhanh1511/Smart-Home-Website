@@ -1,16 +1,13 @@
-from machine import Pin
-from time import sleep
-import dht, ujson, gc
-import usocket as socket
+import dht, ujson, uasyncio as asyncio, urequests
 from OOP import *
 
 # Khai Báo Đèn
 led = {
     "Led_Main": LED(pin_number=2),
-    "Led_First": LED(pin_number=13),
-    "Led_Second": LED(pin_number=15)
+    "Led_D7": LED(pin_number=13),
+    "Led_D8": LED(pin_number=15)
 }
-
+url_host = 'http://192.168.1.3:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -29,96 +26,68 @@ def weather():
     return data
 
 
-def web_page():
-    with open('templates/index.html', 'r', encoding='utf-8') as file:
-        html = file.read()
-    return html
+async def send_dht11():
+    url = url_host + '/api/weather'
+    while True:
+        data = weather()
+
+        headers = {'Content-Type': 'application/json'}
+        try:
+            response = urequests.post(url, data=ujson.dumps(data), headers=headers)
+            response.close()
+        except OSError as e:
+            print('Error loading LED:', e)
+
+        await asyncio.sleep(5)
 
 
-def handle_request(request):
-    if 'GET /led' in request:
-        value = ''
+async def send_pir():
+    url = url_host + '/api/motion'
+    while True:
+        data = {'status': True if pir.get_status() else False}
+        headers = {'Content-Type': 'application/json'}
+        try:
+            response = urequests.post(url, data=ujson.dumps(data), headers=headers)
 
-        if "led=off" in request:
-            led['Led_Main'].turn_on()
-            value = 'on'
+            response.close()
+        except OSError as e:
+            print('Error loading LED:', e)
 
-
-        elif "led=on" in request:
-            led['Led_Main'].turn_off()
-            value = 'off'
-
-
-        elif "led1=on" in request:
-            led['Led_First'].turn_on()
-            value = 'on'
-
-        elif "led1=off" in request:
-            led['Led_First'].turn_off()
-            value = 'off'
+        await asyncio.sleep(3)
 
 
-        elif "led2=on" in request:
-            led['Led_Second'].turn_on()
-            value = 'on'
+async def toggleLed():
+    url = url_host + '/api/change_status_led'
+    while True:
+        response = urequests.get(url)
+        data = response.json()
 
-
-        elif "led2=off" in request:
-            led['Led_Second'].turn_off()
-            value = 'on'
-
-        response = {
-            'state': str(value)
-        }
-
-        return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
-
-    elif 'GET /api/weather' in request:
-        response = weather()
-
-        return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
-
-    elif 'GET /api/motion' in request:
-        response = {'status': True if pir.get_status() else False}
-        if pir.get_status():
-            led['Led_Main'].turn_off()
+        if data['Led_Main']:
+            led.get('Led_Main').turn_off()
         else:
-            led['Led_Main'].turn_on()
-        return 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n' + ujson.dumps(response)
+            led.get('Led_Main').turn_on()
+
+        if data['Led_D7']:
+            led.get('Led_D7').turn_on()
+        else:
+            led.get('Led_D7').turn_off()
+
+        if data['Led_D8']:
+            led.get('Led_D8').turn_on()
+        else:
+            led.get('Led_D8').turn_off()
+
+        response.close()
+        await asyncio.sleep(0.2)
 
 
-
-    elif 'GET /' in request:
-
-        response = web_page()
-
-        return 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + response
-
-    else:
-        return 'HTTP/1.1 404 NOT FOUND\r\n\r\n', None
+async def main():
+    await asyncio.gather(
+        send_dht11(),
+        send_pir(),
+        toggleLed()
+    )
 
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 80))
-s.listen(5)
-
-while True:
-    try:
-        if gc.mem_free() < 102000:
-            gc.collect()
-
-        conn, addr = s.accept()
-        conn.settimeout(3.0)
-        print('Got a connection from %s' % str(addr))
-        request = conn.recv(1024)
-        conn.settimeout(None)
-        request = str(request)
-        print('Content = %s' % request)
-
-        response = handle_request(request)
-
-        conn.sendall(response)
-        conn.close()
-
-    except OSError as e:
-        conn.close()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())

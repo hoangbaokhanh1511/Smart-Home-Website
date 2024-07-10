@@ -111,22 +111,22 @@
             <div class="led_main">
                 <div class="stats">Led_Main:</div>
                 <div class="led-button">
-                    <button onclick="state('=on')">ON</button>
-                    <button onclick="state('=off')">OFF</button>
+                    <button id="Led_Main_On">ON</button>
+                    <button id="Led_Main_Off">OFF</button>
                 </div>
             </div>
             <div class="ledD0">
-                <div class="stats">Led_D0:</div>
+                <div class="stats">Led_D7:</div>
                 <div class="ledD0-button">
-                    <button onclick="state('1=on')" )>ON</button>
-                    <button onclick="state('1=off')">OFF</button>
+                    <button id="Led_D7_On">ON</button>
+                    <button id="Led_D7_Off">OFF</button>
                 </div>
             </div>
             <div class="ledD1">
-                <div class="stats">Led_D1:</div>
+                <div class="stats">Led_D8:</div>
                 <div class="ledD1-button">
-                    <button onclick="state('2=on')">ON</button>
-                    <button onclick="state('2=off')">OFF</button>
+                    <button id="Led_D8_On">ON</button>
+                    <button id="Led_D8_Off">OFF</button>
                 </div>
             </div>
             <p id="pir" onclick="pir()">Pir sensor HC-SR501: waiting</p>
@@ -148,8 +148,10 @@
         </div>
 
     </div>
+
     <script>
-        function pir(){
+        // Xử lý cảm biến chuyển động
+        function pir() {
             fetch('/api/motion')
                 .then(response => response.json())
                 .then(data => {
@@ -160,68 +162,65 @@
                     console.error(err)
                 })
         }
+        setInterval(pir, 3000) // => cứ mỗi 3s check 1 lần
 
 
-        function state(state) {
-            fetch('/led' + state)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('status').innerHTML = "Led is: " + data.state
-                })
-                .catch(err => {
-                    console.error('Lỗi khi gửi yêu cầu: ', err);
-                });
-        }
-
-
-
-        function getData(x) {
-            let y = []
-            for (let i = Math.max(x.length - 5, 0); i < x.length; i++) {
-                y.push(x[i])
-            }
-            return y
-        }
-
-        const Data = {
-            data1: "",
-            data2: ""
-        }
-
+        // Xử lý cảm biến đo nhiệt độ và độ ẩm
         function realtime() {
             fetch('/api/weather')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
-                    Data.data1 = data.temperature
-
                     document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
-                    Data.data2 = data.humidity
-
                 })
                 .catch(err => {
                     console.error('Lỗi khi gửi yêu cầu: ', err);
                 });
         }
 
+        setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
 
-
-        const url = "https://script.google.com/macros/s/AKfycbwZsQxPWyt4VyFV0OblQyXOzXVByee0L6DviWr0ysK9DVrs_sHZ10j40v1ZcwGzrG_j4Q/exec"
-
-        function upload_data() {
-            fetch(url , {
+        //Xử lý các button về đèn
+        function change_status_led(name,state){
+            fetch('/api/change_status_led' , {
                 method: "POST",
-                mode: "no-cors",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Data)
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    led_name: name,
+                    state: state
+                })
+
             })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+
+            .catch(err => {
+                console.error(err)
+            })
+
         }
 
-        setInterval(pir,1000)
-        setInterval(realtime, 3000)
-        setInterval(upload_data, 3100)
+        // Lắng nghe sự kiện nhấn button
+        document.getElementById('Led_Main_On').addEventListener("click",function (event) {
+            change_status_led("Led_Main",true)
+        })
+        document.getElementById('Led_Main_Off').addEventListener("click",function (event) {
+            change_status_led("Led_Main",false)
+        })
+        document.getElementById('Led_D7_On').addEventListener("click",function (event) {
+            change_status_led("Led_D7",true)
+        })
+        document.getElementById('Led_D7_Off').addEventListener("click",function (event) {
+            change_status_led("Led_D7",false)
+        })
+        document.getElementById('Led_D8_On').addEventListener("click",function (event) {
+            change_status_led("Led_D8",true)
+        })
+        document.getElementById('Led_D8_Off').addEventListener("click",function (event) {
+            change_status_led("Led_D8",false)
+        })
 
     </script>
 </body>
