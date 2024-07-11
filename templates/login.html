@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1, initial-scale=1.0">
+
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+
+</head>
+<body>
+  <h1>This is login page</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+      {% for category, message in messages %}
+        <p class="category">{{message}}</p>
+      {% endfor %}
+
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+    <caption>Thông tin đăng nhập</caption>
+    <p>Username: <input placeholder="Enter your username" type="text" name="username"></p>
+    <p>Password: <input placeholder="Enter your password" type="password" name="password"></p>
+    <input href="/login" type="submit" value="Login">
+  </form>
+
+</body>
+
+</html>

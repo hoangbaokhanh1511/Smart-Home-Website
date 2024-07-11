@@ -7,7 +7,7 @@ led = {
     "Led_D7": LED(pin_number=13),
     "Led_D8": LED(pin_number=15)
 }
-url_host = 'http://192.168.1.3:5000'
+url_host = 'http://192.168.1.7:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -27,13 +27,14 @@ def weather():
 
 
 async def send_dht11():
-    url = url_host + '/api/weather'
+    url = url_host + '/user_dashboard/api/weather'
     while True:
         data = weather()
 
         headers = {'Content-Type': 'application/json'}
         try:
             response = urequests.post(url, data=ujson.dumps(data), headers=headers)
+
             response.close()
         except OSError as e:
             print('Error loading LED:', e)
@@ -42,7 +43,7 @@ async def send_dht11():
 
 
 async def send_pir():
-    url = url_host + '/api/motion'
+    url = url_host + '/user_dashboard/api/motion'
     while True:
         data = {'status': True if pir.get_status() else False}
         headers = {'Content-Type': 'application/json'}
@@ -57,9 +58,10 @@ async def send_pir():
 
 
 async def toggleLed():
-    url = url_host + '/api/change_status_led'
+    url = url_host + '/user_dashboard/api/change_status_led'
     while True:
         response = urequests.get(url)
+
         data = response.json()
 
         if data['Led_Main']:
@@ -87,7 +89,5 @@ async def main():
         send_pir(),
         toggleLed()
     )
-
-
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
