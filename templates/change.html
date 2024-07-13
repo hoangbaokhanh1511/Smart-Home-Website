@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change pass</title>
+  <link rel="stylesheet" href=" {{url_for('static', filename = '/styles/change_pass.css')}} ">
+</head>
+
+<body>
+  <h4>Xin chào {{key}}</h4>
+  <h3>Đổi mật khẩu</h3>
+
+  <form method="post">
+    <input placeholder="Your current password" type="password" name="oldPassword">
+    <input placeholder="New password" type="password" name="newPassword">
+    <input placeholder="Repeat new password" type="password" name="repeatPassword">
+    <input type="submit" value="Enter">
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+      <ul>
+        {% for category, message in messages %}
+          <li class="category">{{message}}</li>
+        {% endfor %}
+      </ul>
+
+    {% endif %}
+  {% endwith %}
+  <a href="/user_dashboard">Back to Dashboard</a>
+</body>
+
+</html>

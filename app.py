@@ -19,32 +19,38 @@ class users(db.Model):
         self.password = password
 
 
-@app.route('/', methods=["GET", "POST"])
+@app.route('/')
 def home():
-    if request.method == "POST":
-        return redirect(url_for('login'))
-    else:
-        return render_template('home.html')
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
+        handle = request.form['handle']
+        if handle == "Login":
 
-        username = request.form['username']  # lấy username vào phiên làm việc
-        password = request.form['password']  # lấy password vào phiên làm việc
+            username = request.form['username']  # lấy username vào phiên làm việc
+            password = request.form['password']  # lấy password vào phiên làm việc
 
-        found_user = users.query.filter_by(name=username, password=password).first()
+            found_user = users.query.filter_by(name=username, password=password).first()
 
-        if found_user:
-            session['username'] = found_user.name
-            return redirect(url_for('user_dashboard'))
+            if found_user:
+
+                session['username'] = found_user.name
+
+                return redirect(url_for('user_dashboard'))
+
+            else:
+                flash("Sai tài khoản mật khẩu !", "error")
+                return render_template('login.html')
 
         else:
-            flash("Sai tài khoản mật khẩu !", "error")
-            return render_template('login.html')
+            return redirect(url_for('signup'))
 
     else:
+        if 'username' in session:
+            return redirect(url_for('user_dashboard'))
         return render_template('login.html')
 
 
@@ -58,6 +64,7 @@ def signup():
         found_user = users.query.filter_by(name=user).first()
 
         if user and pas:
+
             if not found_user:
 
                 # Thêm thông tin vào database
@@ -81,9 +88,9 @@ def signup():
 @app.route('/user_dashboard', methods=["GET", "POST"])
 def user_dashboard():
     if request.method == "GET":
-
+        username = session['username']
         if 'username' in session:
-            username = session['username']
+
             return render_template('userpage.html', username=username)
         else:
             flash("Bạn cần phải đăng nhập trước", "error")
@@ -91,15 +98,54 @@ def user_dashboard():
 
 
     else:  # log out xóa data khỏi phiên làm việc
+        handle = request.form['handle']
 
-        session.pop('username', None)
-        flash("Đăng xuất thành công", "success")
-        return redirect(url_for('login'))
+        if handle == "Logout":
+            session.pop('username', None)
+            flash("Đăng xuất thành công", "success")
+            return redirect(url_for('login'))
+        else:
+            username = session['username']
+
+            return redirect(url_for('change'))
+
+
+@app.route('/change', methods=['GET', 'POST'])
+def change():
+    found_user = users.query.filter_by(name=session['username']).first()
+    if request.method == "GET":
+        return render_template('change.html', key=found_user.name)
+    else:
+        oldpass = request.form['oldPassword']
+        newpass = request.form['newPassword']
+        repeat = request.form['repeatPassword']
+        if not oldpass or not newpass or not repeat:
+            flash('Vui lòng điền đầy đủ thông tin', 'error')
+        else:
+            if found_user.password != oldpass:
+                flash('Password cũ không đúng', 'error')
+            if newpass != repeat:
+                flash('Password repeat không trùng', 'error')
+            if newpass == oldpass:
+                flash('Trùng với password cũ', 'error')
+
+        if found_user.password == oldpass and newpass == repeat and newpass != oldpass:
+            flash('Thay đổi thành công', 'success')
+            found_user.password = newpass
+            db.session.commit()
+        return render_template('change.html', key=found_user.name)
 
 
 @app.route('/view/database')
 def data():
-    return render_template('view.html', data=users.query.all())
+    query = request.args.get('query')  # lấy dữ liêu từ url
+
+    if query:
+        result = users.query.filter(users.name.like(f"%{query}%")).all()  # => tìm kiếm tương đối
+    else:
+        result = users.query.all()
+
+    return render_template('view.html', data=result, query=query)
 
 
 # Phần này xử lý thao tác module => => => => =>

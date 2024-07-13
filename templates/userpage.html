@@ -11,63 +11,77 @@
     rel="stylesheet">
   <title>Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/style.css')}}">
-
+  <link rel="icon" href="{{ url_for('static', filename = 'images/module-icon.jpg')}}">
 </head>
 
 <body>
-  <div class="container">
-    <div id="user">
-      <div id="information">
-        <p id="username">Username: {{username}}</p>
+  <div class="main-left">
+
+    <div class="container adiv">
+
+      <div id="user">
+        <div id="information">
+          <p id="username">Username: {{username}}</p>
+        </div>
+        <form method="post">
+          <input type="submit" name="handle" value="Logout">
+          <input type="submit" name="handle" value="Change Password">
+        </form>
       </div>
-      <form method="post">
-        <input type="submit" value="Log out">
-      </form>
+
+      <div class="tittle">
+        Demo ESP8266
+      </div>
+      <div class="button-section">
+        <div class="led_main">
+          <div class="stats">Led_Main:</div>
+          <div class="led-button">
+            <button id="Led_Main_On">ON</button>
+            <button id="Led_Main_Off">OFF</button>
+          </div>
+        </div>
+        <div class="ledD0">
+          <div class="stats">Led_D0:</div>
+          <div class="ledD0-button">
+            <button id="Led_D7_On">ON</button>
+            <button id="Led_D7_Off">OFF</button>
+          </div>
+        </div>
+        <div class="ledD1">
+          <div class="stats">Led_D1:</div>
+          <div class="ledD1-button">
+            <button id="Led_D8_On">ON</button>
+            <button id="Led_D8_Off">OFF</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="tittle">
-      Demo ESP8266
-    </div>
-    <div class="button-section">
-      <div class="led_main">
-        <div class="stats">Led_Main:</div>
-        <div class="led-button">
-          <button id="Led_Main_On">ON</button>
-          <button id="Led_Main_Off">OFF</button>
+    <div class="weather-forecast adiv">
+
+      <div class="Tittle">
+        Cảm Biến Dự Báo Thời Tiết
+      </div>
+
+      <div id="data" class="Stats">
+        <div class="description">
+          <div id="temperature" class="nhiet_do">Loading Temperature.....</div>
+          <div id="humidity" class="do_am">Loading Humidity......</div>
         </div>
       </div>
-      <div class="ledD0">
-        <div class="stats">Led_D7:</div>
-        <div class="ledD0-button">
-          <button id="Led_D7_On">ON</button>
-          <button id="Led_D7_Off">OFF</button>
-        </div>
-      </div>
-      <div class="ledD1">
-        <div class="stats">Led_D8:</div>
-        <div class="ledD1-button">
-          <button id="Led_D8_On">ON</button>
-          <button id="Led_D8_Off">OFF</button>
-        </div>
-      </div>
-      <p id="pir" onclick="pir()">Pir sensor HC-SR501: waiting</p>
+
 
     </div>
 
   </div>
-  <div class="weather-forecast">
 
-    <div class="Tittle">
-      Cảm Biến Dự Báo Thời Tiết
-    </div>
-
-    <div onclick="realtime()" id="data" class="Stats">
-      <div class="description">
-        <div id="temperature" class="nhiet_do">Loading Temperature.....</div>
-        <div id="humidity" class="do_am">Loading Humidity......</div>
-      </div>
+  <div class="main-right">
+    <div class=" adiv">
+      <div class="tittle">Phát hiện chuyển động</div>
+      <h4 id="pir" onclick="pir()">Pir sensor HC-SR501: waiting</h4>
     </div>
 
   </div>
+
 </body>
 <script src="{{ url_for('static', filename = 'scripts/main.js')}}"></script>
 
