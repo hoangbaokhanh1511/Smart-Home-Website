@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Database</title>
+</head>
+<body>
+  <h1>Danh sách người dùng</h1>
+  <table border="1">
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Password</th>
+    </tr>
+    {% for user in data %}
+    <tr>
+      <td>{{ user._id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.password }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="{{ url_for('home') }}">Home</a>
+</body>
+</html>
