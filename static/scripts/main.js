@@ -10,6 +10,7 @@ function pir() {
       console.error(err)
     })
 }
+pir()
 setInterval(pir, 3000) // => cứ mỗi 3s check 1 lần
 
 
@@ -29,8 +30,8 @@ function realtime() {
       console.error('Lỗi khi gửi yêu cầu: ', err);
     });
 }
-
-setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
+realtime()
+setInterval(realtime, 3600000) // => đo 1 lần mỗi 1h
 
 //Xử lý các button về đèn
 function change_status_led(name, state) {
