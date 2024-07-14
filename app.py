@@ -149,11 +149,6 @@ def data():
 
 
 # Phần này xử lý thao tác module => => => => =>
-data_sensor_dht11 = {
-    'temperature': None,
-    'humidity': None
-}
-
 status_pir = {
     'status': None
 }
@@ -164,13 +159,14 @@ led = {
     'Led_D8': False
 }
 
-
+DATA = {}
 # Xử lý dht11
 @app.route('/user_dashboard/api/weather', methods=['POST', 'GET'])
 def get_weather():
+
     if request.method == 'POST':  # nhận dữ liệu từ mạch
         data = request.get_json()  # lấy dữ liệu được truyền thành file json
-        data_sensor_dht11.update(data)  # cập nhật dữ liệu
+        DATA.update((data))
         if data:
 
             return jsonify({"status": "success", "data_received": data}), 200
@@ -178,7 +174,7 @@ def get_weather():
             return jsonify({"status": "error", "message": "No data received"}), 400
 
     else:
-        return jsonify(data_sensor_dht11)  # Cập nhật api json
+        return jsonify(DATA)  # Cập nhật api json
 
 
 # xử lý pir sensor HC-SR501

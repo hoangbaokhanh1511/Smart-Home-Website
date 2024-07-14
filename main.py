@@ -1,7 +1,5 @@
-import dht, ujson, uasyncio as asyncio, urequests
-import machine
+import dht, ujson, uasyncio as asyncio, urequests,machine,utime
 from machine import I2C, Pin
-
 from esp8266_i2c_lcd import I2cLcd
 from OOP import *
 
@@ -18,6 +16,12 @@ pir = motion_detect(pin_number=14)
 # sensor DHT11
 sensor = sensor_dht11(pin_number=16)
 
+#API thời tiết local
+# API_key = "07bb5510d2576951d78b0f0b637f4716"
+# ion = 107.5796
+# iat = 16.4637
+# data = (urequests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={iat}&lon={ion}&appid={API_key}")).json()
+
 
 def weather():
     temperature, humidity = sensor.get_weather()
@@ -29,22 +33,28 @@ def weather():
 
     return data
 
-
-async def send_dht11():
+async def API_weather():
     url = url_host + '/user_dashboard/api/weather'
+
     while True:
-        data = weather()
 
-        headers = {'Content-Type': 'application/json'}
-        try:
-            response = urequests.post(url, data=ujson.dumps(data), headers=headers)
+        API_key = "07bb5510d2576951d78b0f0b637f4716"
+        ion = 107.5796
+        iat = 16.4637
+        data = (urequests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={iat}&lon={ion}&appid={API_key}")).json()
 
-            response.close()
-        except OSError as e:
-            print('Error loading LED:', e)
+        up_data = {
+            'temperature': data['main']['temp'] - 273,
+            'humidity': data['main']['humidity'],
+            'feels_like': data['main']['feels_like'] - 273,
+            'main': data['weather'][0]['main'],
+            'visibility': data['visibility'],
+            'rain': data['rain']['1h']
+        }
 
-        await asyncio.sleep(5)
-
+        respone = urequests.post(url,data=ujson.dumps(up_data),headers={'Content-type':'application/json'})
+        respone.close()
+        await asyncio.sleep(900)
 
 async def send_pir():
     url = url_host + '/user_dashboard/api/motion'
@@ -102,20 +112,35 @@ async def toggleLed():
 #         print(f"Nồng độ co {co_concentration} đơn vị ppm")
 #         print(f"Nồng độ ethanol {ethanol_concentration} đơn vị ppm")
 #         await asyncio.sleep(1)
-#
+
 
 async def LCD():
 
+    data = weather()
     DEFAULT_I2C_ADDR = 0x27
-    i2c = I2C(scl=Pin(5), sda=Pin(4), freq=100000)
+    i2c = I2C(scl=Pin(5), sda=Pin(4), freq=400000)
     lcd = I2cLcd(i2c, DEFAULT_I2C_ADDR, 2, 16)
-    lcd.putstr("Bai thuc hanh 5 \nGiao tiep LCD")
+    celcius = bytearray([
+        0x0E,
+        0x11,
+        0x11,
+        0x0E,
+        0x00,
+        0x00,
+        0x00,
+        0x00
+    ])
+    lcd.custom_char(0, celcius)
+    lcd.putstr(f"Nhiet Do: {data.get('temperature')}")
+    lcd.putchar(chr(0))
+    lcd.putstr(f"C\nDo am: {data.get('humidity')}%")
+
 
 async def main():
-    await LCD()
-    await asyncio.gather(
 
-        send_dht11(),
+    await asyncio.gather(
+        LCD(),
+        API_weather(),
         send_pir(),
         toggleLed()
     )

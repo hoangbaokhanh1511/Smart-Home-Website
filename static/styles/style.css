@@ -96,8 +96,8 @@ button{
   justify-content: center;
 }
 
-.nhiet_do,.do_am{
-  font-size: 18px;
+.nhiet_do,.do_am,.thoi_tiet_chinh,.cam_nhan,.luong_mua_trong_1h_qua,.tam_nhin{
+  font-size: 14px;
   font-weight: bold;
 }
 canvas{
@@ -121,4 +121,8 @@ button:hover{
 }
 #user input{
   font-size: 11px;
+}
+
+#clock{
+  font-size: 12px;
 }

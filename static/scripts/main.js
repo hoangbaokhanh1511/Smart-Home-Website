@@ -18,8 +18,12 @@ function realtime() {
   fetch('/user_dashboard/api/weather')
     .then(response => response.json())
     .then(data => {
+      document.getElementById('main_weather').innerHTML = "Trạng Thái Thời Tiết Hiện Tại: " + data.main
       document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
       document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
+      document.getElementById('feels_like').innerHTML = "Nhiệt Độ cảm nhận: " + (data.feels_like).toFixed(2)  + "℃"
+      document.getElementById('rain').innerHTML = "Lượng mưa trong 1 giờ qua: " + data.rain + " mm"
+      document.getElementById('visibility').innerHTML = "Tầm nhìn khả thi: " + (data.visibility / 1000) + 'km'
     })
     .catch(err => {
       console.error('Lỗi khi gửi yêu cầu: ', err);
@@ -69,3 +73,22 @@ document.getElementById('Led_D8_On').addEventListener("click", function (event) 
 document.getElementById('Led_D8_Off').addEventListener("click", function (event) {
   change_status_led("Led_D8", false)
 })
+
+// Hiển thị giờ hiện tại
+function clock(){
+  let now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let seconds = now.getSeconds();
+
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+
+  let currentTime = hours + ':' + minutes + ':' + seconds + ' - ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+
+
+  document.getElementById('clock').innerText ="UTC+07:00 - " + currentTime;
+}
+
+setInterval(clock,1000)
