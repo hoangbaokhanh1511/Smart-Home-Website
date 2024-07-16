@@ -148,6 +148,15 @@ def data():
     return render_template('view.html', data=result, query=query)
 
 
+@app.route('/add')
+def add():
+    return render_template('add.html')
+
+
+@app.route('/remove')
+def remove():
+    return render_template('remove.html')
+
 # Phần này xử lý thao tác module => => => => =>
 status_pir = {
     'status': None

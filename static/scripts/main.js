@@ -23,7 +23,6 @@ function realtime() {
       document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
       document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
       document.getElementById('feels_like').innerHTML = "Nhiệt Độ cảm nhận: " + (data.feels_like).toFixed(2)  + "℃"
-      document.getElementById('rain').innerHTML = "Lượng mưa trong 1 giờ qua: " + data.rain + " mm"
       document.getElementById('visibility').innerHTML = "Tầm nhìn khả thi: " + (data.visibility / 1000) + 'km'
     })
     .catch(err => {

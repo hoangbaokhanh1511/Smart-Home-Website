@@ -9,7 +9,8 @@ led = {
     "Led_D7": LED(pin_number=13),
     "Led_D8": LED(pin_number=15)
 }
-url_host = 'http://192.168.1.7:5000'
+
+url_host = 'http://192.168.1.8:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -48,12 +49,12 @@ async def API_weather():
             'humidity': data['main']['humidity'],
             'feels_like': data['main']['feels_like'] - 273,
             'main': data['weather'][0]['main'],
-            'visibility': data['visibility'],
-            'rain': data['rain']['1h']
+            'visibility': data['visibility']
         }
 
         respone = urequests.post(url,data=ujson.dumps(up_data),headers={'Content-type':'application/json'})
         respone.close()
+
         await asyncio.sleep(900)
 
 async def send_pir():
@@ -77,7 +78,7 @@ async def toggleLed():
         response = urequests.get(url)
 
         data = response.json()
-
+        # print(data)
         if data['Led_Main']:
             led.get('Led_Main').turn_off()
         else:
