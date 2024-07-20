@@ -125,9 +125,12 @@ def user_dashboard():
     if request.method == "GET":
 
         username = session['username']
-        print(username)
-        start = History_Pir.query.first().timestamp.date()
-        end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
+        start = 0
+        end = 0
+
+        if History_Pir.query.count() > 0:
+            start = History_Pir.query.first().timestamp.date()
+            end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
 
         if 'username' in session:
             return render_template('userpage.html', username=username, start=start, end=end)
@@ -255,7 +258,13 @@ def data():
 def history_pir():
     start = History_Pir.query.first()
     end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first()
-    return render_template('pir.html', data=History_Pir.query.all(), startTime=start, endTime=end)
+    if start and end:
+
+        return render_template('pir.html', data=History_Pir.query.all(), startTime=start, endTime=end)
+
+    else:
+
+        return render_template('pir.html', data=History_Pir.query.all())
 
 
 # active form
