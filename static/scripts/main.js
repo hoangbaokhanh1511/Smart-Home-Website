@@ -11,7 +11,7 @@ function pir() {
     })
 }
 pir()
-setInterval(pir, 3000) // => cứ mỗi 3s check 1 lần
+setInterval(pir, 5000) // => cứ mỗi 5s check 1 lần
 
 
 // Xử lý cảm biến đo nhiệt độ và độ ẩm
@@ -22,7 +22,7 @@ function realtime() {
       document.getElementById('main_weather').innerHTML = "Trạng Thái Thời Tiết Hiện Tại: " + data.main
       document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
       document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
-      document.getElementById('feels_like').innerHTML = "Nhiệt Độ cảm nhận: " + (data.feels_like).toFixed(2)  + "℃"
+      document.getElementById('feels_like').innerHTML = "Nhiệt Độ cảm nhận: " + (data.feels_like).toFixed(2) + "℃"
       document.getElementById('visibility').innerHTML = "Tầm nhìn khả thi: " + (data.visibility / 1000) + 'km'
     })
     .catch(err => {
@@ -30,7 +30,7 @@ function realtime() {
     });
 }
 realtime()
-setInterval(realtime, 3600000) // => đo 1 lần mỗi 1h
+setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
 
 //Xử lý các button về đèn
 function change_status_led(name, state) {
@@ -75,7 +75,7 @@ document.getElementById('Led_D8_Off').addEventListener("click", function (event)
 })
 
 // Hiển thị giờ hiện tại
-function clock(){
+function clock() {
   let now = new Date();
   let hours = now.getHours();
   let minutes = now.getMinutes();
@@ -87,8 +87,24 @@ function clock(){
 
   let currentTime = hours + ':' + minutes + ':' + seconds + ' - ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
 
+  document.getElementById('clock').innerText = "UTC+07:00 - " + currentTime;
+}
+clock()
+setInterval(clock, 1000)
 
-  document.getElementById('clock').innerText ="UTC+07:00 - " + currentTime;
+
+function dataPir() {
+  fetch('/view/history_pir')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('infor').innerHTML = data
+    })
+    .catch(err => {
+      console.error(err)
+    })
 }
 
-setInterval(clock,1000)
+if (document.getElementById('status').textContent == "ON") {
+  dataPir()
+  setInterval(dataPir, 10000)
+}

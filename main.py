@@ -10,7 +10,7 @@ led = {
     "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://192.168.1.8:5000'
+url_host = 'http://192.168.1.5:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -69,7 +69,7 @@ async def send_pir():
         except OSError as e:
             print('Error loading LED:', e)
 
-        await asyncio.sleep(3)
+        await asyncio.sleep(10)
 
 
 async def toggleLed():
@@ -145,7 +145,7 @@ async def main():
         send_pir(),
         toggleLed()
     )
-
+    print("Done")
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
