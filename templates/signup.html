@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+</head>
+<body>
+  <h1>This is signup page</h1>
+  <form method="post">
+    <caption>Đăng ký tài khoản người dùng</caption>
+    <p>Username: <input placeholder="Enter your username" type="text" name="username"></p>
+    <p>Password: <input placeholder="Enter your password" type="password" name="password"></p>
+    <input type="submit" value="Signup">
+  </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+      {% for category, message in messages %}
+        <p class="category">{{message}}</p>
+      {% endfor %}
+
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

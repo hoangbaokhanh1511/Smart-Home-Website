@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Database</title>
+  <style>
+    #function {
+      margin-top: 10px;
+    }
+    table{
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th,tr {
+      text-align: center;
+    }
+
+    #submit{
+      border: none;
+      background-color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Danh sách người dùng</h1>
+  <form action="{{ url_for('data') }}" method="get">
+    <input type="text" placeholder="Enter the infomation" name="query" value="{{query}}">
+    <button type="submit">Search</button>
+  </form>
+
+  {%if data%}
+  <table border="1">
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Password</th>
+
+    </tr>
+    {% for user in data %}
+
+    <tr>
+      <td>{{ user._id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.password }}</td>
+
+    </tr>
+    {%endfor%}
+  {%else%}
+    <p>Không tồn tại thông tin người dùng</p>
+  {%endif%}
+
+  </table>
+  <a href="{{ url_for('home') }}">Home</a>
+  <div id="function">
+
+    <button id="add">Add</button>
+    <button id="remove">Remove</button>
+
+    <div id="form"></div>
+
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+    {% for category, message in messages %}
+      <p class="category">{{message}}</p>
+    {% endfor %}
+
+    {% endif %}
+  {% endwith %}
+
+</body>
+<script src="{{ url_for('static', filename = 'scripts/view.js')}}"></script>
+
+</html>

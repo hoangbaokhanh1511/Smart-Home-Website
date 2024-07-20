@@ -6,9 +6,11 @@ except:
 import network
 import esp
 
+
 esp.osdebug(None)
 
 import gc
+
 
 gc.collect()
 
@@ -23,3 +25,5 @@ while sta.isconnected() == False:
     pass
 print('Ket noi mang Wifi thanh cong!')
 print(sta.ifconfig())
+
+#0108675083

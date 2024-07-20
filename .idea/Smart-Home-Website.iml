@@ -12,5 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="MicroPython" level="project" />
+    <orderEntry type="module" module-name="Project-Smart-Home" />
   </component>
 </module>
