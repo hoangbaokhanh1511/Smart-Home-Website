@@ -10,7 +10,7 @@ led = {
     "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://192.168.1.5:5000'
+url_host = 'http://192.168.1.7:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -39,7 +39,7 @@ async def API_weather():
 
     while True:
 
-        API_key = "07bb5510d2576951d78b0f0b637f4716"
+        API_key = "993e2f3c8044ed3f8a149993504ae427"
         ion = 107.5796
         iat = 16.4637
         data = (urequests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={iat}&lon={ion}&appid={API_key}")).json()
@@ -53,6 +53,7 @@ async def API_weather():
         }
 
         respone = urequests.post(url,data=ujson.dumps(up_data),headers={'Content-type':'application/json'})
+        print(respone.status_code)
         respone.close()
 
         await asyncio.sleep(900)

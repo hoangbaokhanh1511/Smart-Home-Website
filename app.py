@@ -1,6 +1,6 @@
 from flask import Flask, render_template, send_file, url_for, jsonify, redirect, session, request, flash
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = "HelloWorld!!"
@@ -48,6 +48,9 @@ class History_Pir(db.Model):
     def __init__(self):
         now = datetime.now()
         self.timestamp = now.replace(microsecond=0)  # bỏ phần microsecond chỉ lấy ngang hh:mm:ss
+
+    def __repr__(self):
+        return f"{self.timestamp}"
 
 
 @app.route('/')
@@ -125,9 +128,31 @@ def user_dashboard():
     if request.method == "GET":
 
         username = session['username']
-        print(username)
-        start = History_Pir.query.first().timestamp.date()
-        end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
+        start = 0
+        end = 0
+        if History_Pir.query.count() > 0:
+
+            start = History_Pir.query.first().timestamp.date()
+            end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
+
+            two_days = start + timedelta(days=2)  # Lấy thời gian
+            print(repr(start),repr(end), two_days)
+            while (end - start).days >= 2:
+
+                dell = History_Pir.query.filter(History_Pir.timestamp.between(start, two_days)).all()
+
+                for data in dell:
+                    db.session.delete(data)
+                db.session.commit()
+
+                start = two_days
+                two_days = two_days + timedelta(days=2)
+
+            # Nếu có xóa thì phải cập nhật lại ID
+            all_pir = History_Pir.query.all()
+            for index, data in enumerate(all_pir, start=1):
+                data._id = index
+            db.session.commit()
 
         if 'username' in session:
             return render_template('userpage.html', username=username, start=start, end=end)
@@ -255,7 +280,13 @@ def data():
 def history_pir():
     start = History_Pir.query.first()
     end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first()
-    return render_template('pir.html', data=History_Pir.query.all(), startTime=start, endTime=end)
+    if start and end:
+
+        return render_template('pir.html', data=History_Pir.query.all(), startTime=start, endTime=end)
+
+    else:
+
+        return render_template('pir.html', data=History_Pir.query.all())
 
 
 # active form
@@ -293,7 +324,6 @@ def get_weather():
         data = request.get_json()  # lấy dữ liệu được truyền thành file json
         data_sensor_dht11.update(data)  # cập nhật dữ liệu
         if data:
-
             return jsonify({"status": "success", "data_received": data}), 200
         else:
             return jsonify({"status": "error", "message": "No data received"}), 400
@@ -331,7 +361,6 @@ def change_status_led():
         new_status = data.get('state')
         if led_name in led:
             led[led_name] = new_status
-            print(led)
             return jsonify({led_name: new_status}), 200
         else:
             return jsonify({'error': 'Đèn không tồn tại'}), 404

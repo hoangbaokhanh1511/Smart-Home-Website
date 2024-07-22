@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="MicroPython" name="MicroPython">
+      <configuration>
+        <device name="ESP8266" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="MicroPython" level="project" />
+  </component>
+</module>
