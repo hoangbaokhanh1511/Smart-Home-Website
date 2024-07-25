@@ -1,23 +1,25 @@
-import dht, ujson, uasyncio as asyncio, urequests,machine,utime
-from machine import I2C, Pin
+import dht, ujson, uasyncio as asyncio, urequests
+from time import sleep
+from machine import I2C, Pin, PWM
 from esp8266_i2c_lcd import I2cLcd
 from OOP import *
 
-# Khai Báo Đèn
+# Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn
 led = {
     "Led_Main": LED(pin_number=2),
     "Led_D7": LED(pin_number=13),
     "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://192.168.1.7:5000'
+url_host = 'http://192.168.1.5:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
 # sensor DHT11
 sensor = sensor_dht11(pin_number=16)
 
-#API thời tiết local
+
+# API thời tiết local
 # API_key = "07bb5510d2576951d78b0f0b637f4716"
 # ion = 107.5796
 # iat = 16.4637
@@ -34,15 +36,14 @@ def weather():
 
     return data
 
+
 async def API_weather():
     url = url_host + '/user_dashboard/api/weather'
 
     while True:
-
         API_key = "993e2f3c8044ed3f8a149993504ae427"
-        ion = 107.5796
-        iat = 16.4637
-        data = (urequests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={iat}&lon={ion}&appid={API_key}")).json()
+        CITY = "Hue"
+        data = urequests.get(f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_key}").json()
 
         up_data = {
             'temperature': data['main']['temp'] - 273,
@@ -52,11 +53,11 @@ async def API_weather():
             'visibility': data['visibility']
         }
 
-        respone = urequests.post(url,data=ujson.dumps(up_data),headers={'Content-type':'application/json'})
-        print(respone.status_code)
+        respone = urequests.post(url, data=ujson.dumps(up_data), headers={'Content-type': 'application/json'})
         respone.close()
 
         await asyncio.sleep(900)
+
 
 async def send_pir():
     url = url_host + '/user_dashboard/api/motion'
@@ -77,26 +78,16 @@ async def toggleLed():
     url = url_host + '/user_dashboard/api/change_status_led'
     while True:
         response = urequests.get(url)
-
         data = response.json()
-        # print(data)
-        if data['Led_Main']:
-            led.get('Led_Main').turn_off()
-        else:
-            led.get('Led_Main').turn_on()
 
-        if data['Led_D7']:
-            led.get('Led_D7').turn_on()
-        else:
-            led.get('Led_D7').turn_off()
 
-        if data['Led_D8']:
-            led.get('Led_D8').turn_on()
-        else:
-            led.get('Led_D8').turn_off()
+        led['Led_Main'].toggle(data['Led_Main'])
+        led['Led_D7'].toggle(data['Led_D7'])
+        led['Led_D8'].toggle(data['Led_D8'])
+
 
         response.close()
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.3)
 
 
 # adc = ADC(0)
@@ -117,7 +108,6 @@ async def toggleLed():
 
 
 async def LCD():
-
     data = weather()
     DEFAULT_I2C_ADDR = 0x27
     i2c = I2C(scl=Pin(5), sda=Pin(4), freq=400000)
@@ -138,15 +128,15 @@ async def LCD():
     lcd.putstr(f"C\nDo am: {data.get('humidity')}%")
 
 
-async def main():
 
+async def main():
     await asyncio.gather(
         LCD(),
         API_weather(),
         send_pir(),
-        toggleLed()
+        toggleLed(),
     )
-    print("Done")
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())

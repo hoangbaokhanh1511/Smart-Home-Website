@@ -1,22 +1,35 @@
-from machine import Pin
+from machine import Pin,PWM
+from time import sleep
 import dht
 
-
 class LED:
-    GPIO = -1
     def __init__(self, pin_number):
         self.led = Pin(pin_number, Pin.OUT)
-        self.led.value(0)
-        self.GPIO = pin_number
+        self.pwm = PWM(self.led, freq=10000)
+        self.brightness = 0
 
-    def turn_on(self):
-        self.led.on()
 
-    def turn_off(self):
-        self.led.off()
+    def toggle(self, value):
 
-    def __str__(self):
-        return f"This is GPIO {self.GPIO}"
+        if value == 0 or value == 1023:
+            self.brightness = value
+            self.pwm.duty(self.brightness)
+
+        else:
+
+            if self.brightness < value:
+                for duty in range (self.brightness,value,25):
+                    self.pwm.duty(duty)
+                    sleep(0.01)
+            else:
+                for duty in range (self.brightness,value,-25):
+                    self.pwm.duty(duty)
+                    sleep(0.01)
+
+            self.brightness = value
+            # print(self.brightness)
+
+        return self
 
 
 class sensor_dht11:

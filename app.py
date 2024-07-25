@@ -1,7 +1,9 @@
 from flask import Flask, render_template, send_file, url_for, jsonify, redirect, session, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
+import requests, io, sys, json
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 app.secret_key = "HelloWorld!!"
 
@@ -136,8 +138,8 @@ def user_dashboard():
             end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
 
             two_days = start + timedelta(days=2)  # Lấy thời gian
-            print(repr(start),repr(end), two_days)
-            while (end - start).days >= 2:
+
+            while (end - two_days).days >= 2:
 
                 dell = History_Pir.query.filter(History_Pir.timestamp.between(start, two_days)).all()
 
@@ -155,7 +157,8 @@ def user_dashboard():
             db.session.commit()
 
         if 'username' in session:
-            return render_template('userpage.html', username=username, start=start, end=end)
+
+            return render_template('userpage.html', username=username, start=start, end=end, )
         else:
             flash("Bạn cần phải đăng nhập trước", "error")
             return redirect(url_for('login'))
@@ -289,6 +292,12 @@ def history_pir():
         return render_template('pir.html', data=History_Pir.query.all())
 
 
+@app.route('/view/weather')
+def five_days_weather():
+    result = get_weather_for_five_days()
+    return render_template('weather.html', result=result)
+
+
 # active form
 @app.route('/add')
 def add():
@@ -311,9 +320,9 @@ status_pir = {
 }
 
 led = {
-    'Led_Main': False,
-    'Led_D7': False,
-    'Led_D8': False
+    'Led_Main': 1023,
+    'Led_D7': 0,
+    'Led_D8': 0
 }
 
 
@@ -358,17 +367,48 @@ def change_status_led():
     if request.method == "POST":
         data = request.json
         led_name = data.get('led_name')
-        new_status = data.get('state')
+        new_value = data.get('value')
         if led_name in led:
-            led[led_name] = new_status
-            return jsonify({led_name: new_status}), 200
+            led[led_name] = new_value
+            return jsonify({led_name: new_value}), 200
         else:
             return jsonify({'error': 'Đèn không tồn tại'}), 404
     else:
         return jsonify(led)
 
 
+# Độ sáng Đèn
+
+
+def get_weather_for_five_days():
+    data = requests.get(
+        'http://api.openweathermap.org/data/2.5/forecast?q=Hue&appid=07bb5510d2576951d78b0f0b637f4716&units=metric&lang=vi').json()
+    if data['cod'] != '200':
+        print('Error')
+        return
+
+    data_weather = []
+    for i in range(len(data['list'])):
+        if data['list'][i]['dt_txt'].endswith('00:00:00'):
+            temp = int(data['list'][i]['main']['temp'])
+            hum = data['list'][i]['main']['humidity']
+            icon = data['list'][i]['weather'][0]['icon']
+            icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
+            date = datetime.strptime(data['list'][i]['dt_txt'], '%Y-%m-%d %H:%M:%S')
+            element = {
+                "temp": int(temp),
+                'humidity': hum,
+                "icon_url": icon_url,
+                "date_of_week": date.strftime("%A")
+            }
+
+            data_weather.append(element)
+
+    return data_weather
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+
     app.run(debug=True, host='0.0.0.0')
