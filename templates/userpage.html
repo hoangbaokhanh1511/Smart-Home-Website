@@ -23,10 +23,17 @@
         <div id="information">
           <p id="username">Username: {{username}}</p>
         </div>
+
         <form method="post">
+          <input type="hidden" name="button" value="Logout">
           <input type="submit" name="handle" value="Logout">
+        </form>
+
+        <form method="post">
+          <input type="hidden" name="button" value="Change">
           <input type="submit" name="handle" value="Change Password">
         </form>
+
       </div>
 
       <div class="tittle">
@@ -59,13 +66,18 @@
     <div class="weather-forecast adiv">
 
       <div class="Tittle">
-        Cảm Biến Dự Báo Thời Tiết
+        Thông Tin Thời Tiết
       </div>
 
       <div id="data" class="Stats">
         <div class="description">
+          <div id="main_weather" class="thoi_tiet_chinh">Loading main......</div>
           <div id="temperature" class="nhiet_do">Loading Temperature.....</div>
           <div id="humidity" class="do_am">Loading Humidity......</div>
+          <div id="feels_like" class="cam_nhan">Loading Temp_feels_like......</div>
+          <div id="visibility" class="tam_nhin">Loading visibility......</div>
+          <br>
+          <div id="clock"></div>
         </div>
       </div>
 
@@ -75,9 +87,47 @@
   </div>
 
   <div class="main-right">
-    <div class=" adiv">
+
+    <div class="adiv" style="overflow: auto;">
+
       <div class="tittle">Phát hiện chuyển động</div>
       <h4 id="pir" onclick="pir()">Pir sensor HC-SR501: waiting</h4>
+
+      <div id="search_date_bar">
+        <form method="post">
+          <input type="hidden" name="button" value="Date">
+          <input type="date" name="startDate" id="startDate" value="{{start}}">
+          <input type="date" name="endDate" id="endDate" value="{{end}}">
+          <input type="submit" name="handle" value="Search" id="search">
+        </form>
+        <form method="post">
+          <input type="hidden" name="button" value="Overal">
+          <input type="submit" name="handle" value="Overal" id="overal">
+        </form>
+      </div>
+      <p id="status" style="display: none;">{{status}}</p>
+      <div id="infor">
+
+        <table border="1px">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+          {%if result%}
+            {%for data in result%}
+              <tr>
+                <th>{{data._id}}</th>
+                <th>{{data.timestamp}}</th>
+              </tr>
+            {%endfor%}
+          {%endif%}
+          </tbody>
+        </table>
+      </div>
+
     </div>
 
   </div>
