@@ -27,7 +27,7 @@ class LED:
                     sleep(0.01)
 
             self.brightness = value
-            # print(self.brightness)
+
 
         return self
 

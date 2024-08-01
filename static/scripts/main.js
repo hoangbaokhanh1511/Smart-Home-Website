@@ -19,11 +19,8 @@ function realtime() {
   fetch('/user_dashboard/api/weather')
     .then(response => response.json())
     .then(data => {
-      document.getElementById('main_weather').innerHTML = "Trạng Thái Thời Tiết Hiện Tại: " + data.main
       document.getElementById('temperature').innerHTML = "Nhiệt độ hiện tại: " + data.temperature + "℃"
       document.getElementById('humidity').innerHTML = "Độ ẩm hiện tại: " + data.humidity + "%"
-      document.getElementById('feels_like').innerHTML = "Nhiệt Độ cảm nhận: " + (data.feels_like).toFixed(2) + "℃"
-      document.getElementById('visibility').innerHTML = "Tầm nhìn khả thi: " + (data.visibility / 1000) + 'km'
     })
     .catch(err => {
       console.error('Lỗi khi gửi yêu cầu: ', err);
@@ -31,6 +28,55 @@ function realtime() {
 }
 realtime()
 setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
+
+function mqt135() {
+  fetch('/user_dashboard/api/mqt135')
+  .then(response => response.json())
+  .then(data => {
+    var value_of_mqt135 = data.value;
+
+    document.getElementById('mqt').innerHTML = "Nồng độ Co2: " + data.value + " (ppm)";
+
+    var section = document.getElementById('Section');
+
+
+    if (value_of_mqt135 <= 1000) {
+      section.innerHTML = `
+      <div class="row">
+        <div class="text">Đánh giá: </div>
+        <div class="box1">
+          <div class="emoji">🙂</div>
+          <div class="text">Good</div>
+        </div>
+      </div>`;
+    } else if (value_of_mqt135 <= 2000) {
+      section.innerHTML = `
+      <div class="row">
+        <div class="text">Đánh giá: </div>
+        <div class="box2">
+          <div class="emoji">🤒</div>
+          <div class="text">Medium</div>
+        </div>
+      </div>`;
+    } else {
+      section.innerHTML = `
+      <div class="row">
+        <div class="text">Đánh giá: </div>
+        <div class="box3">
+          <div class="emoji">😵</div>
+          <div class="text">Danger</div>
+        </div>
+      </div>`;
+    }
+
+  })
+  .catch(err => {
+    console.error(err);
+  });
+}
+mqt135();
+setInterval(mqt135, 2000);
+
 
 //Xử lý các button về đèn
 function change_status_led(name, data) {
@@ -135,19 +181,6 @@ function Light (status, data){
 }
 
 
-// }
-// function excuted_led(name,data){
-//   fetch('/user_dashboard/api/value_led', {
-//     method: "POST",
-//     headers: {'Content-Type': 'application/json'},
-//     body: JSON.stringify ({name: name, value: data})
-//   })
-//   .then(respone => respone.json())
-//   .then(data => {})
-//   .catch(err => {
-//     console.error(err)
-//   })
-// }
 // => Led Main
 document.getElementById('Option_Main').addEventListener('click', function() {
   document.getElementById('custom_light_Main').style.display = 'flex'

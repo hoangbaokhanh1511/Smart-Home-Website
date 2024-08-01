@@ -5,16 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e91e5500-7cf5-432c-8919-cf54aae13a0c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/weather.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MQ135.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Smart-Home-Website.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Smart-Home-Website.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OOP.py" beforeDir="false" afterPath="$PROJECT_DIR$/OOP.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot.py" beforeDir="false" afterPath="$PROJECT_DIR$/boot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/instance/pir.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/instance/pir.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/userpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/userpage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -46,19 +48,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.micropython.configurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="MicroPython.Flash OOP.py">
-    <configuration name="Flash OOP.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/OOP.py" runReplOnSuccess="no">
-      <module name="Smart-Home-Website" />
-      <method v="2">
-        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Flash Smart-Home-Website" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$" runReplOnSuccess="no">
-      <module name="Smart-Home-Website" />
-      <method v="2">
-        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="MicroPython.Flash userpage.html">
     <configuration name="Flash app.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/app.py" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
@@ -71,7 +61,19 @@
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Flash main.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/main.py" runReplOnSuccess="no">
+    <configuration name="Flash style.css" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/static/styles/style.css" runReplOnSuccess="no">
+      <module name="Smart-Home-Website" />
+      <method v="2">
+        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Flash userpage.html" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/templates/userpage.html" runReplOnSuccess="no">
+      <module name="Smart-Home-Website" />
+      <method v="2">
+        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Flash view.html" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/templates/view.html" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
@@ -79,11 +81,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="MicroPython.Flash OOP.py" />
-        <item itemvalue="MicroPython.Flash main.py" />
-        <item itemvalue="MicroPython.Flash main.js" />
-        <item itemvalue="MicroPython.Flash Smart-Home-Website" />
+        <item itemvalue="MicroPython.Flash userpage.html" />
+        <item itemvalue="MicroPython.Flash view.html" />
         <item itemvalue="MicroPython.Flash app.py" />
+        <item itemvalue="MicroPython.Flash main.js" />
+        <item itemvalue="MicroPython.Flash style.css" />
       </list>
     </recent_temporary>
   </component>

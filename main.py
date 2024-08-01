@@ -1,9 +1,8 @@
 import dht, ujson, uasyncio as asyncio, urequests
-from time import sleep
-from machine import I2C, Pin, PWM
+from machine import I2C
 from esp8266_i2c_lcd import I2cLcd
 from OOP import *
-
+from MQ135 import MQ135
 # Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn
 led = {
     "Led_Main": LED(pin_number=2),
@@ -11,53 +10,23 @@ led = {
     "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://192.168.1.5:5000'
+url_host = 'http://192.168.1.8:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
 # sensor DHT11
 sensor = sensor_dht11(pin_number=16)
 
-
-# API thời tiết local
-# API_key = "07bb5510d2576951d78b0f0b637f4716"
-# ion = 107.5796
-# iat = 16.4637
-# data = (urequests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={iat}&lon={ion}&appid={API_key}")).json()
-
+# MQT135
+adc = MQ135(0)
 
 def weather():
     temperature, humidity = sensor.get_weather()
-
     data = {
         'temperature': temperature,
         'humidity': humidity
     }
-
     return data
-
-
-async def API_weather():
-    url = url_host + '/user_dashboard/api/weather'
-
-    while True:
-        API_key = "993e2f3c8044ed3f8a149993504ae427"
-        CITY = "Hue"
-        data = urequests.get(f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_key}").json()
-
-        up_data = {
-            'temperature': data['main']['temp'] - 273,
-            'humidity': data['main']['humidity'],
-            'feels_like': data['main']['feels_like'] - 273,
-            'main': data['weather'][0]['main'],
-            'visibility': data['visibility']
-        }
-
-        respone = urequests.post(url, data=ujson.dumps(up_data), headers={'Content-type': 'application/json'})
-        respone.close()
-
-        await asyncio.sleep(900)
-
 
 async def send_pir():
     url = url_host + '/user_dashboard/api/motion'
@@ -71,7 +40,7 @@ async def send_pir():
         except OSError as e:
             print('Error loading LED:', e)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
 
 
 async def toggleLed():
@@ -80,31 +49,25 @@ async def toggleLed():
         response = urequests.get(url)
         data = response.json()
 
-
         led['Led_Main'].toggle(data['Led_Main'])
         led['Led_D7'].toggle(data['Led_D7'])
         led['Led_D8'].toggle(data['Led_D8'])
 
-
         response.close()
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.1)
 
 
-# adc = ADC(0)
-# async def MQT135():
-#
-#     while True:
-#         adc_value = adc.read()
-#         co2_concentration = adc_value * 2.5
-#         nh3_concentration = adc_value * 1.8
-#         co_concentration = adc_value * 1.3
-#         ethanol_concentration = adc_value * 1.5
-#
-#         print(f"Nồng độ co2 {co2_concentration} đơn vị ppm")
-#         print(f"Nồng độ nh3 {nh3_concentration} đơn vị ppm")
-#         print(f"Nồng độ co {co_concentration} đơn vị ppm")
-#         print(f"Nồng độ ethanol {ethanol_concentration} đơn vị ppm")
-#         await asyncio.sleep(1)
+async def MQT135():
+    url = url_host + '/user_dashboard/api/mqt135'
+    while True:
+        data = weather()
+        value = adc.get_corrected_ppm(data['temperature'],data['humidity'])
+        mqt = {
+            'value': value
+        }
+        response = urequests.post(url=url, headers={'Content-Type': 'application/json'}, data=ujson.dumps(mqt))
+        response.close()
+        await asyncio.sleep(3)
 
 
 async def LCD():
@@ -126,13 +89,27 @@ async def LCD():
     lcd.putstr(f"Nhiet Do: {data.get('temperature')}")
     lcd.putchar(chr(0))
     lcd.putstr(f"C\nDo am: {data.get('humidity')}%")
+    await asyncio.sleep(2)
 
 
+async def dht11():
+    url = url_host + '/user_dashboard/api/weather'
+    while True:
+        data = weather()
+        up_data = {
+            'temperature': data.get('temperature'),
+            'humidity': data.get('humidity')
+        }
+        response = urequests.post(data=ujson.dumps(up_data),headers={"Content-Type": "application/json"},url=url)
+        response.close()
+
+        await asyncio.sleep(5)
 
 async def main():
     await asyncio.gather(
+        MQT135(),
+        dht11(),
         LCD(),
-        API_weather(),
         send_pir(),
         toggleLed(),
     )

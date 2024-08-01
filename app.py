@@ -157,8 +157,9 @@ def user_dashboard():
             db.session.commit()
 
         if 'username' in session:
+            return render_template('userpage.html', username=username, start=start, end=end)
 
-            return render_template('userpage.html', username=username, start=start, end=end, )
+
         else:
             flash("Bạn cần phải đăng nhập trước", "error")
             return redirect(url_for('login'))
@@ -298,16 +299,6 @@ def five_days_weather():
     return render_template('weather.html', result=result)
 
 
-# active form
-@app.route('/add')
-def add():
-    return render_template('add.html')
-
-
-@app.route('/remove')
-def remove():
-    return render_template('remove.html')
-
 
 # Phần này xử lý thao tác module => => => => =>
 data_sensor_dht11 = {
@@ -324,6 +315,24 @@ led = {
     'Led_D7': 0,
     'Led_D8': 0
 }
+
+mqt135 = {
+    'value': 0
+}
+
+
+# Xử lý mqt135
+@app.route('/user_dashboard/api/mqt135', methods=['POST', 'GET'])
+def get_mqt135():
+    if request.method == 'POST':
+        data = request.get_json()
+        mqt135.update(data)
+        if data:
+            return jsonify({"status": "success", "data_received": data}), 200
+        else:
+            return jsonify({"status": "error", "message": "No data received"}), 400
+    else:
+        return jsonify(mqt135)
 
 
 # Xử lý dht11
@@ -378,18 +387,15 @@ def change_status_led():
 
 
 # Độ sáng Đèn
-
-
 def get_weather_for_five_days():
     data = requests.get(
-        'http://api.openweathermap.org/data/2.5/forecast?q=Hue&appid=07bb5510d2576951d78b0f0b637f4716&units=metric&lang=vi').json()
-    if data['cod'] != '200':
-        print('Error')
-        return
+        'http://api.openweathermap.org/data/2.5/forecast?lat=16.4637&lon=107.5917&appid=07bb5510d2576951d78b0f0b637f4716&units=metric').json()
+
+    print(json.dumps(data,indent=4))
 
     data_weather = []
     for i in range(len(data['list'])):
-        if data['list'][i]['dt_txt'].endswith('00:00:00'):
+        if data['list'][i]['dt_txt'].endswith('06:00:00'):
             temp = int(data['list'][i]['main']['temp'])
             hum = data['list'][i]['main']['humidity']
             icon = data['list'][i]['weather'][0]['icon']
