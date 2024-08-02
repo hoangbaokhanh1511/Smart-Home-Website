@@ -151,12 +151,6 @@ def user_dashboard():
         username = session['username']
         start = 0
         end = 0
-<<<<<<< HEAD
-
-        if History_Pir.query.count() > 0:
-            start = History_Pir.query.first().timestamp.date()
-            end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
-=======
         if History_Pir.query.count() > 0:
 
             start = History_Pir.query.first().timestamp.date()
@@ -180,7 +174,6 @@ def user_dashboard():
             for index, data in enumerate(all_pir, start=1):
                 data._id = index
             db.session.commit()
->>>>>>> a176583e90c25b377873e80a81c903d77ae4cc4e
 
         if 'username' in session:
             return render_template('userpage.html', username=username, start=start, end=end)
@@ -495,9 +488,4 @@ def get_weather_for_five_days():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-<<<<<<< HEAD
     app.run(debug=True, host='0.0.0.0')
-=======
-
-    app.run(debug=True, host='0.0.0.0')
->>>>>>> a176583e90c25b377873e80a81c903d77ae4cc4e
