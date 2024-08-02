@@ -1,26 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+
+  <title>Signup Site</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      height: 100vh;
+      background: linear-gradient(to bottom, rgb(131, 131, 222), white);
+    }
+    .centered-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+
+    }
+    .container{
+      max-width: 400px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>This is signup page</h1>
-  <form method="post">
-    <caption>Đăng ký tài khoản người dùng</caption>
-    <p>Username: <input placeholder="Enter your username" type="text" name="username"></p>
-    <p>Password: <input placeholder="Enter your password" type="password" name="password"></p>
-    <input type="submit" value="Signup">
-  </form>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-
-      {% for category, message in messages %}
-        <p class="category">{{message}}</p>
-      {% endfor %}
-
-    {% endif %}
-  {% endwith %}
+  <div class="centered-container">
+    <div class="container bg-white p-5 border border-1 border-dark rounded-3">
+      <div class="row">
+        <img src="/static/images/Logo.png" alt="Logo">
+      </div>
+      <div class="row">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+      </div>
+      <form method="post">
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <label for="username">Username</label>
+            <input class="form-control" placeholder="Enter your username" type="text" name="username">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <label for="password">Password</label>
+            <input class="form-control" placeholder="Enter your password" type="password" name="password">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <input class="btn btn-success" type="submit" value="Signup">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
+
 </html>

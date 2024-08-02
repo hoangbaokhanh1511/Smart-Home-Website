@@ -9,9 +9,19 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
+<<<<<<< HEAD
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="MicroPython" level="project" />
     <orderEntry type="module" module-name="Project-Smart-Home" />
+=======
+    <orderEntry type="jdk" jdkName="C:\Users\qthua\anaconda3" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="MicroPython" level="project" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+>>>>>>> a176583e90c25b377873e80a81c903d77ae4cc4e
   </component>
 </module>
