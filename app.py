@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import requests, io, sys, json
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 app.secret_key = "HelloWorld!!"
 
@@ -25,7 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'  # Tạo datab
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # theo dõi các sửa đổi object và phát tín hiệu
 # database của pir HC-SR501
 app.config['SQLALCHEMY_BINDS'] = {
-    'pir': 'sqlite:///pir.sqlite3'
+    'pir': 'sqlite:///pir.sqlite3',
+    'pending': 'sqlite:///pendingUsers.sqlite3'
 }
 
 db = SQLAlchemy(app)  # Khởi tạo database (cả database chình và phụ)
@@ -40,6 +40,9 @@ class users(db.Model):
         self.name = name
         self.password = password
 
+    def __repr__(self):
+        return f"Name: {self.name}, Password: {self.password}"
+
 
 class History_Pir(db.Model):
     __bind_key__ = 'pir'
@@ -53,6 +56,20 @@ class History_Pir(db.Model):
 
     def __repr__(self):
         return f"{self.timestamp}"
+
+
+class pendingUsers(db.Model):
+    __bind_key__ = 'pending'
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('Username', db.String(100))
+    password = db.Column('Password', db.String(100))
+
+    def __init__(self, name, password):
+        self.name = name
+        self.password = password
+
+    def __repr__(self):
+        return f"Name: {self.name}, Password: {self.password}"
 
 
 @app.route('/')
@@ -104,7 +121,7 @@ def signup():
             if not found_user:
 
                 # Thêm thông tin vào database
-                new_user = users(user, pas)
+                new_user = pendingUsers(user, pas)
                 db.session.add(new_user)
                 db.session.commit()
 
@@ -128,6 +145,8 @@ username = ""
 def user_dashboard():
     global username
     if request.method == "GET":
+
+        print(pendingUsers.query.all())
 
         username = session['username']
         start = 0
@@ -196,7 +215,7 @@ def user_dashboard():
 def change():
     found_user = users.query.filter_by(name=session['username']).first()
     if request.method == "GET":
-        return render_template('change.html', key=found_user.name)
+        return render_template('change.html')
     else:
         oldpass = request.form['oldPassword']
         newpass = request.form['newPassword']
@@ -230,7 +249,10 @@ def data():
         else:
             result = users.query.all()
 
-        return render_template('view.html', data=result, query=query)
+        result2 = pendingUsers.query.all()
+
+        return render_template('view.html', data=result, pending=result2, query=query)
+
     else:
         handle = request.form['handle']
 
@@ -255,6 +277,7 @@ def data():
 
 
         elif handle == 'Remove':
+
             username = request.form['username']
             found_user = users.query.filter_by(name=username).first()
             if found_user:
@@ -276,12 +299,62 @@ def data():
             else:
                 flash('Không tìm thấy tài khoản', 'error')
 
-        result = users.query.all()
-        return render_template('view.html', data=result)
+        elif handle == 'Save':
+            form_data = request.form.to_dict(flat=False)  # Chuyển dữ liệu ImmutableMultiDict thành Dictionary
+
+            size = users.query.count()  # Đếm số user trong database
+
+            Newpass = form_data.get('newPassword')
+            OldPass = form_data.get('oldPassword')
+            getID = form_data.get('ID')
+
+            for step in range(size):
+
+                if Newpass[step] != OldPass[step]:
+                    user = users.query.filter_by(_id=getID[step]).first()
+                    user.password = Newpass[step]
+
+            db.session.commit()
+
+        elif handle == "Submit Change":
+
+            data = request.form.to_dict(flat=False)
+
+            user = data.get('user')
+            if user == None:
+                pass
+
+            else:
+                for index in user:
+                    Id, status = index.split(' ')
+                    Id = int(Id)
+
+                    clone_user = pendingUsers.query.filter_by(id=Id).first()
+                    if status == 'True':
+                        newUser = users(clone_user.name, clone_user.password)
+
+                        db.session.add(newUser)
+
+                    db.session.delete(clone_user)
+
+                all_user = pendingUsers.query.all()
+                for index, user in enumerate(all_user, start=1):
+                    user.id = index
+
+                db.session.commit()
+
+        result1 = users.query.all()
+        result2 = pendingUsers.query.all()
+
+        return render_template('view.html', data=result1, pending=result2)
 
 
 @app.route('/view/history_pir')
 def history_pir():
+    if username == "":
+        flash('Bạn phải đăng nhập trước')
+        return redirect(url_for('login'))
+
     start = History_Pir.query.first()
     end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first()
     if start and end:
@@ -297,7 +370,6 @@ def history_pir():
 def five_days_weather():
     result = get_weather_for_five_days()
     return render_template('weather.html', result=result)
-
 
 
 # Phần này xử lý thao tác module => => => => =>
@@ -386,16 +458,16 @@ def change_status_led():
         return jsonify(led)
 
 
-# Độ sáng Đèn
 def get_weather_for_five_days():
     data = requests.get(
-        'http://api.openweathermap.org/data/2.5/forecast?lat=16.4637&lon=107.5917&appid=07bb5510d2576951d78b0f0b637f4716&units=metric').json()
-
-    print(json.dumps(data,indent=4))
+        'http://api.openweathermap.org/data/2.5/forecast?q=Hue&appid=07bb5510d2576951d78b0f0b637f4716&units=metric&lang=vi').json()
+    if data['cod'] != '200':
+        print('Error')
+        return
 
     data_weather = []
     for i in range(len(data['list'])):
-        if data['list'][i]['dt_txt'].endswith('06:00:00'):
+        if data['list'][i]['dt_txt'].endswith('00:00:00'):
             temp = int(data['list'][i]['main']['temp'])
             hum = data['list'][i]['main']['humidity']
             icon = data['list'][i]['weather'][0]['icon']

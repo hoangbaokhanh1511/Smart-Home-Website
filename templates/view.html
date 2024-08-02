@@ -21,42 +21,58 @@
     <div class="row">
       <form class="d-flex flex-column" action="{{ url_for('data') }}" method="get">
         <label for="usernameLable">Tìm kiếm</label>
-        <input class="form-control mb-3 mt-3" type="text" placeholder="Enter the infomation" name="query"
-          value="{{query}}">
+        <input class="form-control mb-3 mt-3" type="text" placeholder="Enter username" name="query" value="{{query}}">
         <button class="mx-auto btn btn-success justify-content-center" type="submit">Search</button>
       </form>
     </div>
   </div>
 
-  <div class="container text-center" >
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <table class="table table-hover table-bordered" style="border-radius: 10px;">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Username</th>
-              <th scope="col">Password</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if data %}
+  <div class="container text-center">
+    <form method="post">
+      <div class="row justify-content-center">
+        <div class="col-md-8 table-container">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if data %}
               {% for user in data %}
               <tr>
                 <th scope="row">{{ user._id }}</th>
                 <td>{{ user.name }}</td>
-                <td>{{ user.password }}</td>
+                <td>
+                  <span class="showPassword">{{ user.password }}</span>
+
+                  <input class="hidePassword form-control" value="{{ user.password }}" type="text" name="newPassword"
+                    style="display: none;">
+
+                  <input type="hidden" name="oldPassword" value="{{ user.password }}">
+                  <input type="hidden" name="ID" value="{{user._id}}">
+                </td>
+                <td>
+                  <input class="check" type="checkbox">
+                </td>
               </tr>
               {% endfor %}
-            {% else %}
+              {% else %}
               <tr>
-                <td colspan="3" class="text-center">Không tìm thấy</td>
+                <td colspan="4" class="text-center">Không tìm thấy</td>
               </tr>
-            {% endif %}
-          </tbody>
-        </table>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+      <input class="btn btn-success" type="submit" name="handle" value="Save">
+    </form>
+
   </div>
   <div class="container d-flex flex-column justify-content-center">
     <div class="row">
@@ -65,16 +81,17 @@
           <div class="card-header">
             Tùy Chỉnh
           </div>
-          <div class="card-body d-flex gap-3">
+          <div class="card-body d-flex flex-wrap justify-content-center gap-3">
             <a href="{{ url_for('home') }}" class="btn btn-outline-danger">Home</a>
             <button id="add" class="btn btn-primary">ADD USER</button>
             <button id="remove" class="btn btn-primary">REMOVE USER</button>
+            <button id="pending" class="btn btn-primary">PENDING USER</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
       <div class="col">
         <div id="formAdd" class="card" style="display: none;">
 
@@ -84,21 +101,23 @@
 
           <div class="card-body p-4">
 
-              <div class="card-title mb-3">
-                Mời bạn nhập thông tin để tiến hành thêm tài khoản
-              </div>
+            <div class="card-title mb-3">
+              Mời bạn nhập thông tin để tiến hành thêm tài khoản
+            </div>
 
-              <div class="row p-2 ">
-                <form method="post">
-                  <label for="username">Username:</label>
-                  <input class="form-control mb-2 mt-2" type="text" name="username" id="username" placeholder="Enter Username">
+            <div class="row p-2 ">
+              <form method="post">
+                <label for="username">Username:</label>
+                <input class="form-control mb-2 mt-2" type="text" name="username" id="username"
+                  placeholder="Enter Username">
 
-                  <label for="password">Password:</label>
-                  <input class="form-control mt-2 mb-4" type="text" name="password" id="password" placeholder="Enter Password">
+                <label for="password">Password:</label>
+                <input class="form-control mt-2 mb-4" type="text" name="password" id="password"
+                  placeholder="Enter Password">
 
-                  <input class="btn btn-outline-success" type="submit" value="Add" name="handle">
-                </form>
-              </div>
+                <input class="btn btn-outline-success" type="submit" value="Add" name="handle">
+              </form>
+            </div>
 
           </div>
         </div>
@@ -115,19 +134,86 @@
 
           <div class="card-body p-4">
 
-              <div class="card-title mb-3">
-                Mời bạn nhập thông tin để tiến hành xóa tài khoản
+            <div class="card-title mb-3">
+              Mời bạn nhập thông tin để tiến hành xóa tài khoản
+            </div>
+
+            <div class="row p-2 ">
+              <form method="post">
+                <label for="username">Username:</label>
+                <input class="form-control mb-4 mt-2" type="text" name="username" id="username"
+                  placeholder="Enter Username">
+
+                <input class="btn btn-outline-success" type="submit" value="Remove" name="handle" id="check">
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div id="pendinguser" class="card" style="display: none;">
+
+          <div class="card-header">
+            Danh sách user đợi duyệt
+          </div>
+
+          <div class="card-body p-4">
+            <form method="post">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Active</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {%if pending%}
+                  {%for userpending in pending%}
+                  <tr>
+                    <td>
+                      {{userpending.id}}
+                    </td>
+                    <td>
+                      {{userpending.name}}
+                    </td>
+                    <td>
+                      {{userpending.password}}
+                    </td>
+
+                    <td class="d-flex gap-4">
+                      <div class="d-flex flex-column">
+                        <label>Yes</label>
+                        <input type="checkbox" id="yes_{{userpending.id}}" name="user" value="{{ userpending.id }} True" onclick="selectOption(this, '{{ userpending.id }}')">
+                      </div>
+                      <div class="d-flex flex-column">
+                        <label>No</label>
+                        <input type="checkbox" id="no_{{userpending.id}}" name="user" value="{{ userpending.id }} False" onclick="selectOption(this, '{{ userpending.id }}')">
+                      </div>
+                    </td>
+
+                  </tr>
+
+                  {%endfor%}
+                  {%else%}
+                  <tr>
+                    <td colspan="3">Không có account nào pending</td>
+                  </tr>
+                  {%endif%}
+
+                </tbody>
+              </table>
+              <div class="d-flex justify-content-center">
+                <input class="btn btn-outline-success" type="submit" name="handle" value="Submit Change">
               </div>
+            </form>
 
-              <div class="row p-2 ">
-                <form method="post">
-                  <label for="username">Username:</label>
-                  <input class="form-control mb-4 mt-2" type="text" name="username" id="username" placeholder="Enter Username">
-
-                  <input class="btn btn-outline-success" type="submit" value="Remove" name="handle" id="check">
-
-                </form>
-              </div>
 
           </div>
         </div>
@@ -142,14 +228,57 @@
     document.getElementById('add').addEventListener("click", function (event) {
       document.getElementById('formAdd').style.display = 'block'
       document.getElementById('formRemove').style.display = 'none'
-
+      document.getElementById('pendinguser').style.display = 'none'
     })
 
     document.getElementById('remove').addEventListener("click", function (event) {
       document.getElementById('formRemove').style.display = 'block'
       document.getElementById('formAdd').style.display = 'none'
+      document.getElementById('pendinguser').style.display = 'none'
     })
 
+    document.getElementById('pending').addEventListener("click", function (event) {
+      document.getElementById('formRemove').style.display = 'none'
+      document.getElementById('formAdd').style.display = 'none'
+      document.getElementById('pendinguser').style.display = 'block'
+    })
+    /* vì có nhiều tk với class giống nhau
+    nên sẽ dùng querySelectorAll thay vì get ID*/
+    document.querySelectorAll('.check').forEach(checkbox => {
+      checkbox.addEventListener('change', function (event) {
+        const row = event.target.closest('tr') // => lấy ptu gần nhất chứa checkbox này
+        const show = row.querySelector('.showPassword')
+        const hide = row.querySelector('.hidePassword')
+
+
+        if (event.target.checked) {
+          show.style.display = 'none'
+          hide.style.display = 'block'
+        }
+
+        else {
+          hide.value = show.innerText;
+          show.style.display = 'block'
+          hide.style.display = 'none'
+        }
+
+      })
+    })
+
+
+    function selectOption(checkbox, index) {
+      const yesCheckbox = document.getElementById(`yes_${index}`);
+      const noCheckbox = document.getElementById(`no_${index}`);
+      // hiện ra id của user vừa mới dùng checkbox
+
+      if (checkbox === yesCheckbox) {
+        noCheckbox.checked = false;
+      } else if (checkbox === noCheckbox) {
+        yesCheckbox.checked = false;
+      }
+
+
+    }
   </script>
 
 </body>
