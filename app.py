@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_file, url_for, jsonify, redirect, session, request, flash
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
+import requests, io, sys, json
 
 app = Flask(__name__)
 app.secret_key = "HelloWorld!!"
@@ -23,7 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'  # Tạo datab
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # theo dõi các sửa đổi object và phát tín hiệu
 # database của pir HC-SR501
 app.config['SQLALCHEMY_BINDS'] = {
-    'pir': 'sqlite:///pir.sqlite3'
+    'pir': 'sqlite:///pir.sqlite3',
+    'pending': 'sqlite:///pendingUsers.sqlite3'
 }
 
 db = SQLAlchemy(app)  # Khởi tạo database (cả database chình và phụ)
@@ -38,6 +40,9 @@ class users(db.Model):
         self.name = name
         self.password = password
 
+    def __repr__(self):
+        return f"Name: {self.name}, Password: {self.password}"
+
 
 class History_Pir(db.Model):
     __bind_key__ = 'pir'
@@ -48,6 +53,23 @@ class History_Pir(db.Model):
     def __init__(self):
         now = datetime.now()
         self.timestamp = now.replace(microsecond=0)  # bỏ phần microsecond chỉ lấy ngang hh:mm:ss
+
+    def __repr__(self):
+        return f"{self.timestamp}"
+
+
+class pendingUsers(db.Model):
+    __bind_key__ = 'pending'
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('Username', db.String(100))
+    password = db.Column('Password', db.String(100))
+
+    def __init__(self, name, password):
+        self.name = name
+        self.password = password
+
+    def __repr__(self):
+        return f"Name: {self.name}, Password: {self.password}"
 
 
 @app.route('/')
@@ -99,7 +121,7 @@ def signup():
             if not found_user:
 
                 # Thêm thông tin vào database
-                new_user = users(user, pas)
+                new_user = pendingUsers(user, pas)
                 db.session.add(new_user)
                 db.session.commit()
 
@@ -124,16 +146,46 @@ def user_dashboard():
     global username
     if request.method == "GET":
 
+        print(pendingUsers.query.all())
+
         username = session['username']
         start = 0
         end = 0
+<<<<<<< HEAD
 
         if History_Pir.query.count() > 0:
             start = History_Pir.query.first().timestamp.date()
             end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
+=======
+        if History_Pir.query.count() > 0:
+
+            start = History_Pir.query.first().timestamp.date()
+            end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first().timestamp.date()
+
+            two_days = start + timedelta(days=2)  # Lấy thời gian
+
+            while (end - two_days).days >= 2:
+
+                dell = History_Pir.query.filter(History_Pir.timestamp.between(start, two_days)).all()
+
+                for data in dell:
+                    db.session.delete(data)
+                db.session.commit()
+
+                start = two_days
+                two_days = two_days + timedelta(days=2)
+
+            # Nếu có xóa thì phải cập nhật lại ID
+            all_pir = History_Pir.query.all()
+            for index, data in enumerate(all_pir, start=1):
+                data._id = index
+            db.session.commit()
+>>>>>>> backend
 
         if 'username' in session:
             return render_template('userpage.html', username=username, start=start, end=end)
+
+
         else:
             flash("Bạn cần phải đăng nhập trước", "error")
             return redirect(url_for('login'))
@@ -170,7 +222,7 @@ def user_dashboard():
 def change():
     found_user = users.query.filter_by(name=session['username']).first()
     if request.method == "GET":
-        return render_template('change.html', key=found_user.name)
+        return render_template('change.html')
     else:
         oldpass = request.form['oldPassword']
         newpass = request.form['newPassword']
@@ -204,7 +256,10 @@ def data():
         else:
             result = users.query.all()
 
-        return render_template('view.html', data=result, query=query)
+        result2 = pendingUsers.query.all()
+
+        return render_template('view.html', data=result, pending=result2, query=query)
+
     else:
         handle = request.form['handle']
 
@@ -229,6 +284,7 @@ def data():
 
 
         elif handle == 'Remove':
+
             username = request.form['username']
             found_user = users.query.filter_by(name=username).first()
             if found_user:
@@ -250,12 +306,62 @@ def data():
             else:
                 flash('Không tìm thấy tài khoản', 'error')
 
-        result = users.query.all()
-        return render_template('view.html', data=result)
+        elif handle == 'Save':
+            form_data = request.form.to_dict(flat=False)  # Chuyển dữ liệu ImmutableMultiDict thành Dictionary
+
+            size = users.query.count()  # Đếm số user trong database
+
+            Newpass = form_data.get('newPassword')
+            OldPass = form_data.get('oldPassword')
+            getID = form_data.get('ID')
+
+            for step in range(size):
+
+                if Newpass[step] != OldPass[step]:
+                    user = users.query.filter_by(_id=getID[step]).first()
+                    user.password = Newpass[step]
+
+            db.session.commit()
+
+        elif handle == "Submit Change":
+
+            data = request.form.to_dict(flat=False)
+
+            user = data.get('user')
+            if user == None:
+                pass
+
+            else:
+                for index in user:
+                    Id, status = index.split(' ')
+                    Id = int(Id)
+
+                    clone_user = pendingUsers.query.filter_by(id=Id).first()
+                    if status == 'True':
+                        newUser = users(clone_user.name, clone_user.password)
+
+                        db.session.add(newUser)
+
+                    db.session.delete(clone_user)
+
+                all_user = pendingUsers.query.all()
+                for index, user in enumerate(all_user, start=1):
+                    user.id = index
+
+                db.session.commit()
+
+        result1 = users.query.all()
+        result2 = pendingUsers.query.all()
+
+        return render_template('view.html', data=result1, pending=result2)
 
 
 @app.route('/view/history_pir')
 def history_pir():
+    if username == "":
+        flash('Bạn phải đăng nhập trước')
+        return redirect(url_for('login'))
+
     start = History_Pir.query.first()
     end = History_Pir.query.order_by(History_Pir.timestamp.desc()).first()
     if start and end:
@@ -267,15 +373,10 @@ def history_pir():
         return render_template('pir.html', data=History_Pir.query.all())
 
 
-# active form
-@app.route('/add')
-def add():
-    return render_template('add.html')
-
-
-@app.route('/remove')
-def remove():
-    return render_template('remove.html')
+@app.route('/view/weather')
+def five_days_weather():
+    result = get_weather_for_five_days()
+    return render_template('weather.html', result=result)
 
 
 # Phần này xử lý thao tác module => => => => =>
@@ -289,10 +390,28 @@ status_pir = {
 }
 
 led = {
-    'Led_Main': False,
-    'Led_D7': False,
-    'Led_D8': False
+    'Led_Main': 1023,
+    'Led_D7': 0,
+    'Led_D8': 0
 }
+
+mqt135 = {
+    'value': 0
+}
+
+
+# Xử lý mqt135
+@app.route('/user_dashboard/api/mqt135', methods=['POST', 'GET'])
+def get_mqt135():
+    if request.method == 'POST':
+        data = request.get_json()
+        mqt135.update(data)
+        if data:
+            return jsonify({"status": "success", "data_received": data}), 200
+        else:
+            return jsonify({"status": "error", "message": "No data received"}), 400
+    else:
+        return jsonify(mqt135)
 
 
 # Xử lý dht11
@@ -302,7 +421,6 @@ def get_weather():
         data = request.get_json()  # lấy dữ liệu được truyền thành file json
         data_sensor_dht11.update(data)  # cập nhật dữ liệu
         if data:
-
             return jsonify({"status": "success", "data_received": data}), 200
         else:
             return jsonify({"status": "error", "message": "No data received"}), 400
@@ -337,18 +455,49 @@ def change_status_led():
     if request.method == "POST":
         data = request.json
         led_name = data.get('led_name')
-        new_status = data.get('state')
+        new_value = data.get('value')
         if led_name in led:
-            led[led_name] = new_status
-            print(led)
-            return jsonify({led_name: new_status}), 200
+            led[led_name] = new_value
+            return jsonify({led_name: new_value}), 200
         else:
             return jsonify({'error': 'Đèn không tồn tại'}), 404
     else:
         return jsonify(led)
 
 
+def get_weather_for_five_days():
+    data = requests.get(
+        'http://api.openweathermap.org/data/2.5/forecast?q=Hue&appid=07bb5510d2576951d78b0f0b637f4716&units=metric&lang=vi').json()
+    if data['cod'] != '200':
+        print('Error')
+        return
+
+    data_weather = []
+    for i in range(len(data['list'])):
+        if data['list'][i]['dt_txt'].endswith('00:00:00'):
+            temp = int(data['list'][i]['main']['temp'])
+            hum = data['list'][i]['main']['humidity']
+            icon = data['list'][i]['weather'][0]['icon']
+            icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
+            date = datetime.strptime(data['list'][i]['dt_txt'], '%Y-%m-%d %H:%M:%S')
+            element = {
+                "temp": int(temp),
+                'humidity': hum,
+                "icon_url": icon_url,
+                "date_of_week": date.strftime("%A")
+            }
+
+            data_weather.append(element)
+
+    return data_weather
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+<<<<<<< HEAD
     app.run(debug=True, host='0.0.0.0')
+=======
+
+    app.run(debug=True, host='0.0.0.0')
+>>>>>>> backend

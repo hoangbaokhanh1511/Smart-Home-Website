@@ -5,75 +5,283 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>View Database</title>
-  <style>
-    #function {
-      margin-top: 10px;
-    }
-    table{
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th,tr {
-      text-align: center;
-    }
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 
-    #submit{
-      border: none;
-      background-color: white;
-    }
-  </style>
 </head>
 
-<body>
-  <h1>Danh sách người dùng</h1>
-  <form action="{{ url_for('data') }}" method="get">
-    <input type="text" placeholder="Enter the infomation" name="query" value="{{query}}">
-    <button type="submit">Search</button>
-  </form>
+<body style="height: 100vh; background:  linear-gradient(to bottom, rgb(131, 131, 222), white);">
+  <div class="container mt-3" style="margin-bottom: 10vh; max-width: 600px; ">
+    <div class="row mb-3">
+      <h1 style="text-align: center;">Danh sách tài khoản </h1>
+    </div>
+    <div class="row">
+      <form class="d-flex flex-column" action="{{ url_for('data') }}" method="get">
+        <label for="usernameLable">Tìm kiếm</label>
+        <input class="form-control mb-3 mt-3" type="text" placeholder="Enter username" name="query" value="{{query}}">
+        <button class="mx-auto btn btn-success justify-content-center" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
 
-  {%if data%}
-  <table border="1">
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Password</th>
+  <div class="container text-center">
+    <form method="post">
+      <div class="row justify-content-center">
+        <div class="col-md-8 table-container">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if data %}
+              {% for user in data %}
+              <tr>
+                <th scope="row">{{ user._id }}</th>
+                <td>{{ user.name }}</td>
+                <td>
+                  <span class="showPassword">{{ user.password }}</span>
 
-    </tr>
-    {% for user in data %}
+                  <input class="hidePassword form-control" value="{{ user.password }}" type="text" name="newPassword"
+                    style="display: none;">
 
-    <tr>
-      <td>{{ user._id }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.password }}</td>
+                  <input type="hidden" name="oldPassword" value="{{ user.password }}">
+                  <input type="hidden" name="ID" value="{{user._id}}">
+                </td>
+                <td>
+                  <input class="check" type="checkbox">
+                </td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="4" class="text-center">Không tìm thấy</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <input class="btn btn-success" type="submit" name="handle" value="Save">
+    </form>
 
-    </tr>
-    {%endfor%}
-  {%else%}
-    <p>Không tồn tại thông tin người dùng</p>
-  {%endif%}
+  </div>
+  <div class="container d-flex flex-column justify-content-center">
+    <div class="row">
+      <div class="col">
+        <div class="card mt-5">
+          <div class="card-header">
+            Tùy Chỉnh
+          </div>
+          <div class="card-body d-flex flex-wrap justify-content-center gap-3">
+            <a href="{{ url_for('home') }}" class="btn btn-outline-danger">Home</a>
+            <button id="add" class="btn btn-primary">ADD USER</button>
+            <button id="remove" class="btn btn-primary">REMOVE USER</button>
+            <button id="pending" class="btn btn-primary">PENDING USER</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  </table>
-  <a href="{{ url_for('home') }}">Home</a>
-  <div id="function">
+    <div class="row mt-3">
+      <div class="col">
+        <div id="formAdd" class="card" style="display: none;">
 
-    <button id="add">Add</button>
-    <button id="remove">Remove</button>
+          <div class="card-header">
+            Thêm Tài Khoản
+          </div>
 
-    <div id="form"></div>
+          <div class="card-body p-4">
+
+            <div class="card-title mb-3">
+              Mời bạn nhập thông tin để tiến hành thêm tài khoản
+            </div>
+
+            <div class="row p-2 ">
+              <form method="post">
+                <label for="username">Username:</label>
+                <input class="form-control mb-2 mt-2" type="text" name="username" id="username"
+                  placeholder="Enter Username">
+
+                <label for="password">Password:</label>
+                <input class="form-control mt-2 mb-4" type="text" name="password" id="password"
+                  placeholder="Enter Password">
+
+                <input class="btn btn-outline-success" type="submit" value="Add" name="handle">
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div id="formRemove" class="card" style="display: none;">
+
+          <div class="card-header">
+            Xóa Tài Khoản
+          </div>
+
+          <div class="card-body p-4">
+
+            <div class="card-title mb-3">
+              Mời bạn nhập thông tin để tiến hành xóa tài khoản
+            </div>
+
+            <div class="row p-2 ">
+              <form method="post">
+                <label for="username">Username:</label>
+                <input class="form-control mb-4 mt-2" type="text" name="username" id="username"
+                  placeholder="Enter Username">
+
+                <input class="btn btn-outline-success" type="submit" value="Remove" name="handle" id="check">
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div id="pendinguser" class="card" style="display: none;">
+
+          <div class="card-header">
+            Danh sách user đợi duyệt
+          </div>
+
+          <div class="card-body p-4">
+            <form method="post">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Active</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {%if pending%}
+                  {%for userpending in pending%}
+                  <tr>
+                    <td>
+                      {{userpending.id}}
+                    </td>
+                    <td>
+                      {{userpending.name}}
+                    </td>
+                    <td>
+                      {{userpending.password}}
+                    </td>
+
+                    <td class="d-flex gap-4">
+                      <div class="d-flex flex-column">
+                        <label>Yes</label>
+                        <input type="checkbox" id="yes_{{userpending.id}}" name="user" value="{{ userpending.id }} True" onclick="selectOption(this, '{{ userpending.id }}')">
+                      </div>
+                      <div class="d-flex flex-column">
+                        <label>No</label>
+                        <input type="checkbox" id="no_{{userpending.id}}" name="user" value="{{ userpending.id }} False" onclick="selectOption(this, '{{ userpending.id }}')">
+                      </div>
+                    </td>
+
+                  </tr>
+
+                  {%endfor%}
+                  {%else%}
+                  <tr>
+                    <td colspan="3">Không có account nào pending</td>
+                  </tr>
+                  {%endif%}
+
+                </tbody>
+              </table>
+              <div class="d-flex justify-content-center">
+                <input class="btn btn-outline-success" type="submit" name="handle" value="Submit Change">
+              </div>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   </div>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+  <script>
+    document.getElementById('add').addEventListener("click", function (event) {
+      document.getElementById('formAdd').style.display = 'block'
+      document.getElementById('formRemove').style.display = 'none'
+      document.getElementById('pendinguser').style.display = 'none'
+    })
 
-    {% for category, message in messages %}
-      <p class="category">{{message}}</p>
-    {% endfor %}
+    document.getElementById('remove').addEventListener("click", function (event) {
+      document.getElementById('formRemove').style.display = 'block'
+      document.getElementById('formAdd').style.display = 'none'
+      document.getElementById('pendinguser').style.display = 'none'
+    })
 
-    {% endif %}
-  {% endwith %}
+    document.getElementById('pending').addEventListener("click", function (event) {
+      document.getElementById('formRemove').style.display = 'none'
+      document.getElementById('formAdd').style.display = 'none'
+      document.getElementById('pendinguser').style.display = 'block'
+    })
+    /* vì có nhiều tk với class giống nhau
+    nên sẽ dùng querySelectorAll thay vì get ID*/
+    document.querySelectorAll('.check').forEach(checkbox => {
+      checkbox.addEventListener('change', function (event) {
+        const row = event.target.closest('tr') // => lấy ptu gần nhất chứa checkbox này
+        const show = row.querySelector('.showPassword')
+        const hide = row.querySelector('.hidePassword')
+
+
+        if (event.target.checked) {
+          show.style.display = 'none'
+          hide.style.display = 'block'
+        }
+
+        else {
+          hide.value = show.innerText;
+          show.style.display = 'block'
+          hide.style.display = 'none'
+        }
+
+      })
+    })
+
+
+    function selectOption(checkbox, index) {
+      const yesCheckbox = document.getElementById(`yes_${index}`);
+      const noCheckbox = document.getElementById(`no_${index}`);
+      // hiện ra id của user vừa mới dùng checkbox
+
+      if (checkbox === yesCheckbox) {
+        noCheckbox.checked = false;
+      } else if (checkbox === noCheckbox) {
+        yesCheckbox.checked = false;
+      }
+
+
+    }
+  </script>
 
 </body>
-<script src="{{ url_for('static', filename = 'scripts/view.js')}}"></script>
+
 
 </html>
