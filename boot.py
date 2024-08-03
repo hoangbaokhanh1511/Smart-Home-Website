@@ -14,8 +14,8 @@ import gc
 
 gc.collect()
 
-ssid = 'Dao Ngan'
-password = '0108675083'
+ssid = 'dangky3G'
+password = 'moinoixong'
 
 sta = network.WLAN(network.STA_IF)
 sta.active(True)
