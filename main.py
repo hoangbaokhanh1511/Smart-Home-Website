@@ -7,10 +7,10 @@ from MQ135 import MQ135
 led = {
     "Led_Main": LED(pin_number=2),
     "Led_D7": LED(pin_number=13),
-    "Led_D8": LED(pin_number=15)
+    "Led_D8": LED(pin_number=15).toggle(100)
 }
 
-url_host = 'http://192.168.1.8:5000'
+url_host = 'http://192.168.1.7:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -29,10 +29,11 @@ def weather():
     return data
 
 async def send_pir():
-    url = url_host + '/user_dashboard/api/motion'
+    url = url_host + '/api/motion'
     while True:
         data = {'status': True if pir.get_status() else False}
         headers = {'Content-Type': 'application/json'}
+        led['Led_Main'].toggle(0) if data['status'] == True else led['Led_Main'].toggle(1023)
         try:
             response = urequests.post(url, data=ujson.dumps(data), headers=headers)
 
@@ -44,7 +45,7 @@ async def send_pir():
 
 
 async def toggleLed():
-    url = url_host + '/user_dashboard/api/change_status_led'
+    url = url_host + '/api/change_status_led'
     while True:
         response = urequests.get(url)
         data = response.json()
@@ -58,7 +59,7 @@ async def toggleLed():
 
 
 async def MQT135():
-    url = url_host + '/user_dashboard/api/mqt135'
+    url = url_host + '/api/mqt135'
     while True:
         data = weather()
         value = adc.get_corrected_ppm(data['temperature'],data['humidity'])
@@ -93,7 +94,7 @@ async def LCD():
 
 
 async def dht11():
-    url = url_host + '/user_dashboard/api/weather'
+    url = url_host + '/api/weather'
     while True:
         data = weather()
         up_data = {
@@ -109,9 +110,9 @@ async def main():
     await asyncio.gather(
         MQT135(),
         dht11(),
-        LCD(),
+        # LCD(),
         send_pir(),
-        toggleLed(),
+        # toggleLed(),
     )
 
 

@@ -6,115 +6,291 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/static/images/newLogo-darkbg.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/styles/home.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <title>Device</title>
 </head>
 
 <body>
-    <!-- Logo & navbar & account -->
-    <div class="container navbar navbar-expand-md ">
-        <div class="row d-flex justify-content-between w-100">
-            <!-- logo -->
-            <div class="logo  col-auto">
-                <span class="d-flex align-items-center">
-                    <a href="/templates/home.html"><img src="/static/images/newLogo.png" alt=""></a>
+<!-- Logo & navbar & account -->
+<div class="container navbar navbar-expand-md ">
+    <div class="row d-flex justify-content-around w-100">
+        <!-- logo -->
+        <div class="logo col-auto">
+                <span class="d-flex align-items-center gap-3 p-2">
+                    <a href="/templates/home.html"><img src="/static/images/newLogo-darkbg.png" alt=""></a>
                     <a href="#" class="text-black p-0 m-0 text-decoration-none d-md-block d-none">
-                        <p>Sáng tạo - Vận dụng - Đổi mới </p>
+                        <b class="text-light">Sáng tạo - Vận dụng - Đổi mới </b>
                     </a>
                 </span>
-            </div>
+        </div>
 
-            <!-- Account  -->
-            <div class="col-auto order-md-3 account">
-                <a href="#"><img src="/static/images/avt.jpg" class="img-fluid" alt=""
-                        style="width: 50px; height: 50px; border-radius: 100%;"></a>
-            </div>
-            <!-- button navbar -->
-            <button class="navbar-toggler  " type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+        <!-- Account  -->
+        <div class="col-auto order-md-3 account">
+            <a href="#">
+                <img src="/static/images/avt.jpg" class="img-fluid bg-account" alt=""
+                     style="width: 60px; height: 60px; border-radius: 100%;">
+            </a>
+        </div>
+        <!-- button navbar -->
+        <button class="navbar-toggler  " type="button" data-bs-toggle="collapse" data-bs-target="#nav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-three-dots" viewBox="0 0 16 16">
-                    <path
-                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-                </svg>
-            </button>
-            <!-- navbar -->
-            <div class="collapse navbar-collapse smartbar rounded-5" id="nav">
-                <ul class="row navbar-nav d-flex justify-content-around ">
-                    <li class="col nav-link"><a href="/templates/home.html"  class="d-flex justify-content-md-center">
-                            <p>TRANG CHỦ</p>
-                        </a></li>
-                    <li class="col nav-link"><a href="#" class="d-flex justify-content-md-center">
-                            <p>THIẾT BỊ</p>
-                        </a></li>
-                    <li class="col nav-link"><a href="#" class="d-flex justify-content-md-center">
-                            <p>LỊCH SỬ</p>
-                        </a></li>
-                </ul>
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-three-dots" viewBox="0 0 16 16">
+                <path
+                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+            </svg>
+        </button>
+        <!-- navbar -->
+        <div class="collapse mt-2  navbar-collapse smartbar rounded-5" id="nav">
+            <ul class="row navbar-nav d-flex justify-content-round">
+                <li class="col nav-link"><a href="/" class="d-flex justify-content-md-center">
+                    <p>TRANG CHỦ</p>
+                </a></li>
+                <li class="col nav-link"><a href="#" class="d-flex justify-content-md-center">
+                    <p>THIẾT BỊ</p>
+                </a></li>
+                <li class="col nav-link"><a href="#" class="d-flex justify-content-md-center">
+                    <p>LỊCH SỬ</p>
+                </a></li>
+            </ul>
+        </div>
 
+
+    </div>
+</div>
+<!-- Main content -->
+<div class="container  text-center text-white main">
+    <div class="row d-flex align-items-stretch">
+        <!-- Main-left content -->
+        <div class="col-md-6 col-12 main-left">
+            <!-- Nửa trên trái -->
+            <div class="row text-center text-white">
+                <!-- Time & Humi & Temp -->
+                <div class="col">
+                    <div class="row d-flex">
+                        <div class="section col">
+                            <b>Thời gian</b>
+                            <div class="mt-2 mb-2" id="time" style="font-weight: bold; font-size: 30px;"></div>
+                            <div id="date" style="font-size: 20px;"></div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-between">
+                        <div class="section col">
+                            <b>Nhiệt độ</b>
+                            <div id="temperature"></div>
+                        </div>
+                        <div class="section col">
+                            <b>Độ ẩm</b>
+                            <div id="humidity"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chất lượng kk -->
+                <div class="col section d-flex flex-column align-items-center justify-content-between">
+                    <b>Chất lượng không khí</b>
+                    <div id="overal"></div>
+                    <div id="co2"></div>
+                </div>
+            </div>
+            <!-- Nửa dưới trái - CHUYỂN ĐỘNG -->
+            <div class="row text-center text-white" style="min-height: 300px;">
+                <div class="col section" style="min-height: 300px;">
+                    <b>Phát hiện chuyển động</b>
+                    <div class="mt-3">Status: <span id="status_pir" style="font-weight:bold;">Waiting</span></div>
+                    <div class="mt-3" id="history" style="background-color:#283b3e;">
+                        <table class="table table-bordered table-hover table-dark">
+                            <thead>
+                            <tr>
+                                <th scope="col">Lịch sử (5 phát hiện gần nhất)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="data_pir">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Main-right content -->
+        <div class="col-md-6 col-12 main-right d-flex flex-column">
+            <!-- Nửa trên phải - DỰ BÁO THỜI TIẾT -->
+            <div class="row">
+                <div class="col section">
+                    <b>Dự báo thời tiết</b>
+                    <div class="row d-flex mt-3 justify-content-between m-1 text-light">
+                        <div class="col d-flex">
+                            <div class="col-7">
+
+                                <img src="" id="img_title" style="background-color: rgb(255,255,255,0.2); border-radius: 10px">
+                            </div>
+                            <div style="font-size: 12px;" class="fw-bold col d-flex flex-column justify-content-center text-start">
+                                <div class="col" id="temperature_title">
+
+                                </div>
+                                <div class="col" id="humidity_title">
+
+                                </div>
+                                <div class="col" id="wind_title">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col text-end">
+                            <div class="col fw-bold" id="Title"></div>
+                            <div class="col" id="time_title"></div>
+                            <div class="col" id="main_weather_title"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <canvas style="width: 100vh" id="myChart"></canvas>
+                    </div>
+                    <div class="row mt-2 p-1 row-cols-1 row-cols-md-5 g-2">
+                        <div class="col">
+                            <button id="day1" class="btn text-light">
+
+                                <div class="col">
+                                    <h5 id="Day1"></h5>
+                                </div>
+                                <div class="col">
+                                    <img src="" id="Day1img">
+                                </div>
+                                <div class="col d-flex flex-wrap">
+
+                                    <div class="col">
+                                        <div id="Day1temp" class="fw-bold">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div id="Day1hump" class="text">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="day2" class="btn text-light">
+                                <div class="col">
+                                    <h5 id="Day2"></h5>
+                                </div>
+                                <div class="col">
+                                    <img src="" id="Day2img">
+                                </div>
+                                <div class="col d-flex flex-wrap">
+                                    <div class="col ">
+                                        <div id="Day2temp" class="fw-bold">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div id="Day2hump" class="text">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="day3" class="btn text-light">
+                                <div class="col">
+                                    <h5 id="Day3"></h5>
+                                </div>
+                                <div class="col">
+                                    <img src="" id="Day3img">
+
+                                </div>
+                                <div class="col d-flex flex-wrap">
+                                    <div class="col">
+                                        <div id="Day3temp" class="fw-bold">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div id="Day3hump" class="text">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="day4" class="btn text-light">
+                                <div class="col">
+                                    <h5 id="Day4"></h5>
+                                </div>
+                                <div class="col">
+                                    <img src="" id="Day4img">
+                                </div>
+                                <div class="col d-flex flex-wrap">
+                                    <div class="col">
+                                        <div id="Day4temp" class="fw-bold">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div id="Day4hump" class="text">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="day5" class="btn text-light">
+                                <div class="col">
+                                    <h5 id="Day5"></h5>
+                                </div>
+                                <div class="col">
+                                    <img src="" id="Day5img">
+                                </div>
+                                <div class="col d-flex flex-wrap">
+                                    <div class="col">
+                                        <div id="Day5temp" class="fw-bold">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div id="Day5hump" class="text">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Nửa dưới phải -->
 
         </div>
     </div>
-    <!-- Main content -->
-    <div class="container text-center text-white main">
-        <div class="row d-flex align-items-stretch">
-            <!-- Main-left content -->
-            <div class="col-md-6 col-12 main-left">
-                <!-- Nửa trên trái -->
-                <div class="row text-center text-white">
-                    <!-- Time & Humi & Temp -->
-                    <div class="col">
-                        <div class="row d-flex ">
-                            <div class="section col">
-                                <p>Thời gian</p>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-between">
-                            <div class="section col">
-                                <p>Nhiệt độ</p>
-                            </div>
-                            <div class="section col">
-                                <p>Độ ẩm</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Chất lượng kk -->
-                    <div class="col section">
-                        <p>Chất lượng không khí</p>
-                    </div>
-                </div>
-                <!-- Nửa dưới trái - CHUYỂN ĐỘNG -->
-                <div class="row text-center text-white">
-                    <div class="col section" style="min-height: 300px;">
-                        <p>Phát hiện chuyển động</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Main-right content -->
-            <div class="col-md-6 col-12 main-right d-flex flex-column align-items-stretch">
-                <!-- Nửa trên phải - DỰ BÁO THỜI TIẾT -->
-                <div class="row">
-                    <div class="col section" style="height: 300px;">
-                        <p>Dự báo thời tiết</p>
-                    </div>
-                </div>
-                <!-- Nửa dưới phải -->
-                <div class="row align-self-stretch">
-                    <div class="col section" style="height: 210px;">
-                        <p>...</p>
-                    </div>
-                    <div class="col section">
-                        <p>...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
+<script src="{{ url_for('static', filename = 'scripts/home.js')}}"></script>
 </body>
 
 </html>
