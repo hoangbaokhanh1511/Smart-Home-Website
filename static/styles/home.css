@@ -1,6 +1,7 @@
 body{
     background: linear-gradient(to right, #0097b2, #7ed957);
     padding: 20px;
+
 }
 
 .section{
@@ -16,8 +17,7 @@ body{
 
 .logo{
     background-color:#283b3e;
-    border-radius:15px;
-
+    border-radius: 15px;
 }
 
 .logo img{
@@ -28,6 +28,7 @@ body{
 .account img{
     padding:2px;
 }
+
 .bg-account{
     border: 0.2rem solid #0097b2;
 }
@@ -46,6 +47,7 @@ body{
     padding-right: 20px;
     max-width: 300px;
     margin-left: 5px;
+
 }
 
 .smartbar a{

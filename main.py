@@ -3,14 +3,15 @@ from machine import I2C
 from esp8266_i2c_lcd import I2cLcd
 from OOP import *
 from MQ135 import MQ135
+
 # Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn
 led = {
     "Led_Main": LED(pin_number=2),
     "Led_D7": LED(pin_number=13),
-    "Led_D8": LED(pin_number=15).toggle(100)
+    "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://192.168.1.7:5000'
+url_host = 'http://10.10.96.57:5000'
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -20,6 +21,7 @@ sensor = sensor_dht11(pin_number=16)
 # MQT135
 adc = MQ135(0)
 
+
 def weather():
     temperature, humidity = sensor.get_weather()
     data = {
@@ -28,12 +30,14 @@ def weather():
     }
     return data
 
+
 async def send_pir():
     url = url_host + '/api/motion'
     while True:
-        data = {'status': True if pir.get_status() else False}
+        data = {'Bathroom': True if pir.get_status() else False, 'Area2': False}
         headers = {'Content-Type': 'application/json'}
-        led['Led_Main'].toggle(0) if data['status'] == True else led['Led_Main'].toggle(1023)
+        print(data)
+        led['Led_Main'].toggle(0) if data['Bathroom'] == True else led['Led_Main'].toggle(1023)
         try:
             response = urequests.post(url, data=ujson.dumps(data), headers=headers)
 
@@ -62,7 +66,7 @@ async def MQT135():
     url = url_host + '/api/mqt135'
     while True:
         data = weather()
-        value = adc.get_corrected_ppm(data['temperature'],data['humidity'])
+        value = adc.get_corrected_ppm(data['temperature'], data['humidity'])
         mqt = {
             'value': value
         }
@@ -101,10 +105,11 @@ async def dht11():
             'temperature': data.get('temperature'),
             'humidity': data.get('humidity')
         }
-        response = urequests.post(data=ujson.dumps(up_data),headers={"Content-Type": "application/json"},url=url)
+        response = urequests.post(data=ujson.dumps(up_data), headers={"Content-Type": "application/json"}, url=url)
         response.close()
 
         await asyncio.sleep(5)
+
 
 async def main():
     await asyncio.gather(

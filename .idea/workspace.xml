@@ -4,35 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e91e5500-7cf5-432c-8919-cf54aae13a0c" name="Changes" comment="">
-<<<<<<< HEAD
+    <list default="true" id="362350a8-73ee-4510-80e3-6a435a7d42c5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Smart-Home-Website.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Smart-Home-Website.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OOP.py" beforeDir="false" afterPath="$PROJECT_DIR$/OOP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/instance/users.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/instance/users.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/view.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/styles/change_pass.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/add.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/change.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/change.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/remove.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/userpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/userpage.html" afterDir="false" />
-=======
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_2024_4_26_PM_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_2024_4_26_PM_[Changes]1/users.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_2024_4_26_PM__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-=======
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/styles/change_pass.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/change.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/change.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
->>>>>>> backend
-      <change beforePath="$PROJECT_DIR$/templates/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view.html" afterDir="false" />
->>>>>>> e86cd9aa657e41e22211479db310910a5fd76cb0
+      <change beforePath="$PROJECT_DIR$/boot.py" beforeDir="false" afterPath="$PROJECT_DIR$/boot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/instance/pir.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/instance/pir.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scripts/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/styles/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/change.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +29,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -50,60 +36,51 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="2jbMy3uHZKW6JBObV4u6h4ihwyR" />
+  <component name="ProjectId" id="2kB5Uql0W69qQH1EWOSmOsUUFR9" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
-<<<<<<< HEAD
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/qthua/PycharmProjects/Smart-Home-Website",
-    "settings.editor.selected.configurable": "com.jetbrains.micropython.configurable"
-  }
-}]]></component>
-=======
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;backend&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/qthua/PycharmProjects/Smart-Home-Website&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.micropython.configurable&quot;
   }
 }</component>
->>>>>>> backend
-  <component name="RunManager" selected="MicroPython.Flash Smart-Home-Website">
-    <configuration name="Flash Smart-Home-Website" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$" runReplOnSuccess="no">
-      <module name="Smart-Home-Website" />
-      <method v="2">
-        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="MicroPython.Flash main.py">
     <configuration name="Flash app.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/app.py" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Flash main.js" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/static/scripts/main.js" runReplOnSuccess="no">
+    <configuration name="Flash boot.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/boot.py" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Flash userpage.html" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/templates/userpage.html" runReplOnSuccess="no">
+    <configuration name="Flash bot.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/bot.py" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Flash view.html" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/templates/view.html" runReplOnSuccess="no">
+    <configuration name="Flash home.html" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/templates/home.html" runReplOnSuccess="no">
+      <module name="Smart-Home-Website" />
+      <method v="2">
+        <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Flash main.py" type="MicroPythonConfigurationType" factoryName="MicroPython" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/main.py" runReplOnSuccess="no">
       <module name="Smart-Home-Website" />
       <method v="2">
         <option name="MicroPython.StopREPL.Before.Run" enabled="true" />
@@ -111,23 +88,26 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="MicroPython.Flash Smart-Home-Website" />
-        <item itemvalue="MicroPython.Flash userpage.html" />
-        <item itemvalue="MicroPython.Flash view.html" />
+        <item itemvalue="MicroPython.Flash main.py" />
+        <item itemvalue="MicroPython.Flash boot.py" />
         <item itemvalue="MicroPython.Flash app.py" />
-        <item itemvalue="MicroPython.Flash main.js" />
+        <item itemvalue="MicroPython.Flash bot.py" />
+        <item itemvalue="MicroPython.Flash home.html" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e91e5500-7cf5-432c-8919-cf54aae13a0c" name="Changes" comment="" />
-      <created>1721651573853</created>
+      <changelist id="362350a8-73ee-4510-80e3-6a435a7d42c5" name="Changes" comment="" />
+      <created>1722744151475</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1721651573853</updated>
+      <updated>1722744151475</updated>
     </task>
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
