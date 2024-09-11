@@ -1,8 +1,9 @@
 import dht, ujson, uasyncio as asyncio, urequests
 from machine import I2C
-from esp8266_i2c_lcd import I2cLcd
+from module.esp8266_i2c_lcd import I2cLcd
 from OOP import *
-from MQ135 import MQ135
+from module.MQ135 import MQ135
+
 
 # Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn
 led = {
@@ -11,7 +12,8 @@ led = {
     "Led_D8": LED(pin_number=15)
 }
 
-url_host = 'http://10.10.96.57:5000'
+url_host = 'http://192.168.1.5:5000'
+
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
 
@@ -36,7 +38,7 @@ async def send_pir():
     while True:
         data = {'Bathroom': True if pir.get_status() else False, 'Area2': False}
         headers = {'Content-Type': 'application/json'}
-        print(data)
+
         led['Led_Main'].toggle(0) if data['Bathroom'] == True else led['Led_Main'].toggle(1023)
         try:
             response = urequests.post(url, data=ujson.dumps(data), headers=headers)
@@ -67,6 +69,7 @@ async def MQT135():
     while True:
         data = weather()
         value = adc.get_corrected_ppm(data['temperature'], data['humidity'])
+        print(value)
         mqt = {
             'value': value
         }
@@ -107,7 +110,6 @@ async def dht11():
         }
         response = urequests.post(data=ujson.dumps(up_data), headers={"Content-Type": "application/json"}, url=url)
         response.close()
-
         await asyncio.sleep(5)
 
 
@@ -117,7 +119,7 @@ async def main():
         dht11(),
         # LCD(),
         send_pir(),
-        # toggleLed(),
+        toggleLed(),
     )
 
 
