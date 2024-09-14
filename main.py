@@ -101,7 +101,7 @@ async def LCD():
 
 
 async def dht11():
-    url = url_host + '/api/weather'
+    url = url_host + '/api/dht11'
     while True:
         data = weather()
         up_data = {

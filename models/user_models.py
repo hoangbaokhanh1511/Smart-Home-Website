@@ -1,5 +1,6 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash #hask password
+from flask import session
 
 class userManager(db.Model):
     __tablename__ = 'user_manager'
@@ -17,7 +18,7 @@ class userManager(db.Model):
     def dangKy(cls, username, password, hoTen, email, sdt, address, gioiTinh=None, ngaySinh=None):
         if cls.query.filter_by(username=username).first():
             return False, "Tài Khoản đã tồn tại"
-        
+
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = cls(username=username, password=hashed_password, hoTen=hoTen, 
                         email=email, sdt=sdt, gioiTinh=gioiTinh, ngaySinh=ngaySinh, diaChi=address)
@@ -30,13 +31,14 @@ class userManager(db.Model):
         user = cls.query.filter_by(username=username).first()
         
         if user and check_password_hash(user.password,password):
+            session['username'] = user.username
             return True, "Đăng nhập thành công"
         else:
             return False, "Sai tài khoản/mật khẩu"
 
     @classmethod
     def dangXuat(cls):
-        return True, "Đăng Xuất"
+        return True, "Đăng Xuất Thành Công"
 
     @classmethod
     def doiMatKhau(cls, username, password, newPassword):

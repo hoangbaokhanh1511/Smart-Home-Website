@@ -16,7 +16,7 @@ clock()
 setInterval(clock, 1000)
 
 function realtime() {
-    fetch('/api/weather')
+    fetch('/api/dht11')
         .then(response => response.json())
         .then(data => {
             const temp = data.temperature
