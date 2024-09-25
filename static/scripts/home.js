@@ -294,7 +294,8 @@ function fetch_pir() {
         })
 }
 
-setInterval(fetch_pir, 2000) // => 2s cập nhật lịch sử 1 lần
+// setInterval(fetch_pir, 2000) 
+// => 2s cập nhật lịch sử 1 lần
 
 
 function show_pir_data(data) {
