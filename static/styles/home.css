@@ -182,3 +182,7 @@ h5 {
         opacity: 1;
     }
 }
+.symbol-temperature{
+    color: rgba(9, 206, 9, 0.671);
+    font-size: 18px;
+}

@@ -2,7 +2,7 @@ import dht, ujson, uasyncio as asyncio, urequests
 from machine import I2C
 from module.esp8266_i2c_lcd import I2cLcd
 from OOP import *
-from module.MQ135 import MQ135
+from moduleESP8266.MQ135 import MQ135
 
 
 # Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn

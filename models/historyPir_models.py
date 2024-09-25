@@ -11,5 +11,7 @@ class History_Pir(db.Model):
         now = datetime.now()
         self.timestamp = now.replace(microsecond=0) 
 
-    def __repr__(self):
-        return f"{self.timestamp}"
+    def to_dict(self):
+        return{
+            'Time': self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        }
