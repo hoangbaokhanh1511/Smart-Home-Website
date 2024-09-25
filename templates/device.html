@@ -32,17 +32,13 @@
             <!-- Account  -->
             <div class="col-auto order-md-3 account">
                 <a href="#">
-                    <img src=" {{ url_for('static', filename = 'images/avt.jpg')}}" class="img-fluid bg-account" alt=""
-                        style="width: 50px; height: 50px; border-radius: 100%;">
+                    <img src=" {{ url_for('static', filename = 'images/avt.jpg')}}" class="img-fluid bg-account" alt="" style="width: 50px; height: 50px; border-radius: 100%;">
                 </a>
             </div>
             <!-- button navbar -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-three-dots" viewBox="0 0 16 16">
-                    <path
-                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"></path>
                 </svg>
             </button>
             <!-- navbar -->
@@ -67,19 +63,17 @@
     <div class="main-content container-fluid row d-flex align-content-stretch">
         <!-- List button -->
         <div class="col-md-2 col-4 mt-4">
-            <button class="room section text-white shadow-lg p-3 mb-5" type="button" data-bs-toggle="collapse"
-                data-bs-target="#kitchen" aria-expanded="true" aria-controls="kitchen">
+            <button class="room section text-white shadow-lg p-3 mb-5" type="button" data-bs-toggle="collapse" data-bs-target="#kitchen" aria-expanded="true" aria-controls="kitchen">
                 Phòng bếp
             </button>
-            <button class="room section text-white" type="button" data-bs-toggle="collapse" data-bs-target="#livingroom"
-                aria-expanded="true" aria-controls="kitchen">
+            <button class="room section text-white" type="button" data-bs-toggle="collapse" data-bs-target="#livingroom" aria-expanded="true" aria-controls="kitchen">
                 Phòng khách
             </button>
         </div>
         <!-- Content -->
         <div class="col h-100" style="min-height: 120px;">
             <!-- Kitchen -->
-            <div class="collapse collapse-horizontal align-self-stretch mt-4" id="kitchen">
+            <div class="collapse-horizontal align-self-stretch mt-4 collapse show" id="kitchen" style="">
                 <div class="card card-body align-self-stretch">
                     <div class="row">
                         <div class="k-left col">
@@ -93,7 +87,7 @@
                                 <div class="col section">Nhiệt độ</div>
                             </div>
                             <div class="row">
-                                <div class="col section">Biểu đồ</div>
+                                
                             </div>
                         </div>
                         <div class="k-right col">
@@ -107,8 +101,8 @@
                             </div>
                             <div class="row">
                                 <div class="col section row">
-                                    <div class="col">Quạt gió</div>
-                                    <div class="col">Đèn bếp</div>
+                                    <div class="col">Quạt gió (on/off)</div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -116,23 +110,10 @@
                 </div>
             </div>
             <!-- Living room -->
-            <div class="collapse collapse-horizontal align-self-stretch mt-4" id="livingroom">
+            <div class="collapse-horizontal align-self-stretch mt-4 collapse show" id="livingroom" style="">
                 <div class="card card-body align-self-stretch">
                     <div class="row">
-                        <div class="k-left col">
-                            <div class="row">
-                                <div class="col section">
-                                    Thời gian
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col section">Độ ẩm</div>
-                                <div class="col section">Nhiệt độ</div>
-                            </div>
-                            <div class="row">
-                                <div class="col section">LCD</div>
-                            </div>
-                        </div>
+                        
                         <div class="k-right col">
                             <div class="row">
                                 <div class="col section">Đèn (On/Off)</div>
@@ -148,11 +129,48 @@
         </div>
     </div>
     <!-- Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-</body>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 
+
+</body>
 </html>
