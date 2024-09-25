@@ -95,13 +95,12 @@ function pir() {
     fetch('/api/motion')
         .then(response => response.json())
         .then(data => {
-            const status = data
+            const status = data.status
             const element = document.getElementById('status_pir')
-            console.log(status)
-            if (status.Area1 == true || status.Area2 == true){
-                element.innerHTML = "Motion detected!"
+            if (status === true) {
+                element.innerHTML = "Motion Detected!"
             }
-            else{
+            else {
                 element.innerHTML = "No Motion!"
             }
         })
@@ -291,7 +290,7 @@ function draw(day, target, date_in_week) {
 }
 // Cập nhật lịch sử chuyển động
 function fetch_pir() {
-    fetch('/data_pir')
+    fetch('/api/data_pir')
         .then(response => response.json())
         .then(data => {
             show_pir_data(data)
@@ -301,21 +300,20 @@ function fetch_pir() {
         })
 }
 
-// setInterval(fetch_pir, 2000) 
+setInterval(fetch_pir, 2000)
 // => 2s cập nhật lịch sử 1 lần
 
 
 function show_pir_data(data) {
-    const time = data.data[0].time
-    const area = data.data[0].area
-
+    const time = data.time
+    console.log(time)
     const box = document.getElementById('data_pir')
 
     box.innerHTML = ''
-    if (time.length === 0 || area.length === 0) {
+    if (time.length === 0) {
         box.innerHTMl = `
             <tr>
-                <th colspan="2" scope='col'>
+                <th scope='col'>
                     Không có dữ liệu
                 <th>
             </tr>
@@ -324,36 +322,19 @@ function show_pir_data(data) {
     else {
 
         const row = document.createElement('tr');
-
         const cell1 = document.createElement('td');
-        const cell2 = document.createElement('td');
-
         cell1.textContent = 'Thời Gian';
-        cell2.textContent = 'Khu Vực';
-
         row.appendChild(cell1);
-        row.appendChild(cell2);
-
         box.appendChild(row);
         // Đoạn trên là add thêm title
 
 
         for (let i = 0; i < time.length; i++) {
-
             const row = document.createElement('tr');
-
             const cell1 = document.createElement('td');
-            const cell2 = document.createElement('td');
-
             cell1.textContent = time[i];
-            cell2.textContent = area[i];
-
             row.appendChild(cell1);
-            row.appendChild(cell2);
-
             box.appendChild(row);
-
         }
-
     }
 }

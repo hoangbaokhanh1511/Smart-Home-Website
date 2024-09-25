@@ -4,7 +4,9 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def home():
-    return redirect(url_for('main.login'))
+    if session and session.get('username') == 'admin':
+        return redirect(url_for('main.login'))
+    return redirect(url_for('mainpage'))
 
 @main_bp.route('/main')
 def mainpage():

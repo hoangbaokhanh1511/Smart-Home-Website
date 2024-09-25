@@ -1,8 +1,9 @@
-from flask import request, Blueprint
+from flask import request, Blueprint,jsonify
 from flask_restful import Resource, Api
 from models.historyPir_models import History_Pir
 import os,requests
 from datetime import datetime
+from app import db
 
 module_bp = Blueprint('module', __name__)
 module_api = Api(module_bp)
@@ -13,8 +14,7 @@ data_sensor_dht11 = {
 }
 
 status_pir = {
-    'Area1': None,
-    'Area2': None
+    'status': None
 }
 
 data_check_mqt135 = {
@@ -38,14 +38,12 @@ class motionPir(Resource):
     def put(self):
         data = request.get_json()
         status_pir.update(data)
-        # if data['Area1'] == True:
-        #     detected = History_Pir('Phòng Tắm')
-        #     db.session.add(detected)
-        #     db.session.commit()
-        # if data['Area2'] == True:
-        #     detected = History_Pir('Area2')
-        #     db.session.add(detected)
-        #     db.session.commit()
+        
+        if data.get('status') == True:
+            detected = History_Pir()
+            db.session.add(detected)
+            db.session.commit()
+
         if data:
             return data, 201
         else:
@@ -64,7 +62,7 @@ class mqt135_api(Resource):
 
 class history_data_pir(Resource):
     def get(self):
-        p = {'data': []}
+        result = {}
         size = History_Pir.query.count()
         
         if size <= 5:
@@ -73,12 +71,13 @@ class history_data_pir(Resource):
         else:
             start = size - 4
             end = size
-            data_pir = History_Pir.query.filter(History_Pir._id >= start, History_Pir._id <= end).all()
-            data_time_to_dict = [data.timestamp.strftime('%d/%m/%Y %H:%M:%S') for data in data_pir]
-            data_area_to_dict = [data.area for data in data_pir]
-            
-        p['data'].append({'time': data_time_to_dict, 'area': data_area_to_dict})
-        return p, 200
+            data_pir = History_Pir.query.filter(History_Pir.id >= start, History_Pir.id <= end).all()
+        
+        data_time_to_dict = [data.timestamp.strftime('%d/%m/%Y %H:%M:%S') for data in data_pir]
+        result.update({
+            'time': data_time_to_dict
+        })
+        return result, 200
 
 class weather_forecast(Resource):
     def get(self):
@@ -173,4 +172,4 @@ module_api.add_resource(dht11, '/api/dht11')
 module_api.add_resource(motionPir, '/api/motion')
 module_api.add_resource(mqt135_api, '/api/mqt135')
 module_api.add_resource(weather_forecast, '/api/weather_forecast')
-# module_api.add_resource(history_data_pir, '/data_pir')
+module_api.add_resource(history_data_pir, '/api/data_pir')
