@@ -6,6 +6,7 @@
 body{
     font-family: Roboto;
     min-height: 100vh;
+    background: linear-gradient(to right, #0097b2, #7ed957);
 }
 
 .template{
@@ -15,6 +16,9 @@ body{
 .form{
     width: 400px;
     transition: box-shadow 0.3s ease;
+    background:  rgba(255, 255, 255, 0.715);
+   
+    border: none
 }
 
 .form:hover{

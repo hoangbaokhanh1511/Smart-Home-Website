@@ -6,7 +6,7 @@ body{
 
 .section{
     background:#283b3e ;
-    border-radius: 10px;
+    border-radius: 13px;
     width: fit-content;
     min-height:100px;
     height: auto;
@@ -16,7 +16,6 @@ body{
 
 
 .logo{
-    background-color:#283b3e;
     border-radius: 15px;
 }
 
@@ -40,16 +39,35 @@ body{
 }
 
 .smartbar{
+    display: block !important;
     background: #283b3e;
-    border-radius: 10px;
+    border-radius: 0px;
     height: fit-content;
     padding-left: 20px;
     padding-right: 20px;
-    max-width: 300px;
-    margin-left: 5px;
-
+    max-height:0px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out , max-height 0.7s ease-in-out  ;
 }
-
+.smartbarOpen{
+    max-height: 142px !important;
+    border-radius: 10px;
+    opacity: 1;
+}
+@media screen and (min-width:768px) {
+    .smartbar{
+        max-width: 300px;
+        opacity: 1 !important;
+        max-height: fit-content;
+    }
+}
+#icon-nav{
+    transition: all 0.4s ease-in-out;
+}
+.icon-nav-open{
+    transform: rotate(-90deg) !important;
+}
 .smartbar a{
     text-decoration: none;
     font-size: 80%;
@@ -137,4 +155,30 @@ h5 {
 
 .text {
    color: rgb(177, 177, 177);
+}
+
+.fadein{
+    animation: 2s forwards ease fade-in;
+}
+.zoomin{
+    animation: 1s forwards ease zoom-in;
+}
+@keyframes fade-in{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes zoom-in{
+    0%{
+        scale: 0.5;
+        opacity: 0;
+    }
+    100%{
+        scale: 1;
+        opacity: 1;
+    }
 }
