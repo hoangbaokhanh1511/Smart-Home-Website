@@ -38,14 +38,14 @@ class motionPir(Resource):
     def put(self):
         data = request.get_json()
         status_pir.update(data)
-        if data['Area1'] == True:
-            detected = History_Pir('Phòng Tắm')
-            db.session.add(detected)
-            db.session.commit()
-        if data['Area2'] == True:
-            detected = History_Pir('Area2')
-            db.session.add(detected)
-            db.session.commit()
+        # if data['Area1'] == True:
+        #     detected = History_Pir('Phòng Tắm')
+        #     db.session.add(detected)
+        #     db.session.commit()
+        # if data['Area2'] == True:
+        #     detected = History_Pir('Area2')
+        #     db.session.add(detected)
+        #     db.session.commit()
         if data:
             return data, 201
         else:

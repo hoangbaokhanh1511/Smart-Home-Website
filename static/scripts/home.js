@@ -95,8 +95,15 @@ function pir() {
     fetch('/api/motion')
         .then(response => response.json())
         .then(data => {
-            const status = (data.status ? "Motion Detected!" : "No Motion")
-            document.getElementById('status_pir').innerHTML = status
+            const status = data
+            const element = document.getElementById('status_pir')
+            console.log(status)
+            if (status.Area1 == true || status.Area2 == true){
+                element.innerHTML = "Motion detected!"
+            }
+            else{
+                element.innerHTML = "No Motion!"
+            }
         })
         .catch(err => {
             console.error(err)
