@@ -85,10 +85,6 @@ body{
 
 }
 
-.smartbar p:hover{
-    background-color: rgba(255, 255, 255, 0.319);
-}
-
 .main{
     margin-top: 40px; 
 }
@@ -189,14 +185,12 @@ h5 {
     font-size: 18px;
 }
 
-.dropdown-menu {
-    z-index: 1050; /* Đảm bảo nó hiển thị trên các phần tử khác */
+.navbar-nav>li{
+    border-radius: 30px !important;
 }
-.main-right {
-    position: relative; /* Nếu chưa có */
-    z-index: 1; /* Đảm bảo nó ở dưới dropdown */
-}
-.navbar{
-    padding-left: 5vw;
-    padding-right: 5vw;
+.link-active,.navbar-nav>li:hover{
+    display: flex;
+    align-items: center;
+    height: 40px !important;
+    background: #659299a4;
 }
