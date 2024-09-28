@@ -85,10 +85,6 @@ body{
 
 }
 
-.smartbar p:hover{
-    background-color: rgba(255, 255, 255, 0.319);
-}
-
 .main{
     margin-top: 40px; 
 }
@@ -185,4 +181,14 @@ h5 {
 .symbol-temperature{
     color: rgba(9, 206, 9, 0.671);
     font-size: 18px;
+}
+
+.navbar-nav>li{
+    border-radius: 30px !important;
+}
+.link-active,.navbar-nav>li:hover{
+    display: flex;
+    align-items: center;
+    height: 40px !important;
+    background: #659299a4;
 }

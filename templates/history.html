@@ -54,10 +54,10 @@
                     <li class="col nav-link "><a href="/" class="d-flex justify-content-center">
                             <p>TRANG CHỦ</p>
                         </a></li>
-                    <li class="col nav-link link-active"><a href="/main/device" class="d-flex justify-content-center">
+                    <li class="col nav-link "><a href="/main/device" class="d-flex justify-content-center">
                             <p>THIẾT BỊ</p>
                         </a></li>
-                    <li class="col nav-link"><a href="/main/history" class="d-flex justify-content-center">
+                    <li class="col nav-link link-active"><a href="/main/history" class="d-flex justify-content-center">
                             <p>LỊCH SỬ</p>
                         </a></li>
                 </ul>
@@ -66,48 +66,40 @@
     </div>
     <main class="container">
         <div class="row">
-
-            <div class="col zoomin">
-                <div class="card rounded-4" style="background: rgba(255, 255, 255, 0.35);">
-                    <div class="card-header mx-2" style="border-bottom-color:rgba(255, 255, 255, 0.7)">
-                        <h2>Phòng bếp</h2>
-                    </div>
-                    <div class="card-body mx-2">
-                        <div class="row">
-                            <div class="col section rounded-4">Cảnh báo nhiệt độ</div>
-                            <div class="col section rounded-4">Nồng độ khí gas</div>
-                        </div>
-                        <div class="row">
-                            <div class="col section rounded-4">Thiết lập nhiệt độ cảnh báo</div>
-                            <div class="col section rounded-4">Mức cảnh báo</div>
-                        </div>
-                        <div class="row">
-                            <div class="col section rounded-4">Quạt gió</div>
-                        </div>
-                    </div>
+            <div class="col section zoomin">
+                <div class="container px-5">
+                    <h2 class="text-center mb-4 fw-bold">Lịch sử chuyển động</h2>
+                    <table border="1" class="mx-auto">
+                        <tbody>
+                            <tr>
+                                <th colspan="3" class="text-center">Lịch sử</th>
+                            </tr>
+                            <tr>
+                                <th>a</th>
+                                <th>a</th>
+                                <th>a</th>
+                            </tr>
+                            <tr>
+                                <th>a</th>
+                                <th>a</th>
+                                <th>a</th>
+                            </tr>
+                            <tr>
+                                <th>a</th>
+                                <th>a</th>
+                                <th>a</th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col zoomin">
-                <div class="card rounded-4" style="background: rgba(255, 255, 255, 0.35);">
-                    <div class="card-header mx-2" style="border-bottom-color:rgba(255, 255, 255, 0.7)">
-                        <h2>Phòng khách</h2>
-                    </div>
-                    <div class="card-body mx-2">
-                        <div class="row">
-                            <div class="col section rounded-4">Time</div>
-                            <div class="col section rounded-4">Nhiệt độ</div>
-                            <div class="col section rounded-4">Độ ẩm</div>
-                        </div>
-                        <div class="row">
-                            <div class="col section rounded-4">Đèn (on/off)</div>
-                            <div class="col section rounded-4">Quạt (on/off)</div>
-                        </div>
-                        <div class="row">
-                            <div class="col section rounded-4">Chế độ báo động</div>
-                        </div>
-                    </div>
-                </div>
-                
+            <div class="col section d-flex flex-column justify-content-between zoomin">
+                <img src="" alt="none">
+                <div class="content text-center ">
+                    <h2 class="fw-bold">Thời gian: 12:00</h2>
+                    <h4 class="fw-bold">Khu vực: <span class="text-primary">Phòng khách</span></h4>
+                    <h2 class="fw-bold">Trạng thái: <span class="text-success">Hoạt động</span></h2>
+                </div>  
             </div>
         </div>
         </main>

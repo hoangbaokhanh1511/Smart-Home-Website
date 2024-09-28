@@ -5,8 +5,8 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def home():
     if session and session.get('username') == 'admin':
-        return redirect(url_for('main.login'))
-    return redirect(url_for('mainpage'))
+        return redirect(url_for('main.mainpage'))
+    return redirect(url_for('main.login'))
 
 @main_bp.route('/main')
 def mainpage():
@@ -22,6 +22,10 @@ def login():
 @main_bp.route('/main/device')
 def device():
     return render_template('device.html')
+
+@main_bp.route('/main/history')
+def history():
+    return render_template('history.html')
 
 @main_bp.route('/signup')
 def signup():

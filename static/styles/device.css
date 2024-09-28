@@ -17,7 +17,6 @@ body{
 
 
 .logo{
-    background-color:#283b3e;
     border-radius: 15px;
 }
 
@@ -68,8 +67,16 @@ body{
 
 }
 
-.smartbar p:hover{
+/* .smartbar p:hover{
     background-color: rgba(255, 255, 255, 0.319);
+} */
+
+@media screen and (min-width:768px) {
+    .smartbar{
+        max-width: 300px;
+        opacity: 1 !important;
+        max-height: fit-content;
+    }
 }
 
 .main{
@@ -112,3 +119,52 @@ body{
     height: 100%;
     padding: 0;
 }
+
+
+
+.fadein{
+    animation: 2s forwards ease fade-in;
+}
+.zoomin{
+    animation: 1s forwards ease zoom-in;
+}
+@keyframes fade-in{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes zoom-in{
+    0%{
+        scale: 0.5;
+        opacity: 0;
+    }
+    100%{
+        scale: 1;
+        opacity: 1;
+    }
+}
+.symbol-temperature{
+    color: rgba(9, 206, 9, 0.671);
+    font-size: 18px;
+}
+.navbar-nav>li{
+    border-radius: 30px !important;
+}
+.link-active,.navbar-nav>li:hover{
+    display: flex;
+    align-items: center;
+    height: 40px !important;
+    background: #659299a4;
+}
+
+table{
+    width: 100%;
+}
+table, th, td {
+    border: 1px solid white;
+    padding: 10px 6px;
+    }
