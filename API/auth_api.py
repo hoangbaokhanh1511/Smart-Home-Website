@@ -2,6 +2,7 @@ from flask import request, Blueprint, redirect, url_for, flash, session
 from flask_restful import Resource, Api
 from datetime import datetime
 from Controller.TaiKhoan import userController
+from werkzeug.security import generate_password_hash, check_password_hash #hash password
 
 auth_bp = Blueprint('auth', __name__)
 auth_api = Api(auth_bp)
@@ -31,6 +32,7 @@ class dangXuat(Resource):
         success, msg = userController.dangXuat()
         if success:
             session.pop('username', None)
+            session.pop('id', None)
             flash(msg,'success')
             return redirect(url_for('main.login'))
         return {"message": msg}, 404

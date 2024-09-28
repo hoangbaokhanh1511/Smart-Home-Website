@@ -290,7 +290,7 @@ function draw(day, target, date_in_week) {
 }
 // Cập nhật lịch sử chuyển động
 function fetch_pir() {
-    fetch('/api/data_pir')
+    fetch('/api/data_pir_5')
         .then(response => response.json())
         .then(data => {
             show_pir_data(data)

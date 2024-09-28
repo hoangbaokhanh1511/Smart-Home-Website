@@ -19,7 +19,7 @@
 
 <body>
     <!-- Logo & navbar & account -->
-    <div class="container navbar navbar-expand-md">
+    <div class="container-fluid navbar navbar-expand-md">
         <div class="row w-100 align-items-center m-0 fadein">
             <!-- logo -->
             <div class="logo col">
@@ -32,11 +32,23 @@
             </div>
 
             <!-- Account  -->
-            <div class="col order-md-3 account d-flex justify-content-center justify-content-md-end">
-                <a href="#">
-                    <img src=" {{ url_for('static', filename = 'images/avt.jpg')}}" class="img-fluid bg-account" alt=""
-                        style="width: 50px; height: 50px; border-radius: 100%;">
-                </a>
+            <div class="col order-md-3 account d-flex justify-content-center justify-content-md-end position-relative">
+                <li class="nav-item dropdown list-unstyled">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="{{ url_for('static', filename='images/avt.jpg') }}" class="img-fluid bg-account"
+                            alt="" style="width: 50px; height: 50px; border-radius: 100%;">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">Username: {{username}}</li>
+                        <li class="dropdown-item">ID: {{Id}}</li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/main/changepass">Change Pass</a></li>
+                        <li><a class="dropdown-item" href="/api/auth/logout">Logout</a></li>
+                    </ul>
+                </li>
             </div>
             <!-- button navbar -->
             <div class="col d-flex d-md-none justify-content-end">

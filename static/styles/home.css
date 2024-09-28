@@ -160,9 +160,11 @@ h5 {
 .fadein{
     animation: 2s forwards ease fade-in;
 }
+
 .zoomin{
     animation: 1s forwards ease zoom-in;
 }
+
 @keyframes fade-in{
     0%{
         opacity: 0;
@@ -185,4 +187,16 @@ h5 {
 .symbol-temperature{
     color: rgba(9, 206, 9, 0.671);
     font-size: 18px;
+}
+
+.dropdown-menu {
+    z-index: 1050; /* Đảm bảo nó hiển thị trên các phần tử khác */
+}
+.main-right {
+    position: relative; /* Nếu chưa có */
+    z-index: 1; /* Đảm bảo nó ở dưới dropdown */
+}
+.navbar{
+    padding-left: 5vw;
+    padding-right: 5vw;
 }
