@@ -40,12 +40,12 @@ function realtime() {
 realtime()
 setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
 
-function mqt135() {
-    fetch('/api/mqt135')
+function mqt2() {
+    fetch('/api/mqt2')
         .then(response => response.json())
         .then(data => {
-            var value_of_mqt135 = data.value;
-            if (value_of_mqt135 == 0) {
+            var value_of_mqt2 = data.value;
+            if (value_of_mqt2 == 0) {
                 document.getElementById('overal').innerHTML = "<b>No Data</b>"
             }
             else {
@@ -53,7 +53,7 @@ function mqt135() {
 
                 var section = document.getElementById('overal');
 
-                if (value_of_mqt135 <= 1000) {
+                if (value_of_mqt2 <= 200) {
 
                     section.innerHTML = `
                         <div class = 'd-flex p-3 justify-content-center gap-3 ' id='box'>
@@ -62,7 +62,7 @@ function mqt135() {
                         </div>
                     `;
                     document.getElementById('box').style.backgroundColor = 'rgba(0, 229, 105, 0.3)'
-                } else if (value_of_mqt135 <= 2000) {
+                } else if (value_of_mqt2 > 200 && value_of_mqt2 <= 500) {
                     section.innerHTML = `
                         <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
                         <div class="emoji">🤒</div>
@@ -88,8 +88,8 @@ function mqt135() {
             console.error(err);
         });
 }
-mqt135();
-setInterval(mqt135, 5000);
+mqt2();
+setInterval(mqt2, 5000);
 
 function pir() {
     fetch('/api/motion')
