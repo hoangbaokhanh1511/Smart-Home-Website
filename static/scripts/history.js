@@ -28,36 +28,36 @@ search_form_btn.addEventListener('click', function (e) {
                     data.forEach(element => {
                         let row = `<tr>
                                     <td><input type="checkbox" class="delete-checkbox"
-                                            data-timestamp="{{element.timestamp}}">
-                                    </td>
-                                    <th>${element.timestamp}</th>
-                                    </tr>`
-                        tableBody.innerHTML += row;
+                                            data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
+                                    <td>Đã Phát Hiện Chuyển Động</td>
+                                    <td>${element.timestamp}</td>
+                                </tr>`
+                        tableBody.innerHTML += row
                     });
                 } else {
                     tableBody.innerHTML = `<th colspan="2">No data</th>`
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error))
     })
 })
 
 document.getElementById('selectAll').addEventListener('change', function () {
-    const checkboxes = document.querySelectorAll('.delete-checkbox');
-    checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-});
+    const checkboxes = document.querySelectorAll('.delete-checkbox')
+    checkboxes.forEach(checkbox => checkbox.checked = this.checked)
+})
 
 document.getElementById('delete').addEventListener('click', function () {
-    // Hiện checkbox cho mỗi dòng dữ liệu
+
     document.querySelectorAll('.delete-checkbox').forEach(function (checkbox) {
-        checkbox.style.display = 'inline-block'; // Hiện checkbox
+        checkbox.style.display = 'inline-block'
     });
-    document.getElementById('confirmDeleteBtn').style.display = 'inline-block'; // Hiện nút xóa
+    document.getElementById('confirmDeleteBtn').style.display = 'inline-block'
 });
 
 document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-    const selectedCheckboxes = document.querySelectorAll('.delete-checkbox:checked');
-    const timestampsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.dataset.timestamp);
+    const selectedCheckboxes = document.querySelectorAll('.delete-checkbox:checked')
+    const timestampsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.dataset.timestamp)
 
     if (timestampsToDelete.length > 0) {
         fetch('/main/history/delete', {
@@ -69,16 +69,16 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
         })
             .then(response => response.json())
             .then(data => {
-                // Xử lý kết quả từ server (có thể hiển thị thông báo)
-                console.log(data.message);
-                // Tải lại trang hoặc xóa dòng đã chọn khỏi bảng
-                location.reload(); // Tải lại trang để cập nhật dữ liệu
+                
+                console.log(data.message)
+                
+                location.reload()
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error))
     } else {
-        alert('Vui lòng chọn ít nhất một mục để xóa.');
+        alert('Vui lòng chọn ít nhất một mục để xóa.')
     }
-});
+})
 
 function clock() {
     let now = new Date()

@@ -34,7 +34,6 @@ def delete_history():
     timestamps = data.get('timestamps', [])
 
     if timestamps:
-        # Xóa dữ liệu trong cơ sở dữ liệu
         for timestamp in timestamps:
             entry_to_delete = History_Pir.query.filter_by(timestamp=datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')).first()
             if entry_to_delete:
@@ -65,7 +64,3 @@ def history():
 @main_bp.route('/signup')
 def signup():
     return render_template('signup.html')
-
-@main_bp.route('/demo')
-def demo():
-    return render_template('demo.html')

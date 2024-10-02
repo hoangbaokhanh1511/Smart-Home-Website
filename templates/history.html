@@ -103,7 +103,8 @@
                             <thead class="text-center">
                                 <tr>
                                     <td><input type="checkbox" id="selectAll"></td>
-                                    <td>Thời gian</td>
+                                    <th>Thông báo</th>
+                                    <th>Thời gian</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center">
@@ -112,7 +113,8 @@
                                 <tr>
                                     <td><input type="checkbox" class="delete-checkbox"
                                             data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
-                                    <th>{{element.timestamp}}</th>
+                                    <td>Đã Phát Hiện Chuyển Động</td>
+                                    <td>{{element.timestamp}}</td>
                                 </tr>
                                 {%endfor%}
                                 {%else%}
@@ -131,7 +133,7 @@
                     <div class="col">
                         <img class="w-100" src="http://xtcoder2004.io.vn:91/stream" alt="Video_Live">
                     </div>
-                    <div class="content text-center">
+                    <div class="content text-center mt-3">
                         <h5 class="fw-bold">Thời gian: <span id="time"></span></h5>
                         <h5 class="fw-bold">Khu vực: <span style="color: aqua;">Phòng khách</span></h5>
                         <h5 class="fw-bold">Trạng thái: <span style="color: limegreen;">Hoạt động</span></h5>
