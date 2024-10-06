@@ -25,6 +25,7 @@ search_form_btn.addEventListener('click', function (e) {
                 let tableBody = document.querySelector("tbody")
                 tableBody.innerHTML = "";
                 if (data.length > 0) {
+
                     data.forEach(element => {
                         let row = `<tr>
                                     <td><input type="checkbox" class="delete-checkbox"
@@ -33,7 +34,7 @@ search_form_btn.addEventListener('click', function (e) {
                                     <td>${element.timestamp}</td>
                                 </tr>`
                         tableBody.innerHTML += row
-                    });
+                    })
                 } else {
                     tableBody.innerHTML = `<th colspan="2">No data</th>`
                 }
@@ -69,9 +70,9 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
         })
             .then(response => response.json())
             .then(data => {
-                
+
                 console.log(data.message)
-                
+
                 location.reload()
             })
             .catch(error => console.error('Error:', error))

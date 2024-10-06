@@ -3,16 +3,20 @@ import requests
 from app import db
 from datetime import datetime
 from models.historyPir_models import History_Pir
+from middleware.middleware import auth
+
 
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
+@auth
 def home():
     if session and session.get('username') == 'admin':
         return redirect(url_for('main.mainpage'))
     return redirect(url_for('main.login'))
 
 @main_bp.route('/main')
+@auth
 def mainpage():
     if session and session['username'] == 'admin':
         return render_template('home.html', username = session['username'], Id = session['id'][-4:])
@@ -25,8 +29,9 @@ def login():
 
 
 @main_bp.route('/main/device')
+@auth
 def device():
-    return render_template('device.html')
+    return render_template('device.html',username = session['username'], Id = session['id'][-4:])
 
 @main_bp.route('/main/history/delete', methods=['DELETE'])
 def delete_history():
@@ -44,6 +49,7 @@ def delete_history():
     return jsonify({"message": "Không có dữ liệu nào để xóa."}), 400
 
 @main_bp.route('/main/history', methods=['GET', 'POST'])
+@auth
 def history():
     filtered_data = History_Pir.query.all()
     
@@ -58,7 +64,7 @@ def history():
         
         return jsonify(results)
 
-    return render_template('history.html', data = filtered_data)
+    return render_template('history.html', data = filtered_data, username = session['username'], Id = session['id'][-4:])
 
 
 @main_bp.route('/signup')

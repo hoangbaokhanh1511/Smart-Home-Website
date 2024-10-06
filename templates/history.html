@@ -81,9 +81,9 @@
     </div>
     <main class="container">
         <div class="row">
-            <div class="col-7  zoomin">
+            <div class="col-7  zoomin ">
                 <div class="section w-100 h-100">
-                    <div class="container px-5">
+                    <div class="container px-5" style="height: 60vh; overflow-y: scroll;">
                         <div class="col d-flex justify-content-center align-items-center mb-3">
                             <h2>Lịch sử chuyển động</h2>
                             <i class="btn bi bi-search ps-5" style="color: green;" id="search"></i>
@@ -99,7 +99,7 @@
                             </form>
                         </div>
                         <button id="confirmDeleteBtn" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>
-                        <table class="mt-3" style="height: 50px;">
+                        <table class="h-25" style="overflow: auto;">
                             <thead class="text-center">
                                 <tr>
                                     <td><input type="checkbox" id="selectAll"></td>
@@ -109,7 +109,7 @@
                             </thead>
                             <tbody class="text-center">
                                 {%if data%}
-                                {%for element in data%}
+                                {%for element in data | reverse%}
                                 <tr>
                                     <td><input type="checkbox" class="delete-checkbox"
                                             data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
