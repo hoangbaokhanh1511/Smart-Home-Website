@@ -3,8 +3,8 @@ import requests
 from app import db
 from datetime import datetime
 from models.historyPir_models import History_Pir
+from models.user_models import userManager
 from middleware.middleware import auth
-
 
 main_bp = Blueprint('main', __name__)
 
@@ -15,6 +15,14 @@ def home():
         return redirect(url_for('main.mainpage'))
     return redirect(url_for('main.login'))
 
+@main_bp.route('/login')
+def login():
+    return render_template('login.html')
+
+@main_bp.route('/signup')
+def signup():
+    return render_template('signup.html')
+
 @main_bp.route('/main')
 @auth
 def mainpage():
@@ -22,10 +30,6 @@ def mainpage():
         return render_template('home.html', username = session['username'], Id = session['id'][-4:])
     else:
         return render_template('Page404.html')
-
-@main_bp.route('/login')
-def login():
-    return render_template('login.html')
 
 
 @main_bp.route('/main/device')
@@ -67,6 +71,18 @@ def history():
     return render_template('history.html', data = filtered_data, username = session['username'], Id = session['id'][-4:])
 
 
-@main_bp.route('/signup')
-def signup():
-    return render_template('signup.html')
+@main_bp.route('/main/changepass', methods=['GET','POST'])
+@auth
+def changepass():
+    return render_template('changepass.html', username=session['username'])
+
+@main_bp.route('/main/profile', methods=['GET','POST'])
+@auth
+def profile():
+    username = session['username']
+    name,email,gender,birthday, phone, address = userManager.findUser(username)
+    gender = 'Nam' if gender == 1 else 'Nữ'
+    
+    if request.method == "POST":
+        print(request.form)
+    return render_template('updateProfile.html', username = username, name=name, email=email, gender=gender, birthday=birthday, phone=phone, address=address)

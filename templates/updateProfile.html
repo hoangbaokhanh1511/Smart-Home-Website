@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Profile</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="../static/styles/login.css">
+    <link rel="icon" href="{{ url_for('static', filename = 'images/newLogo-darkbg.png')}}">
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../static/styles/profile.css">
+</head>
+
+<body>
+
+    <main class="d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body flex-column d-flex justify-content-center align-items-center">
+                            <h5 class="card-title">Profile</h5>
+                            <img src="../static/images/avt.jpg" alt="avatar" class="border border-2 rounded-circle m-2">
+                            <div class="card-text">
+                                <div class="card-text ">
+                                    <div class="text-start">
+                                        <p>Username: {{username}}</p>
+                                        <p>Name: {{name}}</p>
+                                        <p>Email: {{email}}</p>
+                                        <p>Gender: {{gender}}</p>
+                                        <p>Birthday: {{birthday}}</p>
+                                        <p>Phone: {{phone}}</p>
+                                        <p>Address: {{address}}</p>
+                                    </div>
+                                    <a href="/main" class="btn btn-success">Back to Homepage</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Update</h5>
+                            {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                            <div class="card-text">
+                                <form action="/api/auth/changeProfile" method="post">
+                                    <label class="form-label" for="Name">Name:</label>
+                                    <input class="form-control" type="text" placeholder="Enter Name" name="newName"
+                                        id="newName">
+
+                                    <label class="form-label mt-2" for="Email">Email:</label>
+                                    <input class="form-control" type="text" placeholder="Enter Email" name="newEmail"
+                                        id="newEmail">
+
+                                    <label class="form-label mt-2" for="Gender">Gender:</label>
+                                    <select name="newGender" id="newGender" class="form-select">
+                                        <option>Select new gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+
+                                    <label class="form-label mt-2" for="Birthday">Birthday:</label>
+                                    <input class="form-control" type="date" name="newBirthday" id="newBirthday">
+
+                                    <label class="form-label mt-2" for="Phone">Phone:</label>
+                                    <input class="form-control" placeholder="Phone number" type="tel" name="newPhone"
+                                        id="newPhone">
+
+                                    <label class="form-label mt-2" for="Address">Address:</label>
+                                    <input class="form-control" placeholder="Enter Address" type="text"
+                                        name="newAddress" id="newAddress">
+
+                                    <input class="btn btn-outline-success w-100 mt-4" type="submit" value="Save Change">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

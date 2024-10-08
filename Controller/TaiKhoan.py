@@ -1,5 +1,6 @@
 from models.user_models import userManager
 from datetime import datetime
+from flask import session
 
 class userController:
 
@@ -29,19 +30,21 @@ class userController:
 
     @staticmethod
     def doiMatKhau(data):
-        username = data.get('username')
-        password = data.get('password')
+
+        oldPassword = data.get('oldPassword')
         newPassword = data.get('newPassword')
-        
-        return userManager.doiMatKhau(username, password, newPassword)
+        repeatPassword = data.get('repeatPassword')
+        username = session.get('username')
+        return userManager.doiMatKhau(username, oldPassword, newPassword, repeatPassword)
 
     @staticmethod
     def capNhatHoSo(data):
-        username = data.get('username')
-        hoTen = data.get('hoTen')
-        gioiTinh = data.get('gioiTinh')
-        email = data.get('email')
-        sdt = data.get('sdt')
-        diaChi = data.get('diaChi')
+        name = data.get('newName')
+        email = data.get('newEmail')
+        gioiTinh = data.get('newGender')
+        ngaySinh = data.get('newBirthday')
+        sdt = data.get('newPhone')
+        diaChi = data.get('newAddress')
         
-        return userManager.capNhatHoSo(username, hoTen, gioiTinh, email, sdt, diaChi)
+        return userManager.capNhatHoSo(name, email, gioiTinh, ngaySinh, sdt, diaChi)
+    

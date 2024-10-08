@@ -39,19 +39,25 @@ class dangXuat(Resource):
 
 class doiMatKhau(Resource):
     def post(self):
-        receive = request.get_json()
+        receive = request.form
         success, msg = userController.doiMatKhau(receive)
         if success:
-            return {"message": msg}, 201
-        return {"message": msg}, 400
+            flash(msg,'success')
+            return redirect(url_for('main.changepass'))
+        
+        flash(msg,'danger')
+        return redirect(url_for('main.changepass'))
 
 class capNhatHoSo(Resource):
     def post(self):
-        receive = request.get_json()
-        success, msg = userController.doiMatKhau(receive)
+        receive = request.form
+        success, msg = userController.capNhatHoSo(receive)
         if success:
-            return {"message": msg}, 201
-        return {"message": msg}, 400
+            flash(msg,'success')
+            return redirect(url_for('main.profile'))
+        
+        flash(msg,'danger')
+        return redirect(url_for('main.profile'))
     
 auth_api.add_resource(capNhatHoSo, '/api/auth/changeProfile')
 auth_api.add_resource(doiMatKhau, '/api/auth/changePassword')
