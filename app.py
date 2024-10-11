@@ -33,6 +33,9 @@ def create_app():
     
     
     with app.app_context():
-        db.create_all()  
+        new = History_Pir()
+        db.session.add(new)
+        db.session.commit()
+        db.create_all()
     
     return app

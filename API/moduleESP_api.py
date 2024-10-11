@@ -17,8 +17,27 @@ status_pir = {
     'status': None
 }
 
-data_check_mqt135 = {
+data_check_mqt2 = {
     "value": 0
+}
+
+light = {
+    'status': False
+}
+
+fan = {
+    'fan1': False,
+    'fan2': False
+}
+
+warningTemperature = {
+    'temp': None,
+    'status': False
+}
+
+warningGas = {
+    'value': None,
+    'status': False
 }
 
 class dht11(Resource):
@@ -49,18 +68,18 @@ class motionPir(Resource):
         else:
             return {message: "No Data"}, 404
 
-class mqt135_api(Resource):
+class mqt2_api(Resource):
     def get(self):
-        return data_check_mqt135, 200
+        return data_check_mqt2, 200
     def put(self):
         data = request.get_json()
-        data_check_mqt135.update(data)
         if data:
-            return data_check_mqt135, 201
+            data_check_mqt2.update(data)
+            return data_check_mqt2, 201
         else:
             return {message: "No Data"}, 404
 
-class history_data_pir(Resource):
+class history_data_pir_5(Resource):
     def get(self):
         result = {}
         size = History_Pir.query.count()
@@ -168,8 +187,68 @@ class weather_forecast(Resource):
         else:
             return weather, 200
 
+class Light(Resource):
+    def get(self):
+        return light, 201
+    def put(self):
+        data = request.get_json()
+        if data:
+            light['status'] = data['status']
+            return light, 201
+        else:
+            return {message: "No Data"}, 404
+
+class Fan(Resource):
+    def get(self):
+        return fan, 201
+    def put(self):
+        data = request.get_json()
+        print(data)
+        if data:
+            fan.update(data)
+            return fan, 201
+        else:
+            return {message: "No Data"}, 404
+
+class WarningTemperature(Resource):
+    def get(self):
+        return warningTemperature, 201
+    def put(self):
+        data = request.get_json()
+        if data:
+            warningTemperature.update(data)
+            return warningTemperature, 201
+        else:
+            return {message: "No Data"}, 404
+
+class WarningGas(Resource):
+    def get(self):
+        return warningGas, 201
+    def put(self):
+        data = request.get_json()
+        if data:
+            warningGas.update(data)
+            return warningGas, 201
+        else:
+            return {message: "No Data"}, 404
+
+class history_data_pir(Resource):
+    def get(self):
+        result = {}
+        data = History_Pir.query.all()
+        data_time = [element.timestamp.strftime('%d/%m/%Y %H:%M:%S') for element in data]
+            
+        result.update({'time': data_time})
+        
+        return result, 200
+        
 module_api.add_resource(dht11, '/api/dht11')
 module_api.add_resource(motionPir, '/api/motion')
-module_api.add_resource(mqt135_api, '/api/mqt135')
+module_api.add_resource(mqt2_api, '/api/mqt2')
+module_api.add_resource(Light, '/api/light')
+module_api.add_resource(Fan, '/api/fan')
+module_api.add_resource(WarningTemperature, '/api/warningTemperature')
+module_api.add_resource(WarningGas, '/api/warningGas')
 module_api.add_resource(weather_forecast, '/api/weather_forecast')
+module_api.add_resource(history_data_pir_5, '/api/data_pir_5')
 module_api.add_resource(history_data_pir, '/api/data_pir')

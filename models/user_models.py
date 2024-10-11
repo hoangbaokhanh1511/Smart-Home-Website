@@ -1,5 +1,5 @@
 from app import db
-from werkzeug.security import generate_password_hash, check_password_hash #hask password
+from werkzeug.security import generate_password_hash, check_password_hash #hash password
 from flask import session
 
 class userManager(db.Model):
@@ -32,6 +32,7 @@ class userManager(db.Model):
         
         if user and check_password_hash(user.password,password):
             session['username'] = user.username
+            session['id'] = generate_password_hash(str(user.id))
             return True, "Đăng nhập thành công"
         else:
             return False, "Sai tài khoản/mật khẩu"

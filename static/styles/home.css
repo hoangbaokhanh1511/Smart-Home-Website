@@ -156,9 +156,11 @@ h5 {
 .fadein{
     animation: 2s forwards ease fade-in;
 }
+
 .zoomin{
     animation: 1s forwards ease zoom-in;
 }
+
 @keyframes fade-in{
     0%{
         opacity: 0;
