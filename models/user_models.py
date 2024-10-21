@@ -1,6 +1,7 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash #hash password
 from flask import session
+from datetime import datetime
 
 class userManager(db.Model):
     __tablename__ = 'user_manager'
@@ -42,16 +43,17 @@ class userManager(db.Model):
         return True, "Đăng Xuất Thành Công"
 
     @classmethod
-    def doiMatKhau(cls, username, password, newPassword):
+    def doiMatKhau(cls, username, oldPassword, newPassword, repeatPassword):
         user = cls.query.filter_by(username=username).first()
-        if not check_password_hash(user.password, password):
+        
+        if not check_password_hash(user.password, oldPassword):
             return False, "Mật Khẩu Cũ Không Đúng"
         
         if check_password_hash(user.password, newPassword):
             return False, "Trùng Mật Khẩu Cũ"
         
-        if newPassword == "":
-            return False, "Mật Khẩu Không Được Để Trống"
+        if newPassword != repeatPassword:
+            return False, "Nhập Không Trùng Với Mật Khẩu Mới"
         
         user.password = generate_password_hash(newPassword, method='pbkdf2:sha256')
         db.session.commit()
@@ -59,12 +61,30 @@ class userManager(db.Model):
 
 
     @classmethod
-    def capNhatHoSo(cls, username, hoTen, gioiTinh, email, sdt, diaChi):
-        user = cls.query.filter_by(username=username).first()
-        user.hoTen = hoTen
-        user.gioiTinh = gioiTinh
-        user.email = email
-        user.sdt = sdt
-        user.diaChi = diaChi
+    def capNhatHoSo(cls, name, email, gioiTinh, ngaySinh, sdt, diaChi):
+        user = cls.query.filter_by(username=session['username']).first()
+        if name:
+            user.hoTen = name
+        if email:
+            user.email = email
+        if gioiTinh:
+            user.gioiTinh = bool(gioiTinh)
+        if ngaySinh:
+            user.ngaySinh = datetime.strptime(ngaySinh, '%Y-%m-%d').date()
+        if sdt:
+            user.sdt = sdt
+        if diaChi:
+            user.diaChi = diaChi
         db.session.commit()
         return True, "Cập nhật thành công"
+    
+    @classmethod
+    def findUser(cls, username):
+        user = cls.query.filter_by(username=username).first()
+        name = user.hoTen
+        email = user.email
+        gender = user.gioiTinh
+        birthday = user.ngaySinh
+        phone = user.sdt
+        address = user.diaChi
+        return name, email, gender, birthday, phone, address
