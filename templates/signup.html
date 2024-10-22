@@ -17,10 +17,11 @@
 </head>
 <body class="d-flex justify-content-center align-items-center w-100 h-auto px-3 min-vh-100" >
     <div class="rounded-5 p-4 form">
-        <div class="title w-100 d-flex justify-content-center">
+        <div class="d-flex flex-column align-items-center ">
             <h1 class="fw-bold">Signup</h1>
+            <img src="../static/images/newLogo.png" class="col-5 w-25" alt="">
         </div>
-        <form action="/api/auth/signup" method="post">
+        <form action="signup" method="post">
             <!-- {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
             {% for category, message in messages %} -->

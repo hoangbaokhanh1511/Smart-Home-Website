@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <title>Quản lí thiết bị</title>
+    <title>Lịch sử</title>
     <link rel="icon" href="{{ url_for('static', filename = 'images/newLogo-darkbg.png')}}">
     <link rel="icon" href="../static/images/newLogo-darkbg.png">
     <!-- Boostrap -->
@@ -16,7 +16,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js">
     <link rel="stylesheet" href="../static/styles/Config.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* config table */
+        table {
+            width: 100%;
+        }
 
+        table,
+        th,
+        td {
+            border: 1px solid white;
+            padding: 10px 6px;
+        }
+
+        p {
+            text-align: center;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -88,9 +105,9 @@
                 <div class="card ">
                     <div class="container px-5" style="min-height: 50vh;">
                         <div class="col d-flex justify-content-center align-items-center mb-3">
-                            <h2>Lịch sử chuyển động</h2>
-                            <i class="btn bi bi-search ps-5" style="color: green;" id="search"></i>
-                            <i class="btn bi bi-file-earmark-x " style="color: red;" id="delete"></i>
+                            <b>Lịch sử chuyển động</b>
+                            <i class="btn bi bi-search ps-5" style="color: #6ce5e8;" id="search"></i>
+                            <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
                         </div>
                         <div class="col" id="search-form-block" style="display: none;">
                             <form id="search-form" class="d-flex flex-column p-3" method="POST">
@@ -130,16 +147,16 @@
             </div>
             <div class="col-5  d-flex flex-column justify-content-between zoomin">
                 <div class="card ">
-                    <div class="col text-center">
-                        <h2>Camera</h2>
+                    <div class="col text-center" style="height: 40px;">
+                        <b>Camera</b>
                     </div>
-                    <div class="col">
-                        <img class="w-100" src="http://192.168.1.7:81/stream" alt="Video_Live">
+                    <div class="col placeholder-glow">
+                        <img class="w-100 h-100 placeholder" src="http://192.168.1.7:81/stream" alt="Video_Live">
                     </div>
                     <div class="content text-center mt-3">
                         <h5 class="fw-bold">Thời gian: <span id="time"></span></h5>
                         <h5 class="fw-bold">Khu vực: <span style="color: aqua;">Phòng khách</span></h5>
-                        <h5 class="fw-bold">Trạng thái: <span style="color: limegreen;">Hoạt động</span></h5>
+                        <h5 class="fw-bold">Trạng thái: <span style="color: rgb(54, 227, 137);">Hoạt động</span></h5>
                     </div>
                 </div>
             </div>
