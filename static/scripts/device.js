@@ -72,9 +72,9 @@ function settingWarningTemperature(Value) {
             alertWarning.innerHTML = data.value + "℃"
 
             const status = document.getElementById('status-temp-form')
-            status.innerHTML = "Cài Đặt Thành Công"
-            status.style.color = "green"
-            status.style.fontWeight = "bold"
+            status.innerHTML = "Cài đặt thành công"
+            status.style.color = "#55fb83"
+            // status.style.fontWeight = "bold"
 
 
         })
@@ -93,14 +93,14 @@ required_tempMax.addEventListener('click', function (e) {
     const alertWarning = document.getElementById('max').innerText
     if (alertWarning != "None") {
         status_tempMax.innerHTML = "Cài đặt thành công"
-        status_tempMax.style.color = "green"
+        status_tempMax.style.color = "#55fb83"
         status_warning_temp.innerHTML = "On"
         tranfer_warning(true)
 
     }
     else {
         status_tempMax.innerHTML = "Cài đặt thất bại"
-        status_tempMax.style.color = "red"
+        status_tempMax.style.color = "#ff5757"
     }
 })
 
@@ -108,7 +108,7 @@ off_tempMax.addEventListener('click', function (e) {
     status_warning_temp.innerHTML = "Off"
     tranfer_warning(false)
     status_tempMax.innerHTML = "Cài đặt thành công"
-    status_tempMax.style.color = "green"
+    status_tempMax.style.color = "#55fb83"
 })
 
 function tranfer_warning(value) {
@@ -133,14 +133,14 @@ required_gasMax.addEventListener('click', function (e) {
     const alertWarning = document.getElementById('gasMax').innerText
     if (alertWarning != "None") {
         status_gasMax.innerHTML = "Cài đặt thành công"
-        status_gasMax.style.color = "green"
+        status_gasMax.style.color = "#55fb83"
         status_warning_gas.innerHTML = "On"
         tranfer_warning_gas(true)
 
     }
     else {
         status_gasMax.innerHTML = "Cài đặt thất bại"
-        status_gasMax.style.color = "red"
+        status_gasMax.style.color = "#ff5757"
     }
 })
 
@@ -148,7 +148,7 @@ off_gasMax.addEventListener('click', function (e) {
     status_warning_gas.innerHTML = "Off"
     tranfer_warning_gas(false)
     status_gasMax.innerHTML = "Cài đặt thành công"
-    status_gasMax.style.color = "green"
+    status_gasMax.style.color = "#55fb83"
 })
 
 function tranfer_warning_gas(value) {
@@ -196,9 +196,9 @@ function settingWarningGas(value) {
             const alertWarningGas = document.getElementById('gasMax')
             alertWarningGas.innerHTML = data.value + " (ppm)"
 
-            status.innerHTML = "Cài Đặt Thành Công"
-            status.style.color = "green"
-            status.style.fontWeight = "bold"
+            status.innerHTML = "Cài đặt thành công"
+            status.style.color = "#55fb83"
+            // status.style.fontWeight = "bold"
         })
         .catch(err => {
             console.error(err)
@@ -211,7 +211,8 @@ function gas() {
         .then(data => {
             const mqt2 = document.getElementById('mqt2')
             mqt2.innerHTML = data.value
-            mqt2.style.color = "green"
+            mqt2.style.color = "rgb(67, 255, 57)"
+            mqt2.style.fontSize = "40px"
         })
         .catch(err => {
             console.error(err)

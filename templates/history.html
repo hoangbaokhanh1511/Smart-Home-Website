@@ -108,14 +108,15 @@
                             <b>Lịch sử chuyển động</b>
                             <i class="btn bi bi-search ps-5" style="color: #6ce5e8;" id="search"></i>
                             <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
+                            
                         </div>
                         <div class="col" id="search-form-block" style="display: none;">
-                            <form id="search-form" class="d-flex flex-column p-3" method="POST">
-                                <label for="start" class="form-lable">Từ:</label>
+                            <form id="search-form" class="d-flex flex-column justify-content-evenly p-3" method="POST">
+                                <label for="start" class="form-lable mt-2   ">Từ: </label>
                                 <input required class="form-control" type="date" name="startDate" id="startDate">
-                                <label for="end" class="form-lable">Đến:</label>
+                                <label for="end" class="form-lable mt-2">Đến: </label>
                                 <input required class="form-control" type="date" name="endDate" id="endDate">
-                                <input class="btn btn-success" type="submit">
+                                <input class="btn btn-success mt-2" style="width: fit-content;" type="submit">
                             </form>
                         </div>
                         <button id="confirmDeleteBtn" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>

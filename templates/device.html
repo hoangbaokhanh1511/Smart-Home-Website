@@ -15,6 +15,7 @@
     <!-- Chartjs -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js">
     <link rel="stylesheet" href="../static/styles/Config.css">
+    <link rel="stylesheet" href="../static/styles/device.css">
     <style>
         /* config table */
         table {
@@ -108,9 +109,9 @@
                     <div class="row mb-3">
                         <div class="col">
                             <div class="card">
-                                <b>
+                                <h6>
                                     Cảnh báo nhiệt độ
-                                </b>
+                                </h6>
                                 <p>Trạng Thái: <span id="status_warning_temp">Off</span></p>
                                 <p>Nhiệt Độ Cảnh Báo: <span id="max">None</span></p>
                                 <p id="status_tempMax"></p>
@@ -122,9 +123,9 @@
                         </div>
                         <div class="col">
                             <div class="card">
-                                <b>
+                                <h6>
                                     Nồng độ khí gas (ppm)
-                                </b>
+                                </h6>
                                 <div class="col w-100 h-75 d-flex align-items-center justify-content-center">
                                     <h4 id="mqt2">--</h4>
                                 </div>
@@ -134,7 +135,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <div class="card">
-                                <b>Thiết lập nhiệt độ cảnh báo</b>
+                                <h6>Thiết lập nhiệt độ cảnh báo</h6>
                                 <form id="temp-form" class="d-flex mt-3">
                                     <input class="form-control w-75 me-1" required min="0" max="50" type="number"
                                         id="temp" placeholder="Maximum">
@@ -145,17 +146,17 @@
                         </div>
                         <div class="col">
                             <div class="card">
-                                <b>
-                                    Mức cảnh báo.
-                                    <a id="warning_description" href="" class="text-success"> Chi tiết</a>
-                                </b>
+                                <h6>
+                                    Mức cảnh báo
+                                    <a id="warning_description" href="" style="color: rgb(47, 255, 78); text-decoration: none; font-size: small;"> Chi tiết</a>
+                                </h6>
                                 <form id="gas-form" class="d-flex mt-3">
                                     <input required class="form-control w-75 me-1" min="0" type="number" id="valueGas"
                                         placeholder="Enter value warning">
                                     <input class="btn btn-outline-danger" type="submit" value="Save">
                                 </form>
                                 <div class="col">
-                                    <p id="status-gas-form" class="mt-1"></p>
+                                    <p id="status-gas-form" style="color: rgb(0, 189, 0);" class="mt-1"></p>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +164,7 @@
                     <div class="row mb-3" style="flex:1;">
                         <div class="col">
                             <div class="card">
-                                <b>Quạt gió</b>
+                                <h6>Quạt gió</h6>
                                 <div class="col">
                                     <p>Trạng Thái: <span id="status-fan1">Off</span></p>
                                 </div>
@@ -187,13 +188,15 @@
                         <div class="col">
                             <div class="card">
                                 <div>
-                                    <b>Thời gian</b>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi mb-1 bi-clock" viewBox="0 0 16 16">
-                                        <path
-                                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
-                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
-                                    </svg>
+                                    <h6>Thời gian
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi mb-1 bi-clock" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                            <path
+                                                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                        </svg>
+                                    </h6>
                                 </div>
                                 <div class="mt-2 mb-2" id="time" style="font-weight: bold; font-size: 30px;">--</div>
                                 <div id="date" style="font-size: 20px;">--</div>
@@ -201,7 +204,7 @@
                         </div>
                         <div class="col">
                             <div class="card">
-                                <b>Nhiệt Độ
+                                <h6>Nhiệt Độ
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" fill="currentColor"
                                         class="bi mb-1 bi-thermometer-half symbol-temperature" viewBox="0 0 16 16">
                                         <path
@@ -209,7 +212,7 @@
                                         <path
                                             d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1" />
                                     </svg>
-                                </b>
+                                </h6>
                                 <div class="h-75 d-flex align-items-center justify-content-center" id="temperature"
                                     style="font-size: 30px;">--
                                 </div>
@@ -217,7 +220,7 @@
                         </div>
                         <div class="col">
                             <div class="card">
-                                <b>Độ ẩm
+                                <h6>Độ ẩm
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi mb-1 bi-droplet" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
@@ -225,7 +228,7 @@
                                         <path fill-rule="evenodd"
                                             d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z" />
                                     </svg>
-                                </b>
+                                </h6>
                                 <div class="h-75 d-flex align-items-center justify-content-center"
                                     style="font-size: 30px;" id="humidity">--</div>
                             </div>
@@ -234,7 +237,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <div class="card">
-                                <b>Đèn</b>
+                                <h6>Đèn</h6>
                                 <div class="col">
                                     <p>Trạng Thái: <span id="status-light">Off</span></p>
                                 </div>
@@ -246,7 +249,7 @@
                         </div>
                         <div class="col">
                             <div class="card">
-                                <b>Quạt</b>
+                                <h6>Quạt</h6>
                                 <div class="col">
                                     <p>Trạng Thái: <span id="status-fan2">Off</span></p>
                                 </div>
@@ -260,9 +263,9 @@
                     <div class="row mb-3" style="flex:1;">
                         <div class="col">
                             <div class="card">
-                                <b>
+                                <h6>
                                     Chế độ báo động
-                                </b>
+                                </h6>
                                 <p>Trạng Thái: <span id="status_warning_gas">Off</span></p>
                                 <p>Ngưỡng Cảnh Báo (ppm): <span id="gasMax">None</span></p>
                                 <p id="status_gasMax"></p>

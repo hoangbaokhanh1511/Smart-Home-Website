@@ -168,24 +168,45 @@ body {
 }
 
 .btn-danger{
-    background-color: #ff5c5c;
+    background-color: #ff3d3d;
     margin-left: 5%;
 }
 
 .btn-danger:hover{
-    background-color: #cc3838;
+    background-color: #ff3333;
 }
 
 .btn-outline-danger{
-    border-color: #ff5c5c;
-    color: #ff5c5c;
+    border-color: #ff3d3d;
+    color: #ff3d3d;
 }
 
 .btn-outline-danger:hover{
-    background-color: #ff5c5c;
+    background-color: #ff3d3d;
+}
+
+.btn-outline-success{
+    border-color: #7ed957 ;
+    color: #7ed957;
+}
+
+.btn-outline-success:hover{
+    background-color: #7ed957;
+    color: rgb(4, 106, 0);
+}
+
+.btn-outline-success:active{
+    background-color: #60a842;
+    color: rgb(4, 106, 0);
 }
 
 .card b{
     color: #5affdc;
-    font-size: 25px;
+    font-size: 15px;
+}
+
+h6{
+    color:#5affdc;
+    font-size: 18px;
+    font-weight: bold;
 }

@@ -1,11 +1,11 @@
 #temperature{
-    color:#00e569;
+    color:#11fb7e;
     font-weight:bold;
     font-size:28px;
     margin-top:5px;
 }
 #humidity{
-    color:#0097b2;
+    color:#03c5e7;
     font-weight:bold;
     font-size:28px;
     margin-top:5px;
@@ -42,7 +42,7 @@ table.table td {
 }
 
 h5 {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .text {
@@ -50,6 +50,5 @@ h5 {
 }
 
 .symbol-temperature{
-    color: rgba(9, 206, 9, 0.671);
     font-size: 18px;
 }
