@@ -6,46 +6,47 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="stylesheet" href="../static/styles/login.css">
     <link rel="icon" href="{{ url_for('static', filename = 'images/newLogo-darkbg.png')}}">
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <link rel="stylesheet" href="../static/styles/profile.css">
+        <link rel="stylesheet" href="../static/styles/Config.css">
+        <link rel="stylesheet" href="../static/styles/form.css">
+        <link rel="stylesheet" href="../static/styles/profile.css">
 </head>
 
 <body>
-
-    <main class="d-flex align-items-center">
+    <main class="d-flex align-items-center mt-5">
         <div class="container">
             <div class="row">
-                <div class="col">
+                <div class="col-12 col-md-6 mb-3">
                     <div class="card">
-                        <div class="card-body flex-column d-flex justify-content-center align-items-center">
-                            <h5 class="card-title">Profile</h5>
-                            <img src="../static/images/avt.jpg" alt="avatar" class="border border-2 rounded-circle m-2">
+                        <div class="card-body text-center d-flex flex-column align-items-center">
+                            <h5 style="color: #5affdc" class="card-title fw-bold">Profile</h5>
+                            <img src="../static/images/avt.png" alt="avatar" class="border border-2 rounded-circle mt-5 mx-2 mb-3" 
+                            width="200" height="200">
                             <div class="card-text">
                                 <div class="card-text ">
-                                    <div class="text-start">
-                                        <p>Username: {{username}}</p>
-                                        <p>Name: {{name}}</p>
-                                        <p>Email: {{email}}</p>
-                                        <p>Gender: {{gender}}</p>
-                                        <p>Birthday: {{birthday}}</p>
-                                        <p>Phone: {{phone}}</p>
-                                        <p>Address: {{address}}</p>
-                                    </div>
-                                    <a href="/main" class="btn btn-success">Back to Homepage</a>
+                                        <p>Username: <span class="in4">{{username}}</span></p>
+                                        <p>Name: <span class="in4">{{name}}</span></p>
+                                        <p>Email: <span class="in4">{{name}}</span></p>
+                                        <p>Gender: <span class="in4">{{gender}}</span></p>
+                                        <p>Birthday: <span class="in4">{{birthday}}</span></p>
+                                        <p>Phone: <span class="in4">{{phone}}</span></p>
+                                        <p>Address: <span class="in4">{{address}}</span></p>
                                 </div>
+                            </div>
+                            <div class="mt-auto">
+                                <a href="/main" class="btn  btn-outline-success" style="margin: 0;">Back to Homepage</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-12 col-md-6 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-center">Update</h5>
+                            <h5 style="    color: #5affdc" class="card-title fw-bold text-center">Update</h5>
                             {% with messages = get_flashed_messages(with_categories=True) %}
                             {% if messages %}
                             {% for category, message in messages %}
@@ -56,7 +57,7 @@
                             {% endif %}
                             {% endwith %}
                             <div class="card-text">
-                                <form action="/api/auth/changeProfile" method="post">
+                                <form action="/api/auth/changeProfile" method="post" class="d-flex flex-column">
                                     <label class="form-label" for="Name">Name:</label>
                                     <input class="form-control" type="text" placeholder="Enter Name" name="newName"
                                         id="newName">
@@ -83,7 +84,7 @@
                                     <input class="form-control" placeholder="Enter Address" type="text"
                                         name="newAddress" id="newAddress">
 
-                                    <input class="btn btn-outline-success w-100 mt-4" type="submit" value="Save Change">
+                                    <input class="btn rounded-3 btn-outline-success mt-4" type="submit" value="Save Change">
                                 </form>
                             </div>
                         </div>
