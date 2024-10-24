@@ -40,42 +40,63 @@ function realtime() {
 realtime()
 setInterval(realtime, 5000) // => đo 1 lần mỗi 5s
 
-function mqt2() {
-    fetch('/api/mqt2')
+function clkk() {
+    fetch('/api/clkk')
         .then(response => response.json())
         .then(data => {
-            var value_of_mqt2 = data.value;
-            if (value_of_mqt2 == 0) {
+            var clkk = data.aqi;
+
+            if (clkk == 0) {
                 document.getElementById('overal').innerHTML = "<b>No Data</b>"
             }
             else {
-                document.getElementById('co2').innerHTML = "<b> Nồng độ CO<sub>2</sub> : " + data.value + " (ppm)</b>";
+                document.getElementById('aqi').innerHTML = "<b> Chỉ Số AQI : " + clkk + " </b>";
 
                 var section = document.getElementById('overal');
 
-                if (value_of_mqt2 <= 200) {
+                if (clkk == 1) {
 
                     section.innerHTML = `
                         <div class = 'd-flex p-3 justify-content-center gap-3 ' id='box'>
-                        <div class="emoji">🙂</div>
+                        <div class="emoji">😊</div>
                         <div style='color: #00e569; font-size:25px' class="text">Good</div>
                         </div>
                     `;
+
                     document.getElementById('box').style.backgroundColor = 'rgba(0, 229, 105, 0.3)'
-                } else if (value_of_mqt2 > 200 && value_of_mqt2 <= 500) {
+                } else if (clkk == 2) {
                     section.innerHTML = `
                         <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
-                        <div class="emoji">🤒</div>
-                        <div style='color:yellow; font-size:25px' class="text">Medium</div>
+                        <div class="emoji">😃</div>
+                        <div style='color:yellow; font-size:25px' class="text">Fair</div>
                         </div>
                     `;
                     document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
 
-                } else {
+                }
+                else if (clkk == 3) {
+                    section.innerHTML = `
+                        <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
+                        <div class="emoji">😒</div>
+                        <div style='color:yellow; font-size:25px' class="text">Moderate</div>
+                        </div>
+                    `;
+                    document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
+                }
+                else if (clkk == 4) {
+                    section.innerHTML = `
+                        <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
+                        <div class="emoji">😞</div>
+                        <div style='color:yellow; font-size:25px' class="text">Poor</div>
+                        </div>
+                    `;
+                    document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
+                }
+                else {
                     section.innerHTML = `
                         <div class = 'd-flex p-3 justify-content-center gap-3' id='box'>
-                            <div class="emoji">😵</div>
-                            <div style="font-size:25px" class="text-danger">Danger</div>
+                            <div class="emoji">😷</div>
+                            <div style="font-size:25px" class="text-danger">Hazardous</div>
                         </div>`;
                     document.getElementById('box').style.backgroundColor = 'rgba(255, 255, 0, 0.3)'
 
@@ -88,8 +109,8 @@ function mqt2() {
             console.error(err);
         });
 }
-mqt2();
-setInterval(mqt2, 5000);
+clkk();
+setInterval(clkk, 5000);
 
 function pir() {
     fetch('/api/motion')
@@ -306,7 +327,7 @@ setInterval(fetch_pir, 2000)
 
 function show_pir_data(data) {
     const time = data.time
-    console.log(time)
+
     const box = document.getElementById('data_pir')
 
     box.innerHTML = ''

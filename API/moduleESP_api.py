@@ -4,6 +4,8 @@ from models.historyPir_models import History_Pir
 import os,requests
 from datetime import datetime
 from app import db
+from dotenv import load_dotenv
+load_dotenv()
 
 module_bp = Blueprint('module', __name__)
 module_api = Api(module_bp)
@@ -241,7 +243,21 @@ class history_data_pir(Resource):
         result.update({'time': data_time})
         
         return result, 200
-        
+
+class CLKK(Resource):
+    def get(self):
+        latitude = 16.4637
+        longitude = 107.5909
+        url = f'http://api.openweathermap.org/data/2.5/air_pollution?lat={latitude}&lon={longitude}&appid={os.getenv("API_KEY")}'
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Check if the request was successful
+            data = response.json()
+            aqi = data['list'][0]['main']['aqi']
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching data: {e}")
+        return {"aqi": aqi}
+
 module_api.add_resource(dht11, '/api/dht11')
 module_api.add_resource(motionPir, '/api/motion')
 module_api.add_resource(mqt2_api, '/api/mqt2')
@@ -252,3 +268,4 @@ module_api.add_resource(WarningGas, '/api/warningGas')
 module_api.add_resource(weather_forecast, '/api/weather_forecast')
 module_api.add_resource(history_data_pir_5, '/api/data_pir_5')
 module_api.add_resource(history_data_pir, '/api/data_pir')
+module_api.add_resource(CLKK, '/api/clkk')

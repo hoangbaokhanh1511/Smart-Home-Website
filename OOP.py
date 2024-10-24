@@ -5,32 +5,18 @@ import dht
 class LED:
     def __init__(self, pin_number):
         self.led = Pin(pin_number, Pin.OUT)
-        self.pwm = PWM(self.led, freq=10000)
-        self.brightness = 0
+    def On(self):
+        return self.led.value(1)
+    def Off(self):
+        return self.led.value(0)
 
-
-    def toggle(self, value):
-
-        if value == 0 or value == 1023:
-            self.brightness = value
-            self.pwm.duty(self.brightness)
-
-        else:
-
-            if self.brightness < value:
-                for duty in range (self.brightness,value,25):
-                    self.pwm.duty(duty)
-                    sleep(0.01)
-            else:
-                for duty in range (self.brightness,value,-25):
-                    self.pwm.duty(duty)
-                    sleep(0.01)
-
-            self.brightness = value
-
-
-        return self
-
+class Fan:
+    def __init__(self, pin_number):
+        self.fan = Pin(pin_number, Pin.OUT)
+    def On(self):
+        return self.fan.value(1)
+    def Off(self):
+        return self.fan.value(0)
 
 class sensor_dht11:
     def __init__(self, pin_number):
@@ -44,6 +30,6 @@ class sensor_dht11:
 class motion_detect:
     def __init__(self, pin_number):
         self.pir = Pin(pin_number, Pin.IN)
-
+        self.pir.value(0)
     def get_status(self):
         return self.pir.value()

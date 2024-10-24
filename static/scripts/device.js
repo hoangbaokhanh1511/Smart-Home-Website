@@ -217,7 +217,8 @@ function gas() {
             console.error(err)
         })
 }
-setTimeout(gas, 3000)
+gas()
+setInterval(gas,5000)
 
 
 function turnOnFan1(e) {
