@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const status_warning_temp = document.getElementById('status_warning_temp')
 
             status_warning_temp.innerHTML = data.status ? "On" : "Off"
-            alertWarning.innerHTML = data.value + "℃"
+            alertWarning.innerHTML = data.value ? data.value + "℃" : "~"
 
         })
         .catch(err => { console.error(err) })
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const status_warning_gas = document.getElementById('status_warning_gas')
 
             status_warning_gas.innerHTML = data.status ? "On" : "Off"
-            alertWarning.innerHTML = data.value + " (ppm)"
+            alertWarning.innerHTML = data.value ? data.value + " (ppm)" : "~"
 
         })
         .catch(err => { console.error(err) })
@@ -60,7 +60,7 @@ function settingWarningTemperature(Value) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            value: Value
+            value: parseInt(Value)
         })
     })
         .then(res => res.json())
@@ -74,8 +74,6 @@ function settingWarningTemperature(Value) {
             const status = document.getElementById('status-temp-form')
             status.innerHTML = "Cài đặt thành công"
             status.style.color = "#55fb83"
-            // status.style.fontWeight = "bold"
-
 
         })
         .catch(err => {
@@ -166,7 +164,7 @@ function tranfer_warning_gas(value) {
 const warning_description = document.getElementById('warning_description')
 warning_description.addEventListener('click', function (e) {
     e.preventDefault()
-    alert("Các mức cảnh báo:\n- Mức An Toàn 0-200\n- Mức Cảnh Báo Thấp 200-500\n- Mức Cảnh Báo Cao > 500")
+    alert("Các mức cảnh báo:\n- Mức An Toàn 0-1800\n- Mức Cảnh Báo Thấp 1801-3600\n- Mức Cảnh Báo Cao > 3600")
 })
 
 const gas_form = document.getElementById('gas-form')
@@ -184,7 +182,7 @@ function settingWarningGas(value) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            value: value
+            value: parseInt(value)
         })
     })
         .then(res => res.json())
@@ -198,7 +196,7 @@ function settingWarningGas(value) {
 
             status.innerHTML = "Cài đặt thành công"
             status.style.color = "#55fb83"
-            // status.style.fontWeight = "bold"
+
         })
         .catch(err => {
             console.error(err)
@@ -219,7 +217,7 @@ function gas() {
         })
 }
 gas()
-setInterval(gas,5000)
+setInterval(gas, 5000)
 
 
 function turnOnFan1(e) {
@@ -345,5 +343,117 @@ function realtime() {
             console.error('Lỗi khi gửi yêu cầu: ', err);
         });
 }
-setTimeout(realtime, 2000)
+realtime()
+setInterval(realtime, 5000)
 
+async function fetchTemp() {
+    let value = 0;
+    try {
+        const response = await fetch('/api/dht11');
+        const data = await response.json();
+        value = data.temperature;
+    } catch (error) {
+        console.error(error);
+    }
+    return value;
+}
+
+async function sendMessageWarningTemperature() {
+    try {
+        const response = await fetch('/api/send/dht11', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "message": "Cảnh Báo Nhiệt Độ Vượt Mức Cho Phép"
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function sendWarningTemperature() {
+    try {
+        const response = await fetch('/api/warningTemperature');
+        const data = await response.json();
+
+        const status = data.status;
+        const value = data.value;
+        const tempValue = await fetchTemp();
+
+        if (status) {
+            if (value < tempValue) {
+                await sendMessageWarningTemperature();
+                setTimeout(sendWarningTemperature, 100000);
+            } else {
+                setTimeout(sendWarningTemperature, 1000);
+            }
+        } else {
+            setTimeout(sendWarningTemperature, 1000);
+        }
+    } catch (error) {
+        console.error(error);
+        setTimeout(sendWarningTemperature, 1000);
+    }
+}
+
+sendWarningTemperature();
+
+
+async function fetchMQT2() {
+    let value = 0;
+    try {
+        const response = await fetch('/api/mqt2');
+        const data = await response.json();
+        value = data.value;
+    } catch (error) {
+        console.error(error);
+    }
+    return value;
+}
+
+async function sendMessageWarningGas() {
+    try {
+        const response = await fetch('/api/send/mqt2', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "message": "Cảnh Báo Nồng Độ Khí Gas Vượt Mức Cho Phép"
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function sendWarningGas() {
+    try {
+        const response = await fetch('/api/warningGas');
+        const data = await response.json();
+
+        const status = data.status;
+        const value = data.value;
+        const mqt2Value = await fetchMQT2();
+
+
+        if (status) {
+            if (value < mqt2Value) {
+                await sendMessageWarningGas();
+                setTimeout(sendWarningGas, 100000);
+            } else {
+                setTimeout(sendWarningGas, 1000);
+            }
+        } else {
+            setTimeout(sendWarningGas, 1000);
+        }
+    } catch (error) {
+        console.error(error);
+        setTimeout(sendWarningGas, 1000);
+    }
+}
+
+sendWarningGas();

@@ -103,12 +103,11 @@
         <div class="row">
             <div class="col-7 zoomin">
                 <div class="card ">
-                    <div class="container px-5" style="min-height: 50vh;">
+                    <div class="container px-5">
                         <div class="col d-flex justify-content-center align-items-center mb-3">
                             <b>Lịch sử chuyển động</b>
                             <i class="btn bi bi-search ps-5" style="color: #6ce5e8;" id="search"></i>
                             <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
-                            
                         </div>
                         <div class="col" id="search-form-block" style="display: none;">
                             <form id="search-form" class="d-flex flex-column justify-content-evenly p-3" method="POST">
@@ -120,29 +119,34 @@
                             </form>
                         </div>
                         <button id="confirmDeleteBtn" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>
-                        <table class="h-25" style="overflow: auto;">
-                            <thead class="text-center">
-                                <tr>
-                                    <td><input type="checkbox" id="selectAll"></td>
-                                    <th>Thông báo</th>
-                                    <th>Thời gian</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                {%if data%}
-                                {%for element in data | reverse%}
-                                <tr>
-                                    <td><input type="checkbox" class="delete-checkbox"
-                                            data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
-                                    <td>Đã Phát Hiện Chuyển Động</td>
-                                    <td>{{element.timestamp}}</td>
-                                </tr>
-                                {%endfor%}
-                                {%else%}
-                                <th colspan="2">No data</th>
-                                {%endif%}
-                            </tbody>
-                        </table>
+                        <div class="col " style="max-height: 60vh; overflow-y: scroll; ">
+                            <table class="table h-25">
+                                <thead class="text-center">
+                                    <tr>
+                                        <td><input type="checkbox" id="selectAll"></td>
+                                        <th>Thông báo</th>
+                                        <th>Thời gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    {% if data %}
+                                    {% for element in data | reverse %}
+                                    <tr>
+                                        <td><input type="checkbox" class="delete-checkbox"
+                                                data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
+                                        <td>Đã Phát Hiện Chuyển Động</td>
+                                        <td>{{ element.timestamp }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="3">No data</td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>

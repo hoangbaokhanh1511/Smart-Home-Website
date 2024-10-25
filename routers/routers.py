@@ -55,6 +55,13 @@ def delete_history():
 @main_bp.route('/main/history', methods=['GET', 'POST'])
 @auth
 def history():
+    # limit = 10
+    # page = 1
+    # if request.args.get('page') is not None:
+    #     page = int(request.args.get('page'))
+    # offset = (page - 1) * limit
+    # filtered_data =  History_Pir.query.offset(offset).limit(limit).all()
+    
     filtered_data = History_Pir.query.all()
     
     if request.method == 'POST':

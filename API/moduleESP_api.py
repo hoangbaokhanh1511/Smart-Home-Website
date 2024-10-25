@@ -33,7 +33,6 @@ fan = {
 }
 
 warningTemperature = {
-    'temp': None,
     'status': False
 }
 
@@ -84,15 +83,8 @@ class mqt2_api(Resource):
 class history_data_pir_5(Resource):
     def get(self):
         result = {}
-        size = History_Pir.query.count()
-        
-        if size <= 5:
-            data_pir = History_Pir.query.all()
-
-        else:
-            start = size - 4
-            end = size
-            data_pir = History_Pir.query.filter(History_Pir.id >= start, History_Pir.id <= end).all()
+        data_pir = History_Pir.query.order_by(History_Pir.id.desc()).limit(5).all()
+        data_pir = data_pir[::-1]  # Đảo ngược thứ tự để hiển thị từ cũ đến mới
         
         data_time_to_dict = [data.timestamp.strftime('%d/%m/%Y %H:%M:%S') for data in data_pir]
         result.update({

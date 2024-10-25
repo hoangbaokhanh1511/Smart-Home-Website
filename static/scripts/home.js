@@ -55,52 +55,51 @@ function clkk() {
                 var section = document.getElementById('overal');
 
                 if (clkk == 1) {
-
                     section.innerHTML = `
-                        <div class = 'd-flex p-3 justify-content-center gap-3 ' id='box'>
-                        <div class="emoji">😊</div>
-                        <div style='color: #00e569; font-size:25px' class="text">Good</div>
+                        <div class='d-flex p-3 justify-content-center gap-3 align-items-center' id='box'>
+                            <div class="emoji">😊</div>
+                            <div style='font-size:20px; color: #006400;' class="text">Tốt</div>
                         </div>
                     `;
+                    document.getElementById('box').style.backgroundColor = 'rgba(144, 238, 144, 0.5)';
 
-                    document.getElementById('box').style.backgroundColor = 'rgba(0, 229, 105, 0.3)'
                 } else if (clkk == 2) {
                     section.innerHTML = `
-                        <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
-                        <div class="emoji">😃</div>
-                        <div style='color:yellow; font-size:25px' class="text">Fair</div>
+                        <div class='d-flex p-3 gap-3 justify-content-center align-items-center' id='box'>
+                            <div class="emoji">😃</div>
+                            <div style='font-size:20px; color: #FFD700;' class="text">Trung Bình</div>
                         </div>
                     `;
-                    document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
+                    document.getElementById('box').style.backgroundColor = 'rgba(255, 255, 0, 0.5)';
 
-                }
-                else if (clkk == 3) {
+                } else if (clkk == 3) {
                     section.innerHTML = `
-                        <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
-                        <div class="emoji">😒</div>
-                        <div style='color:yellow; font-size:25px' class="text">Moderate</div>
+                        <div class='d-flex p-3 gap-3 justify-content-center align-items-center' id='box'>
+                            <div class="emoji">😒</div>
+                            <div style='font-size:20px; color: #FF8C00;' class="text">Không Tốt (Cho Người Nhạy Cảm)</div>
                         </div>
                     `;
-                    document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
-                }
-                else if (clkk == 4) {
+                    document.getElementById('box').style.backgroundColor = 'rgba(255, 165, 0, 0.5)';
+
+                } else if (clkk == 4) {
                     section.innerHTML = `
-                        <div class = 'd-flex p-3 gap-3 justify-content-center' id='box'>
-                        <div class="emoji">😞</div>
-                        <div style='color:yellow; font-size:25px' class="text">Poor</div>
+                        <div class='d-flex p-3 gap-3 justify-content-center align-items-center' id='box'>
+                            <div class="emoji">😞</div>
+                            <div style='font-size:20px; color: #DC143C;' class="text">Không Lành Mạnh</div>
                         </div>
                     `;
-                    document.getElementById('box').style.backgroundColor = 'rgba(220, 53, 69, 0.3)'
-                }
-                else {
+                    document.getElementById('box').style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
+
+                } else {
                     section.innerHTML = `
-                        <div class = 'd-flex p-3 justify-content-center gap-3' id='box'>
+                        <div class='d-flex p-3 justify-content-center gap-3 align-items-center' id='box'>
                             <div class="emoji">😷</div>
-                            <div style="font-size:25px" class="text-danger">Hazardous</div>
-                        </div>`;
-                    document.getElementById('box').style.backgroundColor = 'rgba(255, 255, 0, 0.3)'
-
+                            <div style='font-size:20px; color: #FFFFFF;' class="text">Nguy Hại</div>
+                        </div>
+                    `;
+                    document.getElementById('box').style.backgroundColor = 'rgba(128, 0, 128, 0.5)';
                 }
+
 
             }
 
