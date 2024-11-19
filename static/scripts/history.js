@@ -118,24 +118,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updatePagination() {
-        // Xóa nút cũ và tạo lại nút cho từng trang
         const prevPage = document.getElementById("prev-page");
         const nextPage = document.getElementById("next-page");
+
+        // Xóa các nút cũ
         const pageItems = Array.from(pagination.querySelectorAll(".page-item")).filter(
             item => item !== prevPage && item !== nextPage
         );
         pageItems.forEach(item => item.remove());
 
-        for (let i = 1; i <= totalPages; i++) {
-            const pageItem = document.createElement("li");
-            pageItem.classList.add("page-item", i === currentPage ? "active" : "");
-            pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-            pageItem.addEventListener("click", () => {
-                currentPage = i;
-                renderTable(currentPage);
-                updatePagination();
-            });
-            pagination.insertBefore(pageItem, nextPage);
+        // Tạo lại các nút
+        for (let i = currentPage-1; i <= currentPage+1; i++) {
+            if (i>=1 && i <= totalPages){
+                const pageItem = document.createElement("li");
+                pageItem.classList.add("page-item");
+                if (i === currentPage) {
+                    pageItem.classList.add("active");
+                }
+                pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageItem.addEventListener("click", () => {
+                    currentPage = i;
+                    renderTable(currentPage);
+                    updatePagination();
+                });
+                pagination.insertBefore(pageItem, nextPage);
+            }
         }
 
         // Vô hiệu hóa nút "Previous" và "Next" nếu cần
