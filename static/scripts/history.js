@@ -94,3 +94,74 @@ function clock() {
 }
 clock()
 setInterval(clock, 1000)
+
+// Pagination   
+document.addEventListener("DOMContentLoaded", function () {
+    const rowsPerPage = 10;
+    const tableBody = document.getElementById("table-body");
+    const pagination = document.getElementById("pagination");
+
+    // Lấy danh sách các dòng
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    let currentPage = 1;
+
+    function renderTable(page) {
+        // Ẩn tất cả các dòng
+        rows.forEach((row, index) => {
+            row.style.display = "none";
+            if (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) {
+                row.style.display = ""; // Hiển thị dòng của trang hiện tại
+            }
+        });
+    }
+
+    function updatePagination() {
+        // Xóa nút cũ và tạo lại nút cho từng trang
+        const prevPage = document.getElementById("prev-page");
+        const nextPage = document.getElementById("next-page");
+        const pageItems = Array.from(pagination.querySelectorAll(".page-item")).filter(
+            item => item !== prevPage && item !== nextPage
+        );
+        pageItems.forEach(item => item.remove());
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement("li");
+            pageItem.classList.add("page-item", i === currentPage ? "active" : "");
+            pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            pageItem.addEventListener("click", () => {
+                currentPage = i;
+                renderTable(currentPage);
+                updatePagination();
+            });
+            pagination.insertBefore(pageItem, nextPage);
+        }
+
+        // Vô hiệu hóa nút "Previous" và "Next" nếu cần
+        prevPage.classList.toggle("disabled", currentPage === 1);
+        nextPage.classList.toggle("disabled", currentPage === totalPages);
+    }
+
+    document.getElementById("prev-page").addEventListener("click", function (e) {
+        e.preventDefault();
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable(currentPage);
+            updatePagination();
+        }
+    });
+
+    document.getElementById("next-page").addEventListener("click", function (e) {
+        e.preventDefault();
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable(currentPage);
+            updatePagination();
+        }
+    });
+
+    // Khởi tạo hiển thị
+    renderTable(currentPage);
+    updatePagination();
+});

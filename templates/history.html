@@ -29,9 +29,43 @@
             padding: 10px 6px;
         }
 
+
+        table {
+            border-color: white;
+        }
+
         p {
             text-align: center;
             margin: 0;
+        }
+
+        .table>:not(caption)>*>* {
+            color: white;
+            background: #78f1e71f;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f2f2f21a;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
         }
     </style>
 </head>
@@ -105,7 +139,7 @@
                 <div class="card ">
                     <div class="container px-5">
                         <div class="col d-flex justify-content-center align-items-center mb-3">
-                            <b>Lịch sử chuyển động</b>
+                            <h6>Lịch sử chuyển động</h6>
                             <i class="btn bi bi-search ps-5" style="color: #6ce5e8;" id="search"></i>
                             <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
                         </div>
@@ -119,8 +153,9 @@
                             </form>
                         </div>
                         <button id="confirmDeleteBtn" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>
-                        <div class="col " style="max-height: 60vh; overflow-y: scroll; ">
-                            <table class="table h-25">
+                        <!-- Table -->
+                        <div class="col" style="max-height: 60vh; overflow-y: scroll;">
+                            <table class="table h-25" id="data-table">
                                 <thead class="text-center">
                                     <tr>
                                         <td><input type="checkbox" id="selectAll"></td>
@@ -128,9 +163,9 @@
                                         <th>Thời gian</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody class="text-center" id="table-body">
                                     {% if data %}
-                                    {% for element in data | reverse %}
+                                    {% for element in data|reverse %}
                                     <tr>
                                         <td><input type="checkbox" class="delete-checkbox"
                                                 data-timestamp="{{ element.timestamp }}" style="display: none;"></td>
@@ -146,15 +181,25 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        <ul class="pagination" id="pagination" style="margin-top: 10px; text-align: center;">
+                            <li class="page-item disabled" id="prev-page">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <!-- Pagination buttons will be generated dynamically -->
+                            <li class="page-item disabled" id="next-page">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-5  d-flex flex-column justify-content-between zoomin">
+            <div class="col-5  d-flex flex-column zoomin">
                 <div class="card ">
-                    <div class="col text-center" style="height: 40px;">
-                        <b>Camera</b>
-                    </div>
+                    <h6 class="text-center mb-4">Camera</h6>
                     <div class="col placeholder-glow">
                         <img class="w-100 h-100 placeholder" src="http://192.168.1.7:81/stream" alt="Video_Live">
                     </div>
