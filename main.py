@@ -3,7 +3,7 @@ from OOP import *
 from machine import I2C, ADC
 from esp8266_i2c_lcd import I2cLcd
 
-url_host = 'http://10.10.96.73:5000'
+url_host = 'http://192.168.1.221:5000'
 
 # Khai Báo Đèn Bật Tắt của đèn
 light = LED(pin_number=12)

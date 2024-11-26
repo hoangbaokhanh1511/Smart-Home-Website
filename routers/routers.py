@@ -44,9 +44,16 @@ def delete_history():
 
     if timestamps:
         for timestamp in timestamps:
-            entry_to_delete = History_Pir.query.filter_by(timestamp=datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')).first()
-            if entry_to_delete:
-                db.session.delete(entry_to_delete)
+            print("Received timestamp:", timestamp)
+            try:
+                timestamp_obj = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+                entry_to_delete = History_Pir.query.filter_by(timestamp=timestamp_obj).first()
+
+                if entry_to_delete:
+                    db.session.delete(entry_to_delete)
+            except ValueError:
+                return jsonify({"message": f"Timestamp {timestamp} không hợp lệ."}), 400
+            
         db.session.commit()
         return jsonify({"message": "Xóa thành công!"}), 200
     
@@ -55,12 +62,6 @@ def delete_history():
 @main_bp.route('/main/history', methods=['GET', 'POST'])
 @auth
 def history():
-    # limit = 10
-    # page = 1
-    # if request.args.get('page') is not None:
-    #     page = int(request.args.get('page'))
-    # offset = (page - 1) * limit
-    # filtered_data =  History_Pir.query.offset(offset).limit(limit).all()
     
     filtered_data = History_Pir.query.all()
     
@@ -77,6 +78,13 @@ def history():
 
     return render_template('history.html', data = filtered_data, username = session['username'], Id = session['id'][-4:])
 
+@main_bp.route('/api/history')
+@auth
+def api_history():
+    
+    filtered_data = History_Pir.query.all()
+    data = [obj.to_dict() for obj in filtered_data]
+    return jsonify(data)
 
 @main_bp.route('/main/changepass', methods=['GET','POST'])
 @auth

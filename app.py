@@ -44,7 +44,6 @@ def create_app():
     app.register_blueprint(module_bp)
     app.register_blueprint(mail_bp)
     
-    
     with app.app_context():
         db.create_all()
     

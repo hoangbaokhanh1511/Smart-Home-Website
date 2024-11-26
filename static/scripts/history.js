@@ -1,10 +1,17 @@
 const search_form_btn = document.getElementById('search')
 const delete_form_btn = document.getElementById('delete')
+const delete_form = document.getElementById('confirmDeleteBtn')
+const show_form_date = document.getElementById('search-form-block')
+const back_btn = document.getElementById('Back')
+let check = false
+
 
 search_form_btn.addEventListener('click', function (e) {
     e.preventDefault()
-    const show_form_date = document.getElementById('search-form-block')
+    check = true
+
     show_form_date.style.display = "block"
+    delete_form.style.display = 'none'
 
     const solve_date = document.getElementById('search-form')
     solve_date.addEventListener('submit', function (e) {
@@ -36,11 +43,12 @@ search_form_btn.addEventListener('click', function (e) {
                         tableBody.innerHTML += row
                     })
                 } else {
-                    tableBody.innerHTML = `<th colspan="2">No data</th>`
+                    tableBody.innerHTML = `<th colspan="3">No data</th>`
                 }
             })
             .catch(error => console.error('Error:', error))
     })
+
 })
 
 document.getElementById('selectAll').addEventListener('change', function () {
@@ -49,14 +57,16 @@ document.getElementById('selectAll').addEventListener('change', function () {
 })
 
 document.getElementById('delete').addEventListener('click', function () {
+    check = true
+    show_form_date.style.display = "none"
 
     document.querySelectorAll('.delete-checkbox').forEach(function (checkbox) {
         checkbox.style.display = 'inline-block'
     });
-    document.getElementById('confirmDeleteBtn').style.display = 'inline-block'
+    confirmDeleteBtn.style.display = 'inline-block'
 });
 
-document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+confirmDeleteBtn.addEventListener('click', function () {
     const selectedCheckboxes = document.querySelectorAll('.delete-checkbox:checked')
     const timestampsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.dataset.timestamp)
 
@@ -70,9 +80,7 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
         })
             .then(response => response.json())
             .then(data => {
-
                 console.log(data.message)
-
                 location.reload()
             })
             .catch(error => console.error('Error:', error))
@@ -80,6 +88,37 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
         alert('Vui lòng chọn ít nhất một mục để xóa.')
     }
 })
+
+function apiHistory() {
+    if (check) return
+    fetch('/api/history')
+        .then(res => res.json())
+        .then(data => {
+            updateTimeHistory(data)
+        })
+        .catch(error => console.error('Error:', error))
+}
+
+function updateTimeHistory(data) {
+    const table = document.getElementById('table-body')
+    table.innerHTML = ''
+
+    if (data && data.length > 0) {
+        data.reverse().forEach(item => {
+            const row = document.createElement('tr')
+            row.innerHTML =
+                `
+                <td><input type="checkbox" class="delete-checkbox" data-timestamp="${item.Time}" style="display: none;"></td>
+                <td>Đã Phát Hiện Chuyển Động</td>
+                <td>${item.Time}</td>
+            `
+            table.appendChild(row)
+        })
+    }
+    else {
+        table.appendChild(document.createElement('tr').innerHTML = `<td colspan="4">No data</td>`)
+    }
+}
 
 function clock() {
     let now = new Date()
@@ -95,80 +134,17 @@ function clock() {
 clock()
 setInterval(clock, 1000)
 
-// Pagination   
-document.addEventListener("DOMContentLoaded", function () {
-    const rowsPerPage = 10;
-    const tableBody = document.getElementById("table-body");
-    const pagination = document.getElementById("pagination");
-
-    // Lấy danh sách các dòng
-    const rows = Array.from(tableBody.querySelectorAll("tr"));
-    const totalPages = Math.ceil(rows.length / rowsPerPage);
-
-    let currentPage = 1;
-
-    function renderTable(page) {
-        // Ẩn tất cả các dòng
-        rows.forEach((row, index) => {
-            row.style.display = "none";
-            if (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) {
-                row.style.display = ""; // Hiển thị dòng của trang hiện tại
-            }
-        });
+setInterval(() => {
+    if (!check) {
+        // console.log("Calling API...");
+        apiHistory();
     }
+}, 1000);
 
-    function updatePagination() {
-        const prevPage = document.getElementById("prev-page");
-        const nextPage = document.getElementById("next-page");
 
-        // Xóa các nút cũ
-        const pageItems = Array.from(pagination.querySelectorAll(".page-item")).filter(
-            item => item !== prevPage && item !== nextPage
-        );
-        pageItems.forEach(item => item.remove());
-
-        // Tạo lại các nút
-        for (let i = currentPage-1; i <= currentPage+1; i++) {
-            if (i>=1 && i <= totalPages){
-                const pageItem = document.createElement("li");
-                pageItem.classList.add("page-item");
-                if (i === currentPage) {
-                    pageItem.classList.add("active");
-                }
-                pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-                pageItem.addEventListener("click", () => {
-                    currentPage = i;
-                    renderTable(currentPage);
-                    updatePagination();
-                });
-                pagination.insertBefore(pageItem, nextPage);
-            }
-        }
-
-        // Vô hiệu hóa nút "Previous" và "Next" nếu cần
-        prevPage.classList.toggle("disabled", currentPage === 1);
-        nextPage.classList.toggle("disabled", currentPage === totalPages);
-    }
-
-    document.getElementById("prev-page").addEventListener("click", function (e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable(currentPage);
-            updatePagination();
-        }
-    });
-
-    document.getElementById("next-page").addEventListener("click", function (e) {
-        e.preventDefault();
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable(currentPage);
-            updatePagination();
-        }
-    });
-
-    // Khởi tạo hiển thị
-    renderTable(currentPage);
-    updatePagination();
+back_btn.addEventListener("click", function (e) {
+    check = false;
+    show_form_date.style.display = "none";
+    delete_form.style.display = "none";
+    // console.log("Back button clicked. check = ", check);
 });

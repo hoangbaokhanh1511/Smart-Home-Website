@@ -139,9 +139,14 @@
                 <div class="card ">
                     <div class="container px-5">
                         <div class="col d-flex justify-content-center align-items-center mb-3">
-                            <h6>Lịch sử chuyển động</h6>
-                            <i class="btn bi bi-search ps-5" style="color: #6ce5e8;" id="search"></i>
-                            <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
+                            <div class="col text-center">
+                                <h6 class="m-3">Lịch sử chuyển động</h6>
+                            </div>
+                            <div class="col-3">
+                                <i class="btn bi bi-search" style="color: #6ce5e8;" id="search"></i>
+                                <i class="btn bi bi-file-earmark-x " style="color: #ff5c5c;" id="delete"></i>
+                                <i class="btn bi bi-filter-circle" style="color:white;" id="Back"></i>
+                            </div>
                         </div>
                         <div class="col" id="search-form-block" style="display: none;">
                             <form id="search-form" class="d-flex flex-column justify-content-evenly p-3" method="POST">
@@ -152,7 +157,11 @@
                                 <input class="btn btn-success mt-2" style="width: fit-content;" type="submit">
                             </form>
                         </div>
-                        <button id="confirmDeleteBtn" class="btn btn-danger" style="display: none;">Xóa đã chọn</button>
+                        <div class="row d-flex justify-content-center mb-4">
+                            <button id="confirmDeleteBtn" class="btn btn-danger w-50 h-50"
+                                style="display: none; margin:0;">Xóa đã
+                                chọn</button>
+                        </div>
                         <!-- Table -->
                         <div class="col" style="max-height: 60vh; overflow-y: scroll;">
                             <table class="table h-25" id="data-table">
@@ -175,25 +184,13 @@
                                     {% endfor %}
                                     {% else %}
                                     <tr>
-                                        <td colspan="3">No data</td>
+                                        <td colspan="4">No data</td>
                                     </tr>
                                     {% endif %}
                                 </tbody>
                             </table>
                         </div>
-                        <ul class="pagination" id="pagination" style="margin-top: 10px; text-align: center;">
-                            <li class="page-item disabled" id="prev-page">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <!-- Pagination buttons will be generated dynamically -->
-                            <li class="page-item disabled" id="next-page">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
+
                     </div>
                 </div>
             </div>
@@ -201,7 +198,7 @@
                 <div class="card ">
                     <h6 class="text-center mb-4">Camera</h6>
                     <div class="col placeholder-glow">
-                        <img class="w-100 h-100 placeholder" src="http://192.168.1.7:81/stream" alt="Video_Live">
+                        <img class="w-100 h-100" src="http://192.168.214.153:81/stream" alt="Video_Live">
                     </div>
                     <div class="content text-center mt-3">
                         <h5 class="fw-bold">Thời gian: <span id="time"></span></h5>
