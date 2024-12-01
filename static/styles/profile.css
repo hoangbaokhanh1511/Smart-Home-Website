@@ -1,0 +1,12 @@
+.in4{
+    color: rgb(255, 253, 141);
+    font-weight: normal;
+}
+
+.card-text{
+    font-weight: bold;
+}
+
+p{
+    margin: 2px 5px;
+}

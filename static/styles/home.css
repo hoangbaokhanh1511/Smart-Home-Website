@@ -1,0 +1,54 @@
+#temperature{
+    color:#11fb7e;
+    font-weight:bold;
+    font-size:28px;
+    margin-top:5px;
+}
+#humidity{
+    color:#03c5e7;
+    font-weight:bold;
+    font-size:28px;
+    margin-top:5px;
+}
+
+#box{
+    font-weight:bold;
+    max-width:400px;
+    border-radius: 10px;
+}
+
+.emoji{
+    display:flex;
+    align-items: center;
+    font-size:25px;
+}
+#history{
+    padding-bottom:0;
+}
+table.table th,
+table.table td {
+     background-color: #283b3e;
+    color: white;
+}
+
+.box {
+    background-color: #27403E;
+    max-width: 600px;
+    border-radius: 20px;
+}
+
+.row button {
+    width: 100%;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+.text {
+   color: rgb(177, 177, 177);
+}
+
+.symbol-temperature{
+    font-size: 18px;
+}

@@ -1,24 +1,25 @@
-import dht, ujson, uasyncio as asyncio, urequests
-from machine import I2C
-from esp8266_i2c_lcd import I2cLcd
+import ujson, uasyncio as asyncio, urequests
 from OOP import *
-from MQ135 import MQ135
-# Khai Báo Đèn Bật Tắt và điều chỉnh độ sáng của đèn
-led = {
-    "Led_Main": LED(pin_number=2),
-    "Led_D7": LED(pin_number=13),
-    "Led_D8": LED(pin_number=15)
-}
+from machine import I2C, ADC
+from esp8266_i2c_lcd import I2cLcd
 
-url_host = 'http://192.168.1.8:5000'
+url_host = 'http://172.20.10.9:5000'
+
+# Khai Báo Đèn Bật Tắt của đèn
+light = LED(pin_number=12)
+
 # Pir sensor pir HC-SR501
 pir = motion_detect(pin_number=14)
+led = Pin(15,Pin.OUT)
+#Quạt
+fan1 = Fan(pin_number=0)
+fan2 = Fan(pin_number=13)
 
 # sensor DHT11
 sensor = sensor_dht11(pin_number=16)
 
-# MQT135
-adc = MQ135(0)
+# MQT2
+adc = ADC(0)
 
 def weather():
     temperature, humidity = sensor.get_weather()
@@ -28,14 +29,30 @@ def weather():
     }
     return data
 
+async def mqt2():
+    while True:
+        url = url_host + '/api/mqt2'
+        value = adc.read()
+        data = {"value": value}
+        headers = {"Content-Type": "application/json"}
+        try:
+            response = urequests.put(url, data=ujson.dumps(data), headers=headers)
+            response.close()
+        except OSError as e:
+            print("Error loading MQT2: ", e)
+
+        await asyncio.sleep(3)
+
+
 async def send_pir():
-    url = url_host + '/user_dashboard/api/motion'
+    url = url_host + '/api/motion'
     while True:
         data = {'status': True if pir.get_status() else False}
         headers = {'Content-Type': 'application/json'}
+        print(pir.get_status())
+        led.on() if pir.get_status() else led.off()
         try:
-            response = urequests.post(url, data=ujson.dumps(data), headers=headers)
-
+            response = urequests.put(url, data=ujson.dumps(data), headers=headers)
             response.close()
         except OSError as e:
             print('Error loading LED:', e)
@@ -44,31 +61,43 @@ async def send_pir():
 
 
 async def toggleLed():
-    url = url_host + '/user_dashboard/api/change_status_led'
+    url = url_host + '/api/light'
     while True:
         response = urequests.get(url)
         data = response.json()
 
-        led['Led_Main'].toggle(data['Led_Main'])
-        led['Led_D7'].toggle(data['Led_D7'])
-        led['Led_D8'].toggle(data['Led_D8'])
+        light.On() if data.get('status') else light.Off()
 
         response.close()
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.4)
+
+async def toggleFan():
+    url = url_host + '/api/fan'
+    while True:
+        response = urequests.get(url)
+        data = response.json()
+
+        f1 = data.get('fan1')
+        f2 = data.get('fan2')
+
+        fan1.On() if f1 else fan1.Off()
+        fan2.On() if f2 else fan2.Off()
+
+        response.close()
+        await asyncio.sleep(0.5)
 
 
-async def MQT135():
-    url = url_host + '/user_dashboard/api/mqt135'
+async def dht11():
+    url = url_host + '/api/dht11'
     while True:
         data = weather()
-        value = adc.get_corrected_ppm(data['temperature'],data['humidity'])
-        mqt = {
-            'value': value
+        up_data = {
+            'temperature': data.get('temperature'),
+            'humidity': data.get('humidity')
         }
-        response = urequests.post(url=url, headers={'Content-Type': 'application/json'}, data=ujson.dumps(mqt))
+        response = urequests.put(data=ujson.dumps(up_data), headers={"Content-Type": "application/json"}, url=url)
         response.close()
-        await asyncio.sleep(3)
-
+        await asyncio.sleep(10)
 
 async def LCD():
     data = weather()
@@ -89,29 +118,16 @@ async def LCD():
     lcd.putstr(f"Nhiet Do: {data.get('temperature')}")
     lcd.putchar(chr(0))
     lcd.putstr(f"C\nDo am: {data.get('humidity')}%")
-    await asyncio.sleep(2)
-
-
-async def dht11():
-    url = url_host + '/user_dashboard/api/weather'
-    while True:
-        data = weather()
-        up_data = {
-            'temperature': data.get('temperature'),
-            'humidity': data.get('humidity')
-        }
-        response = urequests.post(data=ujson.dumps(up_data),headers={"Content-Type": "application/json"},url=url)
-        response.close()
-
-        await asyncio.sleep(5)
+    await asyncio.sleep(10)
 
 async def main():
     await asyncio.gather(
-        MQT135(),
-        dht11(),
-        LCD(),
         send_pir(),
         toggleLed(),
+        toggleFan(),
+        LCD(),
+        dht11(),
+        mqt2()
     )
 
 

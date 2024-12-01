@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="{{ url_for('static', filename = 'images/newLogo-darkbg.png')}}">
+
+    <title>Quản lí thiết bị</title>
+    <!-- Boostrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js">
+    <link rel="stylesheet" href="../static/styles/Config.css">
+    <style>
+        /* config table */
+        table {
+            width: 100%;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid white;
+            padding: 10px 6px;
+        }
+
+        p {
+            text-align: center;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo & navbar & account -->
+    <div class="container navbar navbar-expand-md" style="z-index: 2000;">
+        <div class="row w-100 align-items-center m-0 fadein">
+            <!-- logo -->
+            <div class="logo col">
+                <span class="d-flex align-items-center gap-4 p-3">
+                    <a href="/"><img src="/static/images/newLogo.png" alt=""></a>
+                    <a href="#" class="text-black p-0 m-0 text-decoration-none d-md-block d-none">
+                        <b class="text-light">Sáng tạo - Vận dụng - Đổi mới </b>
+                    </a>
+                </span>
+            </div>
+
+            <!-- Account  -->
+            <div class="col order-md-3 account d-flex justify-content-center justify-content-md-end position-relative">
+                <li class="nav-item dropdown list-unstyled">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="{{ url_for('static', filename='images/avt.png') }}" class="img-fluid bg-account"
+                            alt="" style="width: 50px; height: 50px; border-radius: 100%;">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">Username: {{username}}</li>
+                        <li class="dropdown-item">ID: {{Id}}</li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/main/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/main/changepass">Change Pass</a></li>
+                        <li><a class="dropdown-item" href="/api/auth/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </div>
+            <!-- button navbar -->
+            <div class="col d-flex d-md-none justify-content-end">
+                <button class=" d-flex justify-content-center align-items-center" id="btn-open-navv"
+                    style="width: 40px; height:40px;" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg id="icon-nav" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                    </svg>
+                </button>
+            </div>
+            <!-- navbar -->
+            <div class="collapse col navbar-collapse smartbar rounded-5" id="navv">
+                <ul class="row d-flex align-items-center  navbar-nav d-flex justify-content-around my-1">
+                    <li class="col nav-link "><a href="/" class="d-flex justify-content-center">
+                            <p>TRANG CHỦ</p>
+                        </a></li>
+                    <li class="col nav-link link-active"><a href="/main/device" class="d-flex justify-content-center">
+                            <p>THIẾT BỊ</p>
+                        </a></li>
+                    <li class="col nav-link"><a href="/main/history" class="d-flex justify-content-center">
+                            <p>LỊCH SỬ</p>
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <main class="container text-center">
+        <div class="row">
+            <div class="col-12 col-md-6 d-flex flex-column mb-3 part">
+                <div class="card zoomin"
+                    style="background: rgba(255, 255, 255, 0.35) !important; padding: 10px 15px !important;">
+                    <div class="card-header  mb-3" style="border-bottom-color:rgba(255, 255, 255, 0.7)">
+                        <h2 class="text-center">Phòng bếp</h2>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="card">
+                                <h6>
+                                    Cảnh báo nhiệt độ
+                                </h6>
+                                <p>Trạng Thái: <span id="status_warning_temp">Off</span></p>
+                                <p>Nhiệt Độ Cảnh Báo: <span id="max">None</span></p>
+                                <p id="status_tempMax"></p>
+                                <div class="col d-flex justify-content-center mt-3">
+                                    <button class="btn btn-success w-25" id="required_tempMax">On</button>
+                                    <button class="btn btn-danger w-25" id="off_tempMax">Off</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h6>
+                                    Nồng độ khí gas (ppm)
+                                </h6>
+                                <div class="col w-100 h-75 d-flex align-items-center justify-content-center">
+                                    <h4 id="mqt2">--</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="card">
+                                <h6>Thiết lập nhiệt độ cảnh báo</h6>
+                                <form id="temp-form" class="d-flex mt-3">
+                                    <input class="form-control w-75 me-1" required min="10" max="50" type="number"
+                                        id="temp" placeholder="Maximum">
+                                    <input class="btn btn-outline-danger" type="submit" value="Save">
+                                </form>
+                                <p id="status-temp-form" class="mt-1"></p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h6>
+                                    Mức cảnh báo
+                                    <a id="warning_description" href=""
+                                        style="color: rgb(47, 255, 78); text-decoration: none; font-size: small;"> Chi
+                                        tiết</a>
+                                </h6>
+                                <form id="gas-form" class="d-flex mt-3">
+                                    <input required class="form-control w-75 me-1" min="0" type="number" id="valueGas"
+                                        placeholder="Enter value warning">
+                                    <input class="btn btn-outline-danger" type="submit" value="Save">
+                                </form>
+                                <div class="col">
+                                    <p id="status-gas-form" style="color: rgb(0, 189, 0);" class="mt-1"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3" style="flex:1;">
+                        <div class="col">
+                            <div class="card">
+                                <h6>Quạt gió</h6>
+                                <div class="col">
+                                    <p>Trạng Thái: <span id="status-fan1">Off</span></p>
+                                </div>
+                                <div class="col d-flex mt-3 justify-content-center">
+                                    <button class="btn btn-success w-25" onclick="turnOnFan1(event)">On</button>
+                                    <button class="btn btn-danger w-25" onclick="turnOffFan1(event)">Off</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column mb-3 part">
+                <div class="card zoomin"
+                    style="background: rgba(255, 255, 255, 0.35) !important; padding: 10px 15px !important;">
+
+                    <div class="card-header  mb-3" style="border-bottom-color:rgba(255, 255, 255, 0.7)">
+                        <h2 class="text-center">Phòng khách</h2>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="card">
+                                <div>
+                                    <h6>Thời gian
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi mb-1 bi-clock" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                            <path
+                                                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                        </svg>
+                                    </h6>
+                                </div>
+                                <div class="mt-2 mb-2" id="time" style="font-weight: bold; font-size: 30px;">--</div>
+                                <div id="date" style="font-size: 20px;">--</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h6>Nhiệt Độ
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" fill="currentColor"
+                                        class="bi mb-1 bi-thermometer-half symbol-temperature" viewBox="0 0 16 16">
+                                        <path
+                                            d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415" />
+                                        <path
+                                            d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1" />
+                                    </svg>
+                                </h6>
+                                <div class="h-75 d-flex align-items-center justify-content-center" id="temperature"
+                                    style="font-size: 30px;">--
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h6>Độ ẩm
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi mb-1 bi-droplet" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M7.21.8C7.69.295 8 0 8 0q.164.544.371 1.038c.812 1.946 2.073 3.35 3.197 4.6C12.878 7.096 14 8.345 14 10a6 6 0 0 1-12 0C2 6.668 5.58 2.517 7.21.8m.413 1.021A31 31 0 0 0 5.794 3.99c-.726.95-1.436 2.008-1.96 3.07C3.304 8.133 3 9.138 3 10a5 5 0 0 0 10 0c0-1.201-.796-2.157-2.181-3.7l-.03-.032C9.75 5.11 8.5 3.72 7.623 1.82z" />
+                                        <path fill-rule="evenodd"
+                                            d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z" />
+                                    </svg>
+                                </h6>
+                                <div class="h-75 d-flex align-items-center justify-content-center"
+                                    style="font-size: 30px;" id="humidity">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="card">
+                                <h6>Đèn</h6>
+                                <div class="col">
+                                    <p>Trạng Thái: <span id="status-light">Off</span></p>
+                                </div>
+                                <div class="col d-flex mt-3 justify-content-center">
+                                    <button class="btn btn-success w-25" onclick="turnOnLight(event)">On</button>
+                                    <button class="btn btn-danger w-25" onclick="turnOffLight(event)">Off</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h6>Quạt</h6>
+                                <div class="col">
+                                    <p>Trạng Thái: <span id="status-fan2">Off</span></p>
+                                </div>
+                                <div class="col d-flex mt-3 justify-content-center">
+                                    <button class="btn btn-success w-25" onclick="turnOnFan2(event)">On</button>
+                                    <button class="btn btn-danger w-25" onclick="turnOffFan2(event)">Off</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3" style="flex:1;">
+                        <div class="col">
+                            <div class="card">
+                                <h6>
+                                    Chế độ báo động
+                                </h6>
+                                <p>Trạng Thái: <span id="status_warning_gas">Off</span></p>
+                                <p>Ngưỡng Cảnh Báo (ppm): <span id="gasMax">None</span></p>
+                                <p id="status_gasMax"></p>
+                                <div class="col d-flex justify-content-center mt-3">
+                                    <button class="btn btn-success w-25" id="required_gasMax">On</button>
+                                    <button class="btn btn-danger w-25" id="off_gasMax">Off</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="../static/scripts/device.js"></script>
+
+</body>
+
+</html>

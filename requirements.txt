@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+Flask-RESTful
+flask-mail
+requests
+python-dotenv
+werkzeug
+gunicorn
