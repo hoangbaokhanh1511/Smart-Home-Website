@@ -3,7 +3,7 @@ from OOP import *
 from machine import I2C, ADC
 from esp8266_i2c_lcd import I2cLcd
 
-url_host = 'http://192.168.1.221:5000'
+url_host = 'http://172.20.10.9:5000'
 
 # Khai Báo Đèn Bật Tắt của đèn
 light = LED(pin_number=12)
@@ -33,7 +33,6 @@ async def mqt2():
     while True:
         url = url_host + '/api/mqt2'
         value = adc.read()
-        print(value)
         data = {"value": value}
         headers = {"Content-Type": "application/json"}
         try:
@@ -58,7 +57,7 @@ async def send_pir():
         except OSError as e:
             print('Error loading LED:', e)
 
-        await asyncio.sleep(2)
+        await asyncio.sleep(5)
 
 
 async def toggleLed():
